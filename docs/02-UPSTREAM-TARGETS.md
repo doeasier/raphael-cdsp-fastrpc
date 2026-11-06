@@ -2,10 +2,16 @@
 
 > 目的：把「换整套配套固件解决 cDSP `AEE_EBADASID` / 打通 Unsigned PD」这个成果
 > 提交到能被后人检索到的上游仓库。**本清单只是建议 + 已备好的报告文本，
-> 尚未向任何外部站点发送**；对外提交需要用户确认与相应账号。
+> 尚未向任何上游仓库 / issue / 邮件列表发送**；对外提交需要用户确认与相应账号。
+>
+> **兜底已落地（2026-11-06）**：成果已自存档到本人公开仓库
+> **https://github.com/doeasier/raphael-cdsp-fastrpc**（tag `archive-2026-11-06`）。
+> 该仓库含完整研究日志、英文报告、验收原始日志、复现脚本与示例源码（已脱敏，
+> **不含厂商固件二进制**）。**每个上游 issue / PR / FYI 邮件正文都应链到它**，
+> 这样即使 issue 被关闭或标 stale，证据链仍可引用。英文报告 §6 已改成公开资产清单。
 >
 > 主报告（英文，可直接贴）：`tmp/firmware/upstream-report.txt`
-> 完整证据链（中文）：`docs/05-Hexagon690-DSP调用研究.md` §11 / §16 / §17.6
+> 完整证据链（中文）：`docs/05-Hexagon690-DSP调用研究.md` §11 / §16 / §17.6 / §18
 > 验收原始日志：`logs/firmware/postboot-verify.txt`、`hostmain-uri-fix.txt`
 
 ---
@@ -134,8 +140,9 @@ fastrpc_test -d 3 -U 1 → 3/3 PASS，自写 HVX skel 也跑通
    全部出自 `logs/firmware/postboot-verify.txt` 与 `tmp/firmware/raphael-20210730/manifest.json`。
 2. **别把旧草稿发出去**：`upstream-report.txt` 在 2026-11-06 已整篇重写。旧版结论是
    「INIT_CREATE 恒失败、求版本配对建议」，且把 PIL 误写成 `cdsp.mbn` —— 已被证伪。
-3. **对外动作需确认**：需要 GitHub / GitLab 账号；本报告与所有 Issue 文本都只在本地，
-   **一个字都还没发出去**。
+3. **对外动作需确认**：需要 GitHub / GitLab 账号；**用户侧自存档已完成**
+   （https://github.com/doeasier/raphael-cdsp-fastrpc），但报告与所有 Issue 文本
+   **尚未投递到任何上游仓库 / 邮件列表**。每份正文结尾都加一行指向自存档的链接。
 4. **「首创性」措辞要精确，别一刀切否认也别夸大**：
    - 【公开】错误码定义本身在 `inc/AEEStdErr.h`：`AEE_EOFFSET = 0x80000400`（DSP 侧）、
      `AEE_EBADASID = AEE_EOFFSET + 0x053` → **0x80000453**；同族

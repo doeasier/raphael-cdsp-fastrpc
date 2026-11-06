@@ -91,8 +91,9 @@ was needed.** The earlier plan to rebuild the kernel (K5/K6/K7) was cancelled.
 
 ## 上游投递状态
 
-**截至归档时，所有对外文本一个字都未发送。** 完整投递清单、贴法、可直接复制的 Issue 正文见
-`docs/02-UPSTREAM-TARGETS.md`；英文主报告（可直接贴 `qualcomm/fastrpc#400`）见
+**截至归档时，报告与 Issue 文本尚未投递到任何上游仓库或邮件列表**（自存档即本仓库）。
+完整投递清单、贴法、可直接复制的 Issue 正文见 `docs/02-UPSTREAM-TARGETS.md`；
+英文主报告（可直接贴 `qualcomm/fastrpc#400`，正文 §6 已链到本仓库）见
 `docs/01-UPSTREAM-REPORT.txt`。
 
 | 优先 | 目标 | 形式 |

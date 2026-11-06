@@ -4,6 +4,8 @@
   且把设备 PIL 误写成 cdsp.mbn —— 结论与形态均已推翻，请勿再使用旧版。
   **尚未发送**：对外提交属外部动作，需用户确认后执行。
   建议主投递点：qualcomm/fastrpc#400（同类 user PD spawn 被固件拒绝，见下文 §0）
+  自存档（已公开，可直接引用）：https://github.com/doeasier/raphael-cdsp-fastrpc
+  固定 tag：archive-2026-11-06；正文 §6 已改为公开资产清单。
   数据出处：docs/05-Hexagon690-DSP调用研究.md §11/§13/§16/§17.6，
             logs/firmware/postboot-verify.txt、hostmain-uri-fix.txt、logs/pdscan/
 
@@ -226,14 +228,32 @@ Verification (dmesg + sha256):
      open an issue to agree on scope, then send a PR against `development`
      with `git commit -s` (DCO) signoff.
 
-§6  Repro assets (available on request)
+§6  Repro assets (public self-archive)
 ----------------------------------------
-  fastrpc_pdscan.c / ioctl_trace.c   minimal UAPI-only probes
-  deploy_pdscan.py                   P0/P1/P2/restore matrix driver
-  pack_firmware.py / deploy_firmware.py   split-PIL packing, phased deploy,
-                                         backup + rollback
-  logs/firmware/postboot-verify.txt  full post-reboot acceptance log
-  docs/05-Hexagon690-DSP调用研究.md  full investigation log (Chinese)
+  Full evidence, logs, deployment/rollback scripts and the hand-written
+  HVX example source are archived here (no vendor firmware binaries):
+
+      https://github.com/doeasier/raphael-cdsp-fastrpc
+      (tag: archive-2026-11-06)
+
+  Layout:
+  README.md                       TL;DR, before/after matrix, three pitfalls
+  docs/00-RESEARCH-LOG.md         full investigation log (Chinese)
+  docs/01..07                    this report, upstream targets, deploy plan,
+                                 32-file manifest + hashes, baseline comparison
+  evidence/                      postboot-verify.txt (PAS, build id, 3/3 PASS),
+                                 hostmain-uri-fix.txt, hostmain-diag.txt,
+                                 four read-only audits, P0-P2 matrices,
+                                 KEY-EXCERPTS.md
+  tools/                         fastrpc_pdscan.c / ioctl_trace.c (UAPI probes),
+                                 deploy_pdscan.py (P0/P1/P2/restore matrix),
+                                 pack_firmware.py / deploy_firmware.py
+                                 (split-PIL packing, phased deploy, backup + rollback)
+  example/                       hand-written HVX IDL / stub / skel / host
+
+  Device credentials in the archived scripts are redacted. Vendor firmware
+  blobs are not redistributed; the manifest lists their SHA-256 digests and
+  the exact MIUI build to extract them from.
 
 Thanks to the maintainers for the library and the pairing guidance in
 earlier issues -- it is what pointed us at the firmware set.

@@ -1108,9 +1108,19 @@ Environment="DSP_LIBRARY_PATH=/usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/
   （2024-07 后未更新、需账号）；`linux-firmware` 只收 blob 不收经验文档；
   `linux-msm/hexagon-dsp-binaries` 默认分支 `trunk`、`has_wiki:false`、MIT、2026-11-05 仍活跃。
 
-**兜底**：上游 issue 可能被关闭/标 stale，最稳妥是同时把 §17.6 + 英文报告 +
-`postboot-verify.txt` 归档到自建仓库/Gist/博客，标题带
-`SM8150 raphael AEE_EBADASID fastrpc unsigned PD 2021-07-30 firmware`，再在各 issue 里链过去。
+**兜底 · 已落地（2026-11-06）**：成果已自存档到本人 GitHub 公开仓库
+**https://github.com/doeasier/raphael-cdsp-fastrpc**（默认分支 `main`，固定 tag
+`archive-2026-11-06`）。这样即使上游 issue 被关闭/标 stale，完整证据链仍有永久可引用链接。
+
+| 项 | 内容 |
+|---|---|
+| 可见性 | **public**（可被上游 issue / 邮件列表直接引用；如需改私有可在仓库 Settings 一键切换） |
+| 内容 | `README.md`（中英 TL;DR + 结果矩阵 + 三个坑 + 复现路径）、`docs/`（本文件全文 + 英文报告 + 投递清单 + 部署预案 + 固件哈希/对比）、`evidence/`（冷启动验收、URI 修复、四次只读审计、P0–P2 矩阵 + `KEY-EXCERPTS.md`）、`tools/`（打包/部署/回滚/只读取证/UAPI 探针/TWRP 脚本）、`example/`（自写 HVX 工程源码）、`NOTICE.md` |
+| 脱敏 | 设备 SSH 口令 → `<REDACTED>`、Wi-Fi 内网地址 → `192.168.x.x`、本机工作区路径 → `<WORKSPACE>`；自动化泄漏扫描 0 命中 |
+| **不含** | **任何厂商固件二进制**（`cdsp.mdt`/`bXX`/`mbn`、`fastrpc_shell_*`、skel、`NON-HLOS.bin`、`.deb`、`.so`）；GPL 的 `drivers/misc/fastrpc.c` 副本也已排除，避免再分发义务。`.gitignore` 做了硬性拦截 |
+| 构建脚本 | `tmp/build_github_archive.py`（从工作区复制 + 脱敏生成 `tmp/github-archive/`）；推送走 SSH `git@github.com:doeasier/...` |
+
+各上游 issue / PR / FYI 邮件正文里应链到该仓库（英文报告 §6 已改为公开资产清单）。
 
 
 
