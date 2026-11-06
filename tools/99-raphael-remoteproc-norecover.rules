@@ -1,0 +1,8 @@
+# Raphael: remoteproc SSR recovery goes through TZ pas_shutdown, which hangs
+# in EL3 and hard-locks the whole SoC when ANY DSP firmware asserts.
+# Originally this only covered "modem" (see RAPHAEL-MODEM-STATUS.md 3.1A).
+# Widened 2026-11-05 to ALL remoteprocs (cdsp/adsp/slpi/modem) after a
+# kexec-triggered bootloop that died during udev coldplug.
+# Keeping recovery disabled means a DSP crash stays contained instead of
+# dragging down the entire machine.
+SUBSYSTEM=="remoteproc", ACTION=="add|change", ATTR{recovery}="disabled"

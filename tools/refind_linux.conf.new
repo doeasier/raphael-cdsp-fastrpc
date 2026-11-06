@@ -1,0 +1,29 @@
+# refind kernel command line for Xiaomi Raphael (Redmi K20 Pro).
+#
+# DIAGNOSTIC DEFAULT (2026-11-05), written from TWRP after a kexec-triggered
+# hard-reset bootloop. Evidence from the three most recent journals:
+#   - each boot had a distinct BOOT_ID, ~43s apart (fixed watchdog timeout)
+#   - each stopped at the exact same point: systemd-udev-trigger.service
+#     (Coldplug) STARTING, never FINISHED; last lines = journal-flush/growfs
+#   - no Rebooting/Shutdown/panic, kernel messages just stop -> CPU hard-locked
+#   - TWRP PMIC: "Power-off reason: PS_HOLD (MSM Controlled Shutdown)"
+# i.e. CPU wedges (EL3/TZ) during udev coldplug, then the watchdog resets the
+# SoC. Project's own 99-raphael-modem-norecover.rules documents that a DSP
+# remoteproc SSR goes through TZ pas_shutdown and hard-locks the machine;
+# that rule only covered "modem", not cdsp/adsp/slpi.
+#
+# This entry does three safe, reversible things:
+#   1. modprobe.blacklist= stops the (module-built) Q6V5/PAS remoteproc
+#      drivers from being auto-loaded by udev coldplug -- no DSP firmware
+#      load, no SSR. qcom_wdt is deliberately NOT blacklisted (it must keep
+#      feeding the boot watchdog).
+#   2. systemd.mask= prevents any daemon/udev SYSTEMD_WANTS from pulling up
+#      a DSP or USB-gadget service during early boot.
+#   3. console=tty0 + moderate loglevel + show_status makes the hang point
+#      visible on the panel; panic=0 keeps a panic on screen instead of
+#      rebooting. plymouth is disabled so it cannot hide the text.
+# Boots multi-user.target (SSH still available over WiFi).
+#
+# SECOND entry is the untouched original cmdline for easy rollback.
+"Boot with standard options"  "root=UUID=ee8d3593-59b1-480e-a3b6-4fefb17ee7d8 rw console=ttyMSM0,115200 console=tty0 loglevel=4 systemd.show_status=1 rd.systemd.show_status=1 systemd.log_level=info rd.udev.log_priority=info udev.log_priority=info plymouth.enable=0 panic=0 systemd.unit=multi-user.target modprobe.blacklist=qcom_q6v5_pas,qcom_q6v5_adsp,qcom_q6v5_mss,qcom_q6v5_common,qcom_sysmon,qcom_pil_info systemd.mask=hexagonrpcd-sdsp.service systemd.mask=hexagonrpcd-sdsp.path systemd.mask=usb-ncm.service systemd.mask=raphael-sensors.service systemd.mask=raphael-sensors-persist-perms.service systemd.mask=raphael-slpi-client2slpi.service systemd.mask=raphael-slpi-bl-notify.service systemd.mask=raphael-slpi-oled-gate.service systemd.mask=raphael-gpsd-bridge.service systemd.mask=raphael-sim-init.service dtb=\dtbs\qcom\sm8150-xiaomi-raphael.dtb"
+"Boot ORIGINAL (pre-diag)"  "root=UUID=ee8d3593-59b1-480e-a3b6-4fefb17ee7d8 rw console=ttyMSM0,115200 splash loglevel=0 plymouth.ignore-serial-consoles vt.global_cursor_default=0 rd.systemd.show_status=0 systemd.show_status=0 rd.udev.log_priority=0 udev.log_priority=0 dtb=\dtbs\qcom\sm8150-xiaomi-raphael.dtb"

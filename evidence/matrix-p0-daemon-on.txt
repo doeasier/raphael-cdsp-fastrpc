@@ -1,0 +1,42 @@
+CMD: echo "### fastrpc-cdsp-noattach-0x8"; timeout 25 /opt/rootpd-exp/fastrpc_pdscan /dev/fastrpc-cdsp noattach 0x8 2>&1; echo "RC=$?"
+echo "### fastrpc-cdsp-noattach-0x0"; timeout 25 /opt/rootpd-exp/fastrpc_pdscan /dev/fastrpc-cdsp noattach 0x0 2>&1; echo "RC=$?"
+echo "### fastrpc-cdsp-attach-0x8"; timeout 25 /opt/rootpd-exp/fastrpc_pdscan /dev/fastrpc-cdsp attach 0x8 2>&1; echo "RC=$?"
+echo "### fastrpc-cdsp-secure-noattach-0x8"; timeout 25 /opt/rootpd-exp/fastrpc_pdscan /dev/fastrpc-cdsp-secure noattach 0x8 2>&1; echo "RC=$?"
+echo "### fastrpc-cdsp-secure-attach-0x8"; timeout 25 /opt/rootpd-exp/fastrpc_pdscan /dev/fastrpc-cdsp-secure attach 0x8 2>&1; echo "RC=$?"
+RC: 0
+--- stdout ---
+### fastrpc-cdsp-noattach-0x8
+DEVICE=/dev/fastrpc-cdsp FD=3 PID=4594 ATTACH=noattach ATTRS=0x8 STATIC=0
+GET_DSP_INFO_CAP=0x00000000 GET_DSP_INFO             RC=0 RC_HEX=0x00000000 ERRNO=0 
+INIT_CREATE              RC=-2147482541 RC_HEX=0x80000453 ERRNO=0 Success
+DONE
+RC=0
+### fastrpc-cdsp-noattach-0x0
+DEVICE=/dev/fastrpc-cdsp FD=3 PID=4596 ATTACH=noattach ATTRS=0x0 STATIC=0
+GET_DSP_INFO_CAP=0x00000000 GET_DSP_INFO             RC=0 RC_HEX=0x00000000 ERRNO=0 
+INIT_CREATE              RC=-2147482541 RC_HEX=0x80000453 ERRNO=0 Success
+DONE
+RC=0
+### fastrpc-cdsp-attach-0x8
+DEVICE=/dev/fastrpc-cdsp FD=3 PID=4598 ATTACH=attach ATTRS=0x8 STATIC=0
+GET_DSP_INFO_CAP=0x00000000 GET_DSP_INFO             RC=0 RC_HEX=0x00000000 ERRNO=0 
+INIT_ATTACH              RC=0 RC_HEX=0x00000000 ERRNO=0 
+INIT_CREATE              RC=-2147482598 RC_HEX=0x8000041a ERRNO=0 Success
+DONE
+RC=0
+### fastrpc-cdsp-secure-noattach-0x8
+DEVICE=/dev/fastrpc-cdsp-secure FD=3 PID=4600 ATTACH=noattach ATTRS=0x8 STATIC=0
+GET_DSP_INFO_CAP=0x00000000 GET_DSP_INFO             RC=0 RC_HEX=0x00000000 ERRNO=0 
+INIT_CREATE              RC=-2147482541 RC_HEX=0x80000453 ERRNO=0 Success
+DONE
+RC=0
+### fastrpc-cdsp-secure-attach-0x8
+DEVICE=/dev/fastrpc-cdsp-secure FD=3 PID=4602 ATTACH=attach ATTRS=0x8 STATIC=0
+GET_DSP_INFO_CAP=0x00000000 GET_DSP_INFO             RC=0 RC_HEX=0x00000000 ERRNO=0 
+INIT_ATTACH              RC=0 RC_HEX=0x00000000 ERRNO=0 
+INIT_CREATE              RC=-2147482598 RC_HEX=0x8000041a ERRNO=0 Success
+DONE
+RC=0
+
+--- stderr ---
+

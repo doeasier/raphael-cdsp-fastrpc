@@ -1,0 +1,298 @@
+ROUND-2 READ-ONLY AUDIT
+
+===== pil-buildid =====
+CMD: for f in /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b*; do echo -n "$f: "; grep -a -o -E 'QC_IMAGE_VERSION_STRING.{0,80}' "$f" 2>/dev/null | head -1; grep -a -o -E '[0-9]{6,}\.[0-9]+_[0-9]{8}_[0-9]{6}' "$f" 2>/dev/null | sort -u | head -3; done
+/lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b00: /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b01: /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b02: /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b03: /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b04: /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b05: QC_IMAGE_VERSION_STRING=CDSP.HT.2.0.1-00131-SM8150-1IMAGE_VARIANT_STRING=855.cdsp.prodQOEM_IMA
+/lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b06: /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b08: /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b10: 
+===== block-dev =====
+CMD: lsblk -o NAME,SIZE,FSTYPE,PARTLABEL,MOUNTPOINT 2>&1 | head -60; echo ---; cat /proc/partitions; echo ---; ls -la /dev/disk/by-partlabel/ 2>&1 | head -40
+NAME      SIZE FSTYPE PARTLABEL     MOUNTPOINT
+sda     470.6G                      
+├─sda1      8K        switch        
+├─sda2     32K        ssd           
+├─sda3     32K        dbg           
+├─sda4     32K        bk01          
+├─sda5    128K        bk02          
+├─sda6    256K        bk03          
+├─sda7    512K        bk04          
+├─sda8    512K        keystore      
+├─sda9    512K        frp           
+├─sda10     2M        bk05          
+├─sda11     4M        misc          
+├─sda12     4M        vm-data       
+├─sda13     4M        bk06          
+├─sda14     8M vfat   logfs         
+├─sda15     8M        bk07          
+├─sda16    16M        oops          
+├─sda17    16M        devinfo       
+├─sda18    16M        oem_misc1     
+├─sda19    16M ext4   metadata      
+├─sda20  31.4M        bk08          
+├─sda21  32.6M        splash        
+├─sda22    32M        bk09          
+├─sda23    64M ext4   persist       
+├─sda24    64M ext4   persistbak    /var/lib/rmtfs
+├─sda25    64M        logdump       
+├─sda26   128M        minidump      
+├─sda27   128M        rawdump       
+├─sda28    64M        recovery      
+├─sda29   256M ext4   cache         
+├─sda30     1G vfat   cust          
+└─sda31 468.7G ext4   userdata      /
+sdb         8M                      
+├─sdb1    512K        xbl_config    
+└─sdb2      7M        xbl           
+sdc         8M                      
+├─sdc1    512K        xbl_configbak 
+└─sdc2      7M        xblbak        
+sdd        32M                      
+├─sdd1     32K        bk31          
+├─sdd2    128K        cdt           
+├─sdd3    864K        bk32          
+├─sdd4      1M        ddr           
+└─sdd5      1M        bk33          
+sde         6G                      
+├─sde1     32K        multiimgoem   
+├─sde2     32K        multiimgqti   
+├─sde3     32K        secdata       
+├─sde4     32K        limits        
+├─sde5    104K        bk41          
+├─sde6    128K        qupfw         
+├─sde7    128K        qupfwbak      
+├─sde8    256K        apdp          
+├─sde9    256K        msadp         
+├─sde10   128K        vbmeta        
+├─sde11   128K        storsec       
+├─sde12   256K        bk42          
+├─sde13   256K        devcfg        
+├─sde14   256K        devcfgbak     
+---
+major minor  #blocks  name
+
+   1        0       8192 ram0
+   1        1       8192 ram1
+   1        2       8192 ram2
+   1        3       8192 ram3
+   1        4       8192 ram4
+   1        5       8192 ram5
+   1        6       8192 ram6
+   1        7       8192 ram7
+   1        8       8192 ram8
+   1        9       8192 ram9
+   1       10       8192 ram10
+   1       11       8192 ram11
+   1       12       8192 ram12
+   1       13       8192 ram13
+   1       14       8192 ram14
+   1       15       8192 ram15
+   8        0  493461504 sda
+   8        1          8 sda1
+   8        2         32 sda2
+   8        3         32 sda3
+   8        4         32 sda4
+   8        5        128 sda5
+   8        6        256 sda6
+   8        7        512 sda7
+   8        8        512 sda8
+   8        9        512 sda9
+   8       10       2048 sda10
+   8       11       4096 sda11
+   8       12       4096 sda12
+   8       13       4096 sda13
+   8       14       8192 sda14
+   8       15       8192 sda15
+ 259        0      16384 sda16
+ 259        1      16384 sda17
+ 259        2      16384 sda18
+ 259        3      16384 sda19
+ 259        4      32112 sda20
+ 259        5      33424 sda21
+ 259        6      32768 sda22
+ 259        7      65536 sda23
+ 259        8      65536 sda24
+ 259        9      65536 sda25
+ 259       10     131072 sda26
+ 259       11     131072 sda27
+ 259       12      65536 sda28
+ 259       13     262144 sda29
+ 259       14    1048576 sda30
+ 259       15  491429868 sda31
+   8       64    6291456 sde
+   8       65         32 sde1
+   8       66         32 sde2
+   8       67         32 sde3
+   8       68         32 sde4
+   8       69        104 sde5
+   8       70        128 sde6
+   8       71        128 sde7
+   8       72        256 sde8
+   8       73        256 sde9
+   8       74        128 sde10
+   8       75        128 sde11
+   8       76        256 sde12
+   8       77        256 sde13
+   8       78        256 sde14
+   8       79        512 sde15
+ 259       16        512 sde16
+ 259       17        512 sde17
+ 259       18        512 sde18
+ 259       19       1024 sde19
+ 259       20       1024 sde20
+ 259       21       1024 sde21
+ 259       22       1024 sde22
+ 259       23       1024 sde23
+ 259       24       1024 sde24
+ 259       25       1024 sde25
+ 259       26       1024 sde26
+ 259       27       1024 sde27
+ 259       28       1024 sde28
+ 259       29       8192 sde29
+ 259       30       2048 sde30
+ 259       31       2048 sde31
+ 259       32       2048 sde32
+ 259       33       2048 sde33
+ 259       34       2048 sde34
+ 259       35       2048 sde35
+ 259       36       2048 sde36
+ 259       37       4096 sde37
+ 259       38       4096 sde38
+ 259       39       4096 sde39
+ 259       40       8192 sde40
+ 259       41       8192 sde41
+ 259       42       8192 sde42
+ 259       43       8192 sde43
+ 259       44      16384 sde44
+ 259       45      32768 sde45
+ 259       46      65536 sde46
+ 259       47      65536 sde47
+ 259       48      65536 sde48
+ 259       49     131072 sde49
+ 259       50      22528 sde50
+ 259       51     174080 sde51
+ 259       52     327680 sde52
+ 259       53    1572864 sde53
+ 259       54    3670016 sde54
+   8       48      32768 sdd
+   8       49         32 sdd1
+   8       50        128 sdd2
+   8       51        864 sdd3
+   8       52       1024 sdd4
+   8       53       1024 sdd5
+   8       80      32768 sdf
+   8       81        256 sdf1
+   8       82        744 sdf2
+   8       83       1024 sdf3
+   8       84       2048 sdf4
+   8       85       8192 sdf5
+   8       86       8192 sdf6
+   8       32       8192 sdc
+   8       33        512 sdc1
+   8       34       7168 sdc2
+   8       16       8192 sdb
+   8       17        512 sdb1
+   8       18       7168 sdb2
+ 252        0    4194304 zram0
+---
+总计 0
+drwxr-xr-x 2 root root 2020 11月  6 18:48 .
+drwxr-xr-x 9 root root  180 11月  6 18:48 ..
+lrwxrwxrwx 1 root root   11  1月  1  1970 abl -> ../../sde35
+lrwxrwxrwx 1 root root   11  1月  1  1970 ablbak -> ../../sde36
+lrwxrwxrwx 1 root root   11  1月  1  1970 aop -> ../../sde15
+lrwxrwxrwx 1 root root   11  1月  1  1970 aopbak -> ../../sde16
+lrwxrwxrwx 1 root root   10  1月  1  1970 apdp -> ../../sde8
+lrwxrwxrwx 1 root root   10  1月  1  1970 bk01 -> ../../sda4
+lrwxrwxrwx 1 root root   10  1月  1  1970 bk02 -> ../../sda5
+lrwxrwxrwx 1 root root   10  1月  1  1970 bk03 -> ../../sda6
+lrwxrwxrwx 1 root root   10  1月  1  1970 bk04 -> ../../sda7
+lrwxrwxrwx 1 root root   11  1月  1  1970 bk05 -> ../../sda10
+lrwxrwxrwx 1 root root   11  1月  1  1970 bk06 -> ../../sda13
+lrwxrwxrwx 1 root root   11  1月  1  1970 bk07 -> ../../sda15
+lrwxrwxrwx 1 root root   11  1月  1  1970 bk08 -> ../../sda20
+lrwxrwxrwx 1 root root   11  1月  1  1970 bk09 -> ../../sda22
+lrwxrwxrwx 1 root root   10  1月  1  1970 bk31 -> ../../sdd1
+lrwxrwxrwx 1 root root   10  1月  1  1970 bk32 -> ../../sdd3
+lrwxrwxrwx 1 root root   10  1月  1  1970 bk33 -> ../../sdd5
+lrwxrwxrwx 1 root root   10  1月  1  1970 bk41 -> ../../sde5
+lrwxrwxrwx 1 root root   11  1月  1  1970 bk42 -> ../../sde12
+lrwxrwxrwx 1 root root   11  1月  1  1970 bk43 -> ../../sde23
+lrwxrwxrwx 1 root root   11 11月  6 18:48 bk44 -> ../../sde30
+lrwxrwxrwx 1 root root   11  1月  1  1970 bk45 -> ../../sde39
+lrwxrwxrwx 1 root root   11  1月  1  1970 bk47 -> ../../sde50
+lrwxrwxrwx 1 root root   10 11月  6 18:48 bk51 -> ../../sdf2
+lrwxrwxrwx 1 root root   10  1月  1  1970 bk52 -> ../../sdf3
+lrwxrwxrwx 1 root root   11  1月  1  1970 bluetooth -> ../../sde26
+lrwxrwxrwx 1 root root   11  1月  1  1970 boot -> ../../sde49
+lrwxrwxrwx 1 root root   11  1月  1  1970 cache -> ../../sda29
+lrwxrwxrwx 1 root root   11  1月  1  1970 catecontentfv -> ../../sde28
+lrwxrwxrwx 1 root root   11  1月  1  1970 catefv -> ../../sde18
+lrwxrwxrwx 1 root root   11  1月  1  1970 cateloader -> ../../sde31
+lrwxrwxrwx 1 root root   10  1月  1  1970 cdt -> ../../sdd2
+lrwxrwxrwx 1 root root   11  1月  1  1970 cmnlib -> ../../sde19
+lrwxrwxrwx 1 root root   11  1月  1  1970 cmnlib64 -> ../../sde21
+lrwxrwxrwx 1 root root   11  1月  1  1970 cmnlib64bak -> ../../sde22
+lrwxrwxrwx 1 root root   11  1月  1  1970 cmnlibbak -> ../../sde20
+lrwxrwxrwx 1 root root   11  1月  1  1970 core_nhlos -> ../../sde51
+
+===== esp-locator =====
+CMD: echo '== likely ESP =='; for p in /dev/sda1 /dev/sda2 /dev/sda3 /dev/nvme0n1p1; do [ -b "$p" ] && echo "$p $(blkid -o value -s TYPE $p 2>/dev/null) $(blkid -o value -s LABEL $p 2>/dev/null)"; done; echo '== mounts =='; mount | head -30; echo '== efibootmgr =='; command -v efibootmgr || echo 'efibootmgr: not installed'; echo '== efivars =='; ls /sys/firmware/efi/efivars/ 2>&1 | head -20
+== likely ESP ==
+/dev/sda1  
+/dev/sda2  
+/dev/sda3  
+== mounts ==
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+udev on /dev type devtmpfs (rw,nosuid,relatime,size=5780672k,nr_inodes=1445168,mode=755)
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000)
+tmpfs on /run type tmpfs (rw,nosuid,nodev,noexec,relatime,size=1166320k,mode=755)
+/dev/sda31 on / type ext4 (rw,relatime,errors=remount-ro)
+securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev)
+tmpfs on /run/lock type tmpfs (rw,nosuid,nodev,noexec,relatime,size=5120k)
+cgroup2 on /sys/fs/cgroup type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate,memory_recursiveprot)
+none on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime)
+efivarfs on /sys/firmware/efi/efivars type efivarfs (ro,nosuid,nodev,noexec,relatime)
+bpf on /sys/fs/bpf type bpf (rw,nosuid,nodev,noexec,relatime,mode=700)
+systemd-1 on /proc/sys/fs/binfmt_misc type autofs (rw,relatime,fd=32,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=2846)
+hugetlbfs on /dev/hugepages type hugetlbfs (rw,nosuid,nodev,relatime,pagesize=2M)
+mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
+debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
+configfs on /sys/kernel/config type configfs (rw,nosuid,nodev,noexec,relatime)
+fusectl on /sys/fs/fuse/connections type fusectl (rw,nosuid,nodev,noexec,relatime)
+binfmt_misc on /proc/sys/fs/binfmt_misc type binfmt_misc (rw,nosuid,nodev,noexec,relatime)
+/dev/sda24 on /var/lib/rmtfs type ext4 (rw,nosuid,nodev,noatime)
+tmpfs on /run/user/1000 type tmpfs (rw,nosuid,nodev,relatime,size=1166316k,nr_inodes=291579,mode=700,uid=1000,gid=1000)
+tmpfs on /run/user/121 type tmpfs (rw,nosuid,nodev,relatime,size=1166316k,nr_inodes=291579,mode=700,uid=121,gid=120)
+tmpfs on /run/user/0 type tmpfs (rw,nosuid,nodev,relatime,size=1166316k,nr_inodes=291579,mode=700)
+== efibootmgr ==
+/usr/bin/efibootmgr
+== efivars ==
+AuditMode-8be4df61-93ca-11d2-aa0d-00e098032b8c
+Boot0000-8be4df61-93ca-11d2-aa0d-00e098032b8c
+Boot0001-8be4df61-93ca-11d2-aa0d-00e098032b8c
+Boot0002-8be4df61-93ca-11d2-aa0d-00e098032b8c
+Boot0003-8be4df61-93ca-11d2-aa0d-00e098032b8c
+Boot0004-8be4df61-93ca-11d2-aa0d-00e098032b8c
+Boot0005-8be4df61-93ca-11d2-aa0d-00e098032b8c
+BootOrder-8be4df61-93ca-11d2-aa0d-00e098032b8c
+DeployedMode-8be4df61-93ca-11d2-aa0d-00e098032b8c
+OsIndicationsSupported-8be4df61-93ca-11d2-aa0d-00e098032b8c
+PlatformLang-8be4df61-93ca-11d2-aa0d-00e098032b8c
+PlatformLangCodes-8be4df61-93ca-11d2-aa0d-00e098032b8c
+SecureBoot-8be4df61-93ca-11d2-aa0d-00e098032b8c
+SetupMode-8be4df61-93ca-11d2-aa0d-00e098032b8c
+VendorKeys-8be4df61-93ca-11d2-aa0d-00e098032b8c
+
+===== boot-marker =====
+CMD: echo '== /boot contents =='; find /boot -maxdepth 2 -printf '%p %s\n' 2>/dev/null | head -40; echo '== refind conf anywhere =='; find / -maxdepth 4 -iname 'refind*.conf' -o -iname 'refind*.efi' 2>/dev/null | head -30
+== /boot contents ==
+/boot 4096
+== refind conf anywhere ==
+
+===== secureboot =====
+CMD: for v in /sys/firmware/efi/efivars/SecureBoot-* /sys/firmware/efi/efivars/SetupMode-*; do [ -f "$v" ] && echo "$v: $(od -An -tx1 "$v" | tail -1)"; done; echo ---; dmesg 2>/dev/null | grep -iE 'secure|uefi|stub' | tail -10
+/sys/firmware/efi/efivars/SecureBoot-8be4df61-93ca-11d2-aa0d-00e098032b8c:  06 00 00 00 00
+/sys/firmware/efi/efivars/SetupMode-8be4df61-93ca-11d2-aa0d-00e098032b8c:  06 00 00 00 01
+---
+[    0.405579] sdhci: Secure Digital Host Controller Interface driver

@@ -1,0 +1,200 @@
+READ-ONLY UEFI/BOOT AUDIT
+===== efibootmgr =====
+CMD: efibootmgr -v 2>&1; echo ---; efibootmgr 2>&1
+RC: 0
+BootOrder: 0000,0001,0002,0003,0004,0005
+Boot0000* scsi 0	VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,0000000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,8200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7000000000000000)/SCSI(0,0){auto_created_boot_option}
+      dp: 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 00 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 72 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 82 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 70 00 00 00 00 00 00 00 / 03 02 08 00 00 00 00 00 / 7f ff 04 00
+    data: 4e ac 08 81 11 9f 59 4d 85 0e e2 1a 52 2c 59 b2
+Boot0001* scsi 1	VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,0000000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,8200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7000000000000000)/SCSI(0,1){auto_created_boot_option}
+      dp: 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 00 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 72 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 82 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 70 00 00 00 00 00 00 00 / 03 02 08 00 00 00 01 00 / 7f ff 04 00
+    data: 4e ac 08 81 11 9f 59 4d 85 0e e2 1a 52 2c 59 b2
+Boot0002* scsi 2	VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,0000000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,8200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7000000000000000)/SCSI(0,2){auto_created_boot_option}
+      dp: 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 00 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 72 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 82 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 70 00 00 00 00 00 00 00 / 03 02 08 00 00 00 02 00 / 7f ff 04 00
+    data: 4e ac 08 81 11 9f 59 4d 85 0e e2 1a 52 2c 59 b2
+Boot0003* scsi 3	VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,0000000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,8200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7000000000000000)/SCSI(0,3){auto_created_boot_option}
+      dp: 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 00 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 72 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 82 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 70 00 00 00 00 00 00 00 / 03 02 08 00 00 00 03 00 / 7f ff 04 00
+    data: 4e ac 08 81 11 9f 59 4d 85 0e e2 1a 52 2c 59 b2
+Boot0004* scsi 4	VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,0000000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,8200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7000000000000000)/SCSI(0,4){auto_created_boot_option}
+      dp: 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 00 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 72 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 82 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 70 00 00 00 00 00 00 00 / 03 02 08 00 00 00 04 00 / 7f ff 04 00
+    data: 4e ac 08 81 11 9f 59 4d 85 0e e2 1a 52 2c 59 b2
+Boot0005* scsi 5	VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,0000000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,8200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7000000000000000)/SCSI(0,5){auto_created_boot_option}
+      dp: 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 00 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 72 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 82 00 00 00 00 00 00 00 / 01 04 1c 00 b9 73 1d e6 84 a3 cc 4a ae ab 82 e8 28 f3 62 8b 70 00 00 00 00 00 00 00 / 03 02 08 00 00 00 05 00 / 7f ff 04 00
+    data: 4e ac 08 81 11 9f 59 4d 85 0e e2 1a 52 2c 59 b2
+---
+BootOrder: 0000,0001,0002,0003,0004,0005
+Boot0000* scsi 0	VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,0000000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,8200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7000000000000000)/SCSI(0,0){auto_created_boot_option}
+Boot0001* scsi 1	VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,0000000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,8200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7000000000000000)/SCSI(0,1){auto_created_boot_option}
+Boot0002* scsi 2	VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,0000000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,8200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7000000000000000)/SCSI(0,2){auto_created_boot_option}
+Boot0003* scsi 3	VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,0000000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,8200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7000000000000000)/SCSI(0,3){auto_created_boot_option}
+Boot0004* scsi 4	VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,0000000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,8200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7000000000000000)/SCSI(0,4){auto_created_boot_option}
+Boot0005* scsi 5	VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,0000000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,8200000000000000)/VenHw(e61d73b9-a384-4acc-aeab-82e828f3628b,7000000000000000)/SCSI(0,5){auto_created_boot_option}
+
+===== vfat-parts =====
+CMD: echo '== vfat filesystems =='; blkid 2>/dev/null | grep -iE 'vfat|fat16|fat32' | head -30; echo '== by-partlabel esp/efi/boot =='; find /dev/disk/by-partlabel -maxdepth 1 -printf '%f -> %l\n' 2>/dev/null | grep -iE 'esp|efi|boot|uefi|refind' | head -30; echo '== all partlabels tail =='; find /dev/disk/by-partlabel -maxdepth 1 -printf '%f -> %l\n' 2>/dev/null | tail -40
+RC: 0
+== vfat filesystems ==
+/dev/sde26: SEC_TYPE="msdos" UUID="00BC-614E" BLOCK_SIZE="4096" TYPE="vfat" PARTLABEL="bluetooth" PARTUUID="d18746f0-1774-86b0-1f3e-3121643bc708"
+/dev/sde52: SEC_TYPE="msdos" UUID="00BC-614E" BLOCK_SIZE="4096" TYPE="vfat" PARTLABEL="modem" PARTUUID="14c205fd-e7f1-7aa8-99d8-9b5ca03ad944"
+/dev/sda14: SEC_TYPE="msdos" LABEL="LOGFS" UUID="D273-55EA" BLOCK_SIZE="4096" TYPE="vfat" PARTLABEL="logfs" PARTUUID="52c9e891-9bc2-e6c8-b2fc-dce89db7759a"
+/dev/sda30: LABEL_FATBOOT="efi" LABEL="efi" UUID="2D15-2699" BLOCK_SIZE="4096" TYPE="vfat" PARTLABEL="cust" PARTUUID="fb1fdc61-3e93-6e0a-75ff-e14f3e5d0216"
+== by-partlabel esp/efi/boot ==
+boot -> ../../sde49
+uefisecappbak -> ../../sde33
+uefisecapp -> ../../sde32
+uefivarstore -> ../../sde17
+== all partlabels tail ==
+splash -> ../../sda21
+catefv -> ../../sde18
+aop -> ../../sde15
+logfs -> ../../sda14
+bk06 -> ../../sda13
+multiimgqti -> ../../sde2
+uefivarstore -> ../../sde17
+aopbak -> ../../sde16
+misc -> ../../sda11
+logdump -> ../../sda25
+oem_misc1 -> ../../sda18
+devcfgbak -> ../../sde14
+bk09 -> ../../sda22
+bk33 -> ../../sdd5
+devcfg -> ../../sde13
+bk07 -> ../../sda15
+bk42 -> ../../sde12
+vbmeta -> ../../sde10
+bk03 -> ../../sda6
+keystore -> ../../sda8
+multiimgoem -> ../../sde1
+storsec -> ../../sde11
+frp -> ../../sda9
+bk04 -> ../../sda7
+metadata -> ../../sda19
+ddr -> ../../sdd4
+vm-data -> ../../sda12
+xbl -> ../../sdb2
+bk32 -> ../../sdd3
+bk02 -> ../../sda5
+bk05 -> ../../sda10
+cdt -> ../../sdd2
+bk31 -> ../../sdd1
+xbl_config -> ../../sdb1
+bk01 -> ../../sda4
+dbg -> ../../sda3
+switch -> ../../sda1
+ssd -> ../../sda2
+xblbak -> ../../sdc2
+xbl_configbak -> ../../sdc1
+
+===== boot-vars =====
+CMD: for v in /sys/firmware/efi/efivars/Boot* /sys/firmware/efi/efivars/BootOrder-*; do echo "== $v =="; od -An -c "$v" 2>/dev/null | head -12; done
+RC: 0
+== /sys/firmware/efi/efivars/Boot0000-8be4df61-93ca-11d2-aa0d-00e098032b8c ==
+  \a  \0  \0  \0 001  \0  \0  \0   |  \0   s  \0   c  \0   s  \0
+   i  \0      \0   0  \0  \0  \0 001 004 034  \0 271   s 035 346
+ 204 243 314   J 256 253 202 350   ( 363   b 213  \0  \0  \0  \0
+  \0  \0  \0  \0 001 004 034  \0 271   s 035 346 204 243 314   J
+ 256 253 202 350   ( 363   b 213   r  \0  \0  \0  \0  \0  \0  \0
+ 001 004 034  \0 271   s 035 346 204 243 314   J 256 253 202 350
+   ( 363   b 213 202  \0  \0  \0  \0  \0  \0  \0 001 004 034  \0
+ 271   s 035 346 204 243 314   J 256 253 202 350   ( 363   b 213
+   p  \0  \0  \0  \0  \0  \0  \0 003 002  \b  \0  \0  \0  \0  \0
+ 177 377 004  \0   N 254  \b 201 021 237   Y   M 205 016 342 032
+   R   ,   Y 262
+== /sys/firmware/efi/efivars/Boot0001-8be4df61-93ca-11d2-aa0d-00e098032b8c ==
+  \a  \0  \0  \0 001  \0  \0  \0   |  \0   s  \0   c  \0   s  \0
+   i  \0      \0   1  \0  \0  \0 001 004 034  \0 271   s 035 346
+ 204 243 314   J 256 253 202 350   ( 363   b 213  \0  \0  \0  \0
+  \0  \0  \0  \0 001 004 034  \0 271   s 035 346 204 243 314   J
+ 256 253 202 350   ( 363   b 213   r  \0  \0  \0  \0  \0  \0  \0
+ 001 004 034  \0 271   s 035 346 204 243 314   J 256 253 202 350
+   ( 363   b 213 202  \0  \0  \0  \0  \0  \0  \0 001 004 034  \0
+ 271   s 035 346 204 243 314   J 256 253 202 350   ( 363   b 213
+   p  \0  \0  \0  \0  \0  \0  \0 003 002  \b  \0  \0  \0 001  \0
+ 177 377 004  \0   N 254  \b 201 021 237   Y   M 205 016 342 032
+   R   ,   Y 262
+== /sys/firmware/efi/efivars/Boot0002-8be4df61-93ca-11d2-aa0d-00e098032b8c ==
+  \a  \0  \0  \0 001  \0  \0  \0   |  \0   s  \0   c  \0   s  \0
+   i  \0      \0   2  \0  \0  \0 001 004 034  \0 271   s 035 346
+ 204 243 314   J 256 253 202 350   ( 363   b 213  \0  \0  \0  \0
+  \0  \0  \0  \0 001 004 034  \0 271   s 035 346 204 243 314   J
+ 256 253 202 350   ( 363   b 213   r  \0  \0  \0  \0  \0  \0  \0
+ 001 004 034  \0 271   s 035 346 204 243 314   J 256 253 202 350
+   ( 363   b 213 202  \0  \0  \0  \0  \0  \0  \0 001 004 034  \0
+ 271   s 035 346 204 243 314   J 256 253 202 350   ( 363   b 213
+   p  \0  \0  \0  \0  \0  \0  \0 003 002  \b  \0  \0  \0 002  \0
+ 177 377 004  \0   N 254  \b 201 021 237   Y   M 205 016 342 032
+   R   ,   Y 262
+== /sys/firmware/efi/efivars/Boot0003-8be4df61-93ca-11d2-aa0d-00e098032b8c ==
+  \a  \0  \0  \0 001  \0  \0  \0   |  \0   s  \0   c  \0   s  \0
+   i  \0      \0   3  \0  \0  \0 001 004 034  \0 271   s 035 346
+ 204 243 314   J 256 253 202 350   ( 363   b 213  \0  \0  \0  \0
+  \0  \0  \0  \0 001 004 034  \0 271   s 035 346 204 243 314   J
+ 256 253 202 350   ( 363   b 213   r  \0  \0  \0  \0  \0  \0  \0
+ 001 004 034  \0 271   s 035 346 204 243 314   J 256 253 202 350
+   ( 363   b 213 202  \0  \0  \0  \0  \0  \0  \0 001 004 034  \0
+ 271   s 035 346 204 243 314   J 256 253 202 350   ( 363   b 213
+   p  \0  \0  \0  \0  \0  \0  \0 003 002  \b  \0  \0  \0 003  \0
+ 177 377 004  \0   N 254  \b 201 021 237   Y   M 205 016 342 032
+   R   ,   Y 262
+== /sys/firmware/efi/efivars/Boot0004-8be4df61-93ca-11d2-aa0d-00e098032b8c ==
+  \a  \0  \0  \0 001  \0  \0  \0   |  \0   s  \0   c  \0   s  \0
+   i  \0      \0   4  \0  \0  \0 001 004 034  \0 271   s 035 346
+ 204 243 314   J 256 253 202 350   ( 363   b 213  \0  \0  \0  \0
+  \0  \0  \0  \0 001 004 034  \0 271   s 035 346 204 243 314   J
+ 256 253 202 350   ( 363   b 213   r  \0  \0  \0  \0  \0  \0  \0
+ 001 004 034  \0 271   s 035 346 204 243 314   J 256 253 202 350
+   ( 363   b 213 202  \0  \0  \0  \0  \0  \0  \0 001 004 034  \0
+ 271   s 035 346 204 243 314   J 256 253 202 350   ( 363   b 213
+   p  \0  \0  \0  \0  \0  \0  \0 003 002  \b  \0  \0  \0 004  \0
+ 177 377 004  \0   N 254  \b 201 021 237   Y   M 205 016 342 032
+   R   ,   Y 262
+== /sys/firmware/efi/efivars/Boot0005-8be4df61-93ca-11d2-aa0d-00e098032b8c ==
+  \a  \0  \0  \0 001  \0  \0  \0   |  \0   s  \0   c  \0   s  \0
+   i  \0      \0   5  \0  \0  \0 001 004 034  \0 271   s 035 346
+ 204 243 314   J 256 253 202 350   ( 363   b 213  \0  \0  \0  \0
+  \0  \0  \0  \0 001 004 034  \0 271   s 035 346 204 243 314   J
+ 256 253 202 350   ( 363   b 213   r  \0  \0  \0  \0  \0  \0  \0
+ 001 004 034  \0 271   s 035 346 204 243 314   J 256 253 202 350
+   ( 363   b 213 202  \0  \0  \0  \0  \0  \0  \0 001 004 034  \0
+ 271   s 035 346 204 243 314   J 256 253 202 350   ( 363   b 213
+   p  \0  \0  \0  \0  \0  \0  \0 003 002  \b  \0  \0  \0 005  \0
+ 177 377 004  \0   N 254  \b 201 021 237   Y   M 205 016 342 032
+   R   ,   Y 262
+== /sys/firmware/efi/efivars/BootOrder-8be4df61-93ca-11d2-aa0d-00e098032b8c ==
+  \a  \0  \0  \0  \0  \0 001  \0 002  \0 003  \0 004  \0 005  \0
+== /sys/firmware/efi/efivars/BootOrder-8be4df61-93ca-11d2-aa0d-00e098032b8c ==
+  \a  \0  \0  \0  \0  \0 001  \0 002  \0 003  \0 004  \0 005  \0
+
+===== efi-apps =====
+CMD: echo '== any refind / efi files on mounted fs =='; find / -xdev -maxdepth 5 \( -iname 'refind*.efi' -o -iname 'refind.conf' -o -iname 'refind_linux.conf' -o -iname 'vmlinuz*' -o -iname 'initrd.img*' \) -printf '%p %s\n' 2>/dev/null | head -40
+RC: 0
+== any refind / efi files on mounted fs ==
+
+===== firmware-name =====
+CMD: echo '== remoteproc firmware-name from DT =='; for p in /sys/firmware/devicetree/base/remoteproc* /sys/firmware/devicetree/base/soc@0/remoteproc*; do [ -d "$p" ] || continue; echo "$p"; for a in compatible firmware-name; do [ -f "$p/$a" ] && echo "  $a: $(tr -d '\0' < "$p/$a")"; done; done; echo '== /sys/module/qcom_q6v5_pas =='; ls /sys/module/qcom_q6v5_pas/ 2>&1 | head
+RC: 0
+== remoteproc firmware-name from DT ==
+/sys/firmware/devicetree/base/soc@0/remoteproc@17300000
+  compatible: qcom,sm8150-adsp-pas
+  firmware-name: qcom/sm8150/Xiaomi/raphael/adsp.mdt
+/sys/firmware/devicetree/base/soc@0/remoteproc@2400000
+  compatible: qcom,sm8150-slpi-pas
+  firmware-name: qcom/sm8150/Xiaomi/raphael/slpi_rp.mdt
+/sys/firmware/devicetree/base/soc@0/remoteproc@4080000
+  compatible: qcom,sm8150-mpss-pas
+  firmware-name: qcom/sm8150/Xiaomi/raphael/modem.mdt
+/sys/firmware/devicetree/base/soc@0/remoteproc@8300000
+  compatible: qcom,sm8150-cdsp-pas
+  firmware-name: qcom/sm8150/Xiaomi/raphael/cdsp.mdt
+== /sys/module/qcom_q6v5_pas ==
+coresize
+drivers
+holders
+initsize
+initstate
+notes
+refcnt
+sections
+taint
+uevent
+

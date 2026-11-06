@@ -1,0 +1,324 @@
+{
+  "task": "Redmi K20 Pro / raphael / SM8150 cDSP 固件离线提取与核验（纯离线，未连接设备）",
+  "generated_local_date": "2026-11-06",
+  "source": {
+    "release": "XiaomiFirmwareUpdaterReleases/firmware_xiaomi_raphael @ stable-09.11.2021",
+    "zip": {
+      "path": "tmp/firmware/_download/fw_raphael_miui_RAPHAEL_V12.5.6.0.RFKCNXM_f5fe3b4a6f_11.0.zip",
+      "bytes": 104349078,
+      "sha256": "749f61230279e7feb8f49bae81aeafda2148e41c9a38ef83ce7a0d898161b3f0"
+    },
+    "NON-HLOS.bin": {
+      "bytes": 200929280,
+      "sha256": "7a3183eb7840629154e34585b04bd7b16dc760c76894b3a53768228dd3c3aa77",
+      "filesystem": "FAT16 (4096 B/sector, 4 sectors/cluster)",
+      "role": "CDSP PIL 分段"
+    },
+    "dspso.bin": {
+      "bytes": 67108864,
+      "sha256": "60055d88ae06067083673d866badaaf986ae70efb7afe7ec44388df7822b6ee6",
+      "filesystem": "ext4 (0xef53, 4096 B/block)",
+      "role": "/cdsp DSP 库树"
+    },
+    "baseline_deb": {
+      "path": "tmp/kernel/v7.0-firmware-xiaomi-raphael.deb",
+      "bytes": 58677214,
+      "note": "设备当前同版；解包于 tmp/firmware/baseline-v1.3/"
+    }
+  },
+  "build_id": {
+    "baseline": "CDSP.HT.2.0.1-00171-SM8150-1.357350.2_20201211_224311",
+    "new": "CDSP.HT.2.0.1-00171-SM8150-1.357350.2.419065.1_20210730_070147"
+  },
+  "file_count": 35,
+  "files": [
+    {
+      "path": "dsp/cdsp/_extract_log.txt",
+      "bytes": 2971,
+      "sha256": "14ea786071e7394e624c86002d97faa3985df4196c072e28b82514a9661c789c",
+      "src_in_image": "dspso.bin:/cdsp/_extract_log.txt",
+      "kind": "log"
+    },
+    {
+      "path": "dsp/cdsp/fastrpc_shell_3",
+      "bytes": 939664,
+      "sha256": "f12bf733515ecbf67c2dea46cb8cb92d999de523e72533cf4148376e1e2b21d1",
+      "src_in_image": "dspso.bin:/cdsp/fastrpc_shell_3",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/fastrpc_shell_unsigned_3",
+      "bytes": 935256,
+      "sha256": "f94a206286adc2aa17df70c9468884702445e0490711adeefbdb26a05c25ef31",
+      "src_in_image": "dspso.bin:/cdsp/fastrpc_shell_unsigned_3",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libbenchmark_skel.so",
+      "bytes": 289960,
+      "sha256": "9f5c8da4996e716d534d71eb63b1d81008ce4ebc078859e21ff12db33d55ef84",
+      "src_in_image": "dspso.bin:/cdsp/libbenchmark_skel.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libc++.so.1",
+      "bytes": 3124704,
+      "sha256": "1fc1384555cfad5dd23df8b2e07ffb10a22d6b4bce83a1eb7d0c5e71470188d7",
+      "src_in_image": "dspso.bin:/cdsp/libc++.so.1",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libc++abi.so.1",
+      "bytes": 1435816,
+      "sha256": "766a3ec60719b6a4b33dd5612ff92ba2c72fe6da16a2b8a97e7ef9d274030cb9",
+      "src_in_image": "dspso.bin:/cdsp/libc++abi.so.1",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libhcp_rpc_skel.so",
+      "bytes": 242152,
+      "sha256": "78809032710d91130fe41141b9c1eb31dc58c92b405eee4667c9e0fc5be61cd6",
+      "src_in_image": "dspso.bin:/cdsp/libhcp_rpc_skel.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libhta_dsp_skel.so",
+      "bytes": 248976,
+      "sha256": "9293cc4dbba5ae2a3eb904f2e0be26bb7c5b3a43367f4d0def259c81bb65b4f6",
+      "src_in_image": "dspso.bin:/cdsp/libhta_dsp_skel.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libimmotion_skel.so",
+      "bytes": 3344144,
+      "sha256": "f2620f926d6c12e3ce5efb81020f7e96436a58d808708d04bf4579aff08f6b57",
+      "src_in_image": "dspso.bin:/cdsp/libimmotion_skel.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libstabilitydomain_skel.so",
+      "bytes": 85840,
+      "sha256": "5ad532292068ed63e82e3143d66773e32d662c24ff6f09cb7bc46c6f49592445",
+      "src_in_image": "dspso.bin:/cdsp/libstabilitydomain_skel.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libsysmon_skel.so",
+      "bytes": 205040,
+      "sha256": "27e7edf7d81e4ddfb2697e757201750bdf51a4b760bd7b4283349fff71144f37",
+      "src_in_image": "dspso.bin:/cdsp/libsysmon_skel.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libsysmondomain_skel.so",
+      "bytes": 264496,
+      "sha256": "cb9df8018f01c95f869f8b5414ea7b5b17e648989809ed13904730cf5b7a4a5c",
+      "src_in_image": "dspso.bin:/cdsp/libsysmondomain_skel.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libsysmonhvxthrottle_skel.so",
+      "bytes": 29864,
+      "sha256": "b457c80290076ea04cbc7645ceec9aab7d20ade95ac590b4e57e11d5ee966570",
+      "src_in_image": "dspso.bin:/cdsp/libsysmonhvxthrottle_skel.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libsysmonquery_skel.so",
+      "bytes": 38216,
+      "sha256": "8059abef29aee3a4f3b2462b09155bc7c2e44e28597795aa249fcbb0f37ca13d",
+      "src_in_image": "dspso.bin:/cdsp/libsysmonquery_skel.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libvpp_aie.so",
+      "bytes": 223696,
+      "sha256": "8e0adbc746cee22c13ec6f3d40801e7f7ca008383bd6db839bc8fbea30c53186",
+      "src_in_image": "dspso.bin:/cdsp/libvpp_aie.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libvpp_frc.so",
+      "bytes": 1678016,
+      "sha256": "d0d263e25bed0137fa3b81a6615c824e4a64cf0756d7ff16c2923561b38fc86f",
+      "src_in_image": "dspso.bin:/cdsp/libvpp_frc.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libvpp_mvp.so",
+      "bytes": 6736,
+      "sha256": "5e6bd28f8dc8815a660c1c5cd007de6ecdab1d92605c95669fe521987a8746a1",
+      "src_in_image": "dspso.bin:/cdsp/libvpp_mvp.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libvpp_nr.so",
+      "bytes": 6736,
+      "sha256": "cc88d6e39b8d89cda7b977e117ce48969af04b3c7f3cead052f2fa5be6ccfee2",
+      "src_in_image": "dspso.bin:/cdsp/libvpp_nr.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libvpp_qbr.so",
+      "bytes": 6736,
+      "sha256": "0c4fd1e2482bc01996952aa9a1a3128e77a0e9b04b6463e0ee8ad75f74e04689",
+      "src_in_image": "dspso.bin:/cdsp/libvpp_qbr.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/libvpp_svc_skel.so",
+      "bytes": 276400,
+      "sha256": "b349bf5fe7819e7653258e07e0f6d3febfd0ea1a79d1e83027ef6b4f9881156a",
+      "src_in_image": "dspso.bin:/cdsp/libvpp_svc_skel.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/map_SHARED_LIBS_855.cdsp.prodQ.txt",
+      "bytes": 1656,
+      "sha256": "67942e90f65b98d5187bf5aeed4a5088575fad0356b5d420a8a50ea22fa08094",
+      "src_in_image": "dspso.bin:/cdsp/map_SHARED_LIBS_855.cdsp.prodQ.txt",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "dsp/cdsp/ubwcdma_dynlib.so",
+      "bytes": 157320,
+      "sha256": "fd68479ce7c4ee3198a6149b8f076983626d9c1f87c1f088500ce200281a2107",
+      "src_in_image": "dspso.bin:/cdsp/ubwcdma_dynlib.so",
+      "kind": "dsp",
+      "note": "ext4 inode 原样数据"
+    },
+    {
+      "path": "pil/CDSP.B00",
+      "bytes": 436,
+      "sha256": "e569f87d0f5800ebff05684688f07b2441cf50e3b3bab1049fdb06ce8d3b686b",
+      "src_in_image": "NON-HLOS.bin:IMAGE/CDSP.B00",
+      "kind": "pil-raw",
+      "note": "FAT16 image/ 目录中原样提取"
+    },
+    {
+      "path": "pil/CDSP.B01",
+      "bytes": 7144,
+      "sha256": "5dc5efcd87b3d304719b84f6a1bb59e1cd9ea18a3fec7f0cb1f034735266f752",
+      "src_in_image": "NON-HLOS.bin:IMAGE/CDSP.B01",
+      "kind": "pil-raw",
+      "note": "FAT16 image/ 目录中原样提取"
+    },
+    {
+      "path": "pil/CDSP.B02",
+      "bytes": 228148,
+      "sha256": "a14316ec0d5ad01982332c3240e3f54393d2f32fe0468a53f84612f53c6eb4f8",
+      "src_in_image": "NON-HLOS.bin:IMAGE/CDSP.B02",
+      "kind": "pil-raw",
+      "note": "FAT16 image/ 目录中原样提取"
+    },
+    {
+      "path": "pil/CDSP.B03",
+      "bytes": 104284,
+      "sha256": "19acd6c04f05923f5ced9c226f2cadf89aa9ea4cb2999d6ef774a559cfa5f846",
+      "src_in_image": "NON-HLOS.bin:IMAGE/CDSP.B03",
+      "kind": "pil-raw",
+      "note": "FAT16 image/ 目录中原样提取"
+    },
+    {
+      "path": "pil/CDSP.B04",
+      "bytes": 1200,
+      "sha256": "91a0f8a30417b5488f62368073d953e4d68ed25bee2e9ca4c4e48896b0b64ee6",
+      "src_in_image": "NON-HLOS.bin:IMAGE/CDSP.B04",
+      "kind": "pil-raw",
+      "note": "FAT16 image/ 目录中原样提取"
+    },
+    {
+      "path": "pil/CDSP.B05",
+      "bytes": 2735588,
+      "sha256": "85e678842bdd71f17cab12d5ceed577a954971b9dfd962dbe9d2871e911e4154",
+      "src_in_image": "NON-HLOS.bin:IMAGE/CDSP.B05",
+      "kind": "pil-raw",
+      "note": "FAT16 image/ 目录中原样提取"
+    },
+    {
+      "path": "pil/CDSP.B06",
+      "bytes": 48596,
+      "sha256": "29a625653510d762fd5569ca77c8e7da7799f7b08ef915b7c2b6b312a807107e",
+      "src_in_image": "NON-HLOS.bin:IMAGE/CDSP.B06",
+      "kind": "pil-raw",
+      "note": "FAT16 image/ 目录中原样提取"
+    },
+    {
+      "path": "pil/CDSP.B08",
+      "bytes": 209184,
+      "sha256": "b5d6b494684ddd643719ca212aed9782acaa6b7e2907e3ac0b5ad1d50286d3bd",
+      "src_in_image": "NON-HLOS.bin:IMAGE/CDSP.B08",
+      "kind": "pil-raw",
+      "note": "FAT16 image/ 目录中原样提取"
+    },
+    {
+      "path": "pil/CDSP.B10",
+      "bytes": 54932,
+      "sha256": "14b4f85ba80165c5e2b0c7bbb83be37ad7620dd2cbae82cccbe052a77eb5f7a2",
+      "src_in_image": "NON-HLOS.bin:IMAGE/CDSP.B10",
+      "kind": "pil-raw",
+      "note": "FAT16 image/ 目录中原样提取"
+    },
+    {
+      "path": "pil/CDSP.MDT",
+      "bytes": 7580,
+      "sha256": "4b82459c883f4d9b75cc41c916db41c5c982c3e299c74fa59a550cf8d6f62177",
+      "src_in_image": "NON-HLOS.bin:IMAGE/CDSP.MDT",
+      "kind": "pil-raw",
+      "note": "FAT16 image/ 目录中原样提取"
+    },
+    {
+      "path": "pil/CDSPR.JSN",
+      "bytes": 403,
+      "sha256": "15e148599165b38f68e62302d63c87caa5f0b164deb81aa419bbb4ecf920bc4b",
+      "src_in_image": "NON-HLOS.bin:IMAGE/CDSPR.JSN",
+      "kind": "pil-raw",
+      "note": "FAT16 image/ 目录中原样提取"
+    },
+    {
+      "path": "pil/_extract_log.txt",
+      "bytes": 1249,
+      "sha256": "ee20d89a9a30b6eecbba750eb0454e46e4e0dc6103a38a23f3ef60620e73e1a7",
+      "src_in_image": "(提取日志)",
+      "kind": "log"
+    },
+    {
+      "path": "pil/cdsp.mbn",
+      "bytes": 3405460,
+      "sha256": "00c366aa71d695d10be350630f7b437c9773efdd429ba168fd29305bee4fd1fd",
+      "src_in_image": "NON-HLOS.bin:IMAGE/CDSP.MDT + IMAGE/CDSP.Bxx（按 MDT 自身 phdr p_offset 重排合并）",
+      "kind": "pil-rebuilt",
+      "note": "由本包官方 MDT+Bxx 重排，逐段字节==原 Bxx；非伪造、未改写任何分段内容"
+    }
+  ],
+  "notes": [
+    "dsp/cdsp/ 共 21 个文件：map_SHARED_LIBS_855.cdsp.prodQ.txt 列出的 20 个库全部齐全，另含映射表自身。",
+    "pil/ 共 12 个固件文件：11 个 FAT16 原样分段（CDSP.MDT + CDSP.B00..B10 中实际存在的 9 个 + CDSPR.JSN）+ 1 个重建 cdsp.mbn。",
+    "cdsp.mbn 并非 NON-HLOS.bin 中现成文件；NON-HLOS.bin 内是 Qualcomm split 形态 CDSP.MDT + CDSP.Bxx。",
+    "重建方法：以 CDSP.MDT 前 436 字节(ELF头+12个phdr)为头，按各 phdr 的 p_offset 将对应 Bxx 原样写入，段间补 0；",
+    "前置校验全部通过：MDT 前 436 字节与基准 cdsp.mbn 完全相同、12 段 p_offset/filesz/flags 完全一致、",
+    "Bxx 长度与 phdr.filesz 逐项一致、filesz=0 的段确无 B07/B09/B11、基准 mbn 段间 padding 抽样全 0。",
+    "若不愿使用重建 mbn，可直接使用 pil/ 下的原始 CDSP.MDT + CDSP.Bxx（需设备侧加载器支持 split 形态）。",
+    "本报告及所有产出均为 Windows 主机离线生成；未连接、未修改、未读取设备 172.16.42.1。"
+  ]
+}

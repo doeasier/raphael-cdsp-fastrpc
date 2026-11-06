@@ -1,0 +1,40 @@
+# refind_linux.conf — 阶段 1 收敛版：只恢复 USB-NCM 网络，DSP 保持屏蔽
+#
+# 2026-11-05 定性（已用 upstream 资料核对）：
+#   诊断启动项确实让系统成功进到图形界面（此前"没进多用户"是因无网络而误判），
+#   但它同时打掉了两条网络出口：
+#     - qcom_q6v5_pas 被 blacklist + install /bin/false 双重封死。
+#       raphael 的 WCN3998 走 ath10k_snoc，WLAN 固件跑在 modem Q6 的
+#       protection domain 上（"Nothing about Wi-Fi can happen until the modem
+#       boots"）；而 adsp/cdsp/mpss/slpi 四个 PAS remoteproc 共用
+#       qcom_q6v5_pas 这一个驱动。封死它 -> modem 不启动 -> WLFW QMI 服务
+#       不发布 -> ath10k_snoc probe -110 -> wlan0 消失（GUI "未找到 Wi-Fi 适配器"）。
+#     - systemd.mask=usb-ncm.service -> UDC 未绑定，手机侧有 172.16.42.1 接口，
+#       Windows 侧却枚举不到任何 USB 设备（pnputil: 找不到任何设备）。
+#
+# 【决定策略的硬风险】
+#   SM8150 mainline 已知：modem 启动后 WLAN PD 的 QMI_WLFW_CAL_REPORT_REQ
+#   可在 ~29ms 内把整个 SoC fabric 锁死，无 panic / 无 ramdump / 连 netconsole
+#   都来不及输出（Tab S6 mainline 记录）；pmOS SM8150(vayu) 也有
+#   "qcom_q6v5_pas 4080000.remoteproc: fatal error ... wlan_process" 反复 recovery。
+#   这与本项目之前「固定 43-44s 周期 + 无 shutdown/panic + CPU 连日志都写不出」
+#   的启动循环指纹高度吻合。
+#   => 阶段 1 绝不为恢复 Wi-Fi 解封 qcom_q6v5_pas，Wi-Fi 暂时放弃（D8 不需要它）。
+#   => 网络唯一通道改为 USB-NCM (172.16.42.1)，只需解除 usb-ncm.service 的 mask。
+#
+# 【阶段 2：cDSP，等阶段 1 能联网后在线做，全部可远程完成】
+#   给 modem/adsp/slpi 的 remoteproc 节点加 status="disabled"、只留 cdsp，
+#   再解封 qcom_q6v5_pas；同时给 12 个 compute-cb@N 补 dma-coherent。
+#   两处都是 DTB 修改，合并成一次正常 reboot。这样 modem 不启动（避开 fabric
+#   lock），cDSP 仍可用，网络继续走 USB-NCM。
+#   注意：改 DT 前必须先核对实际 DTB 里 4 个 remoteproc 节点的路径/compatible
+#   与固件是否齐备（内核 7.0.0-sm8150 不等于上游 DTS）。
+#
+# 本版相对诊断项只改一个变量：去掉 systemd.mask=usb-ncm.service。
+#   modprobe.blacklist 六项、所有 SLPI/sensors/gpsd/sim mask、console=tty0、
+#   loglevel=4、plymouth.enable=0、panic=0 全部原样保留，便于干净 A/B。
+# 顺序即 rEFInd 菜单顺序；timeout -1 => 立即启动第一项。第二/三项供回滚。
+
+"Boot stage1 (usb-net only)"  "root=UUID=ee8d3593-59b1-480e-a3b6-4fefb17ee7d8 rw console=ttyMSM0,115200 console=tty0 loglevel=4 systemd.show_status=1 rd.systemd.show_status=1 systemd.log_level=info rd.udev.log_priority=info udev.log_priority=info plymouth.enable=0 panic=0 systemd.unit=multi-user.target modprobe.blacklist=qcom_q6v5_pas,qcom_q6v5_adsp,qcom_q6v5_mss,qcom_q6v5_common,qcom_sysmon,qcom_pil_info systemd.mask=hexagonrpcd-sdsp.service systemd.mask=hexagonrpcd-sdsp.path systemd.mask=raphael-sensors.service systemd.mask=raphael-sensors-persist-perms.service systemd.mask=raphael-slpi-client2slpi.service systemd.mask=raphael-slpi-bl-notify.service systemd.mask=raphael-slpi-oled-gate.service systemd.mask=raphael-gpsd-bridge.service systemd.mask=raphael-sim-init.service dtb=\dtbs\qcom\sm8150-xiaomi-raphael.dtb"
+"Boot ORIGINAL (pre-diag)"  "root=UUID=ee8d3593-59b1-480e-a3b6-4fefb17ee7d8 rw console=ttyMSM0,115200 splash loglevel=0 plymouth.ignore-serial-consoles vt.global_cursor_default=0 rd.systemd.show_status=0 systemd.show_status=0 rd.udev.log_priority=0 udev.log_priority=0 dtb=\dtbs\qcom\sm8150-xiaomi-raphael.dtb"
+"Boot DIAG (no net, pre-converge)"  "root=UUID=ee8d3593-59b1-480e-a3b6-4fefb17ee7d8 rw console=ttyMSM0,115200 console=tty0 loglevel=4 systemd.show_status=1 rd.systemd.show_status=1 systemd.log_level=info rd.udev.log_priority=info udev.log_priority=info plymouth.enable=0 panic=0 systemd.unit=multi-user.target modprobe.blacklist=qcom_q6v5_pas,qcom_q6v5_adsp,qcom_q6v5_mss,qcom_q6v5_common,qcom_sysmon,qcom_pil_info systemd.mask=hexagonrpcd-sdsp.service systemd.mask=hexagonrpcd-sdsp.path systemd.mask=usb-ncm.service systemd.mask=raphael-sensors.service systemd.mask=raphael-sensors-persist-perms.service systemd.mask=raphael-slpi-client2slpi.service systemd.mask=raphael-slpi-bl-notify.service systemd.mask=raphael-slpi-oled-gate.service systemd.mask=raphael-gpsd-bridge.service systemd.mask=raphael-sim-init.service dtb=\dtbs\qcom\sm8150-xiaomi-raphael.dtb"

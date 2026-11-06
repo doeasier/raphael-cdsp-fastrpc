@@ -1,0 +1,410 @@
+host_main failure diagnosis (read-only)
+===== aee-codes =====
+CMD: echo '== AEE error code definitions =='; grep -rniE '80000406|AEE_E[A-Z]+[[:space:]]+0x8000040' /data/local/tmp/hvx/incs /usr/local/include /usr/include /opt 2>/dev/null | head -40; echo '== all AEE defines near 0x800004xx =='; grep -rniE '#define[[:space:]]+AEE_[A-Z]+[[:space:]]+0x800004' /data/local/tmp/hvx/incs /usr/local/include /opt 2>/dev/null | head -60
+RC: 0
+== AEE error code definitions ==
+/data/local/tmp/hvx/incs/stddef/AEEStdErr.h:38:	#define AEE_EOFFSET               0x80000400
+/usr/local/include/fastrpc/AEEStdErr.h:10:#define DSP_AEE_EOFFSET	0x80000400
+/opt/fastrpc-backup-20261106/fastrpc-include/AEEStdErr.h:10:#define DSP_AEE_EOFFSET	0x80000400
+/opt/fastrpc-pr319/inc/AEEStdErr.h:10:#define DSP_AEE_EOFFSET	0x80000400
+== all AEE defines near 0x800004xx ==
+/data/local/tmp/hvx/incs/stddef/AEEStdErr.h:38:	#define AEE_EOFFSET               0x80000400
+
+===== daemon-log =====
+CMD: echo '== cdsprpcd journal (this boot) =='; journalctl -u cdsprpcd -b --no-pager 2>/dev/null | tail -100; echo '== any hvx / skel / open errors =='; journalctl -b --no-pager 2>/dev/null | grep -iE 'hvx|skel|apps_std|remote_handle|mod_table|unsigned|fastrpc_shell' | tail -80
+RC: 0
+== cdsprpcd journal (this boot) ==
+11月 06 22:31:20 xiaomi-raphael systemd[1]: Starting cdsprpcd.service - cDSP RPC daemon...
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: dsprpcd.c:176:CDSP daemon starting
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:4153: fastrpc_apps_user_init done. default domain:3 and &fastrpc_trace:0xffffaeee25e0
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:4274: multidsplib_env_init: libcdsprpc.so loaded
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: dsprpcd.c:183:adsp_default_listener_start called
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1792: remote_handle_open: Successfully opened handle 0x103 for '":;./\attachguestos on domain 3 (spawn time 0 us, load time 0 us)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_perf.c:323: fastrpc_perf_init: enabled systrace 0x0 and RPC traces (kernel 0, dsp 0) with frequency 1000
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: log_config.c:398: file_watcher_thread starting for domain 3
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: log_config.c:422:file_watcher_thread: Couldn't find file cdsprpcd.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xffffa0000b70, method 5 on domain 3 (sc 0x5000000) (errno Success)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: listener_android.c:132: listener thread starting
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_mem.c:556: Error 0x14: fastrpc_mmap_helper failed for fd 11, addr 0xffffadca0000, length 0x40000, domain 3, flags 0x0, ioctl ret 0x80000414, errno Success
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_mem.c:699: Error 0x14: fastrpc_mmap_internal failed for fd 11, addr 0xffffadca0000, length 0x40000, domain 3, flags 0x0
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_mem.c:880: Error 0x14: remote_mmap64_internal failed for fd 0xb of size 262144 (flags 0x0, vaddrin 0xffffadca0000) errno Success
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: apps_mem_imp.c:175::error: 20: AEE_SUCCESS == (nErr = remote_mmap64_internal(fd, rflags, (uint64_t)(uintptr_t)buf, len, (uint64_t *)vadsp))
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: apps_mem_imp.c:199:Error 0x14: apps_mem_request_mmap64 failed for fd 0xb of size 262144 (lflags 0x80000000, rflags 0x0)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: mod_table.c:911: Error 0x14: open_mod_table_handle_invoke failed for handle:0xaeeeea20, sc:0x2010100
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1607: Error 0x14: remote_handle64_invoke failed for module (null), handle 0xaaaaf802f910, method 4 on domain 3 (sc 0x4010100) (errno Success)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: adspmsgd.c:119::error: 20: AEE_SUCCESS == (nErr = adspmsgd_adsp1_init3(handle, 0, RPCMEM_HEAP_DEFAULT, filter, DEFAULT_MEMORY_SIZE, &vapps))
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: adspmsgd.c:145:Error 0x14: adspmsgd_init failed for handle 0xaaaaf802f910 filter 16 with errno Success
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1607: Error 0x8000041d: remote_handle64_invoke failed for module (null), handle 0xaaaaf802f910, method 3 on domain 3 (sc 0x3000000) (errno Success)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xaaaaf802f9b0, method 2 on domain 3 (sc 0x2020200) (errno Operation not permitted)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1719: Warning 0x4e: remote_handle_open_domain: remotectl1 domains not supported for domain 3
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1792: remote_handle_open: Successfully opened handle 0xc04c5200 for adsp_default_listener on domain 3 (spawn time 7135 us, load time 563 us)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1792: remote_handle_open: Successfully opened handle 0xc04c54a0 for adsp_default_listener on domain 3 (spawn time 0 us, load time 220 us)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1792: remote_handle_open: Successfully opened handle 0x8 for '":;./\geteventfd on domain 3 (spawn time 0 us, load time 0 us)
+11月 06 22:31:20 xiaomi-raphael systemd[1]: Started cdsprpcd.service - cDSP RPC daemon.
+== any hvx / skel / open errors ==
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1792: remote_handle_open: Successfully opened handle 0x103 for '":;./\attachguestos on domain 3 (spawn time 0 us, load time 0 us)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: log_config.c:422:file_watcher_thread: Couldn't find file cdsprpcd.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xffffa0000b70, method 5 on domain 3 (sc 0x5000000) (errno Success)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: mod_table.c:911: Error 0x14: open_mod_table_handle_invoke failed for handle:0xaeeeea20, sc:0x2010100
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1607: Error 0x14: remote_handle64_invoke failed for module (null), handle 0xaaaaf802f910, method 4 on domain 3 (sc 0x4010100) (errno Success)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1607: Error 0x8000041d: remote_handle64_invoke failed for module (null), handle 0xaaaaf802f910, method 3 on domain 3 (sc 0x3000000) (errno Success)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xaaaaf802f9b0, method 2 on domain 3 (sc 0x2020200) (errno Operation not permitted)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1719: Warning 0x4e: remote_handle_open_domain: remotectl1 domains not supported for domain 3
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1792: remote_handle_open: Successfully opened handle 0xc04c5200 for adsp_default_listener on domain 3 (spawn time 7135 us, load time 563 us)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1792: remote_handle_open: Successfully opened handle 0xc04c54a0 for adsp_default_listener on domain 3 (spawn time 0 us, load time 220 us)
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: fastrpc_apps_user.c:1792: remote_handle_open: Successfully opened handle 0x8 for '":;./\geteventfd on domain 3 (spawn time 0 us, load time 0 us)
+11月 06 22:31:38 xiaomi-raphael host_main[2741]: fastrpc_apps_user.c:2614: remote_session_control Unsigned PD enable 1 request for domain 3
+11月 06 22:31:38 xiaomi-raphael host_main[2741]: apps_std_imp.c:1076: Successfully opened file fastrpc_shell_unsigned_3
+11月 06 22:31:38 xiaomi-raphael host_main[2741]: fastrpc_apps_user.c:3538: Info: Created user PD on domain 3, dbg_trace 0x0, enabled attr=> RPC timeout:0, Dbg Mode:N, CRC:N, Unsigned:Y, Signed:N, Adapt QOS:N, PD dump: (Config:N, Dbg:N), Perf: (Kernel:N, DSP:N), Iregion:N, QTF:N, UAF:N userPD initmem len:0x500000, Log pkt: N
+11月 06 22:31:38 xiaomi-raphael host_main[2741]: log_config.c:422:file_watcher_thread: Couldn't find file host_main.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx
+11月 06 22:31:38 xiaomi-raphael host_main[2741]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xaaaaea3b26b0, method 2 on domain 3 (sc 0x2020200) (errno Operation not permitted)
+11月 06 22:31:38 xiaomi-raphael host_main[2741]: fastrpc_apps_user.c:1719: Warning 0x4e: remote_handle_open_domain: remotectl1 domains not supported for domain 3
+11月 06 22:31:38 xiaomi-raphael host_main[2741]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xffff80000b70, method 5 on domain 3 (sc 0x5000000) (errno Success)
+11月 06 22:31:38 xiaomi-raphael host_main[2741]: fastrpc_apps_user.c:1740: Error 0x80000406: remote_handle_open_domain: dynamic loading failed for file:///data/local/tmp/hvx/libhvx_add_skel.so?hvx_add_skel_handle_invoke&_modver=1.0&_dom=cdsp on domain 3 (dlerror Absolute path or ./obj_name required for shared object data/local/t
+11月 06 22:31:38 xiaomi-raphael host_main[2741]: fastrpc_apps_user.c:1840: Error 0x80000406: remote_handle64_open failed for file:///data/local/tmp/hvx/libhvx_add_skel.so?hvx_add_skel_handle_invoke&_modver=1.0&_dom=cdsp (errno Success)
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:2614: remote_session_control Unsigned PD enable 1 request for domain 3
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file fastrpc_shell_unsigned_3
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:3538: Info: Created user PD on domain 3, dbg_trace 0x0, enabled attr=> RPC timeout:0, Dbg Mode:N, CRC:N, Unsigned:Y, Signed:N, Adapt QOS:N, PD dump: (Config:N, Dbg:N), Perf: (Kernel:N, DSP:N), Iregion:N, QTF:N, UAF:N userPD initmem len:0x500000, Log pkt: N
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: log_config.c:422:file_watcher_thread: Couldn't find file fastrpc_test.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx;/usr/local/share/fastrpc_test/v68
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xffff84000b70, method 5 on domain 3 (sc 0x5000000) (errno Success)
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xffff84000ce0, method 5 on domain 3 (sc 0x5020000) (errno Operation not permitted)
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file libmultithreading_skel.so
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1844: remote_handle64_open: Successfully opened handle 0xaaaabb31ec40 (remote 0xf5c210) for file:///libmultithreading_skel.so?multithreading_skel_handle_invoke&_modver=1.0&_dom=cdsp on domain 3 (spawn time 24466 us, load time 12185 us), num handles 1
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1965: remote_handle64_close: closed module libmultithreading_skel.so with handle 0xaaaabb31ec40 remote handle 0xf5c210, num of open handles: 0
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:2614: remote_session_control Unsigned PD enable 1 request for domain 3
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file fastrpc_shell_unsigned_3
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:3538: Info: Created user PD on domain 3, dbg_trace 0x0, enabled attr=> RPC timeout:0, Dbg Mode:N, CRC:N, Unsigned:Y, Signed:N, Adapt QOS:N, PD dump: (Config:N, Dbg:N), Perf: (Kernel:N, DSP:N), Iregion:N, QTF:N, UAF:N userPD initmem len:0x500000, Log pkt: N
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: log_config.c:422:file_watcher_thread: Couldn't find file fastrpc_test.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx;/usr/local/share/fastrpc_test/v68
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xaaaabb31b100, method 2 on domain 3 (sc 0x2020200) (errno Success)
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1719: Warning 0x4e: remote_handle_open_domain: remotectl1 domains not supported for domain 3
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xffff84001a80, method 5 on domain 3 (sc 0x5000000) (errno Operation not permitted)
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file libhap_example_skel.so
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1844: remote_handle64_open: Successfully opened handle 0xaaaabb31b100 (remote 0xf5c0b0) for file:///libhap_example_skel.so?hap_example_skel_handle_invoke&_modver=1.0&_dom=cdsp on domain 3 (spawn time 20997 us, load time 13074 us), num handles 1
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1965: remote_handle64_close: closed module libhap_example_skel.so with handle 0xaaaabb31b100 remote handle 0xf5c0b0, num of open handles: 0
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:2614: remote_session_control Unsigned PD enable 1 request for domain 3
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file fastrpc_shell_unsigned_3
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:3538: Info: Created user PD on domain 3, dbg_trace 0x0, enabled attr=> RPC timeout:0, Dbg Mode:N, CRC:N, Unsigned:Y, Signed:N, Adapt QOS:N, PD dump: (Config:N, Dbg:N), Perf: (Kernel:N, DSP:N), Iregion:N, QTF:N, UAF:N userPD initmem len:0x500000, Log pkt: N
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: log_config.c:422:file_watcher_thread: Couldn't find file fastrpc_test.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx;/usr/local/share/fastrpc_test/v68
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xffff84001f60, method 5 on domain 3 (sc 0x5000000) (errno Operation not permitted)
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xaaaabb31aa80, method 2 on domain 3 (sc 0x2020200) (errno Operation not permitted)
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1719: Warning 0x4e: remote_handle_open_domain: remotectl1 domains not supported for domain 3
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: mod_table.c:480: is_reverse_handle_opened: reverse module apps_std already found with handle 0x9505ea20 (idx 0) refs 2
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file libhap_example_skel.so
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: mod_table.c:480: is_reverse_handle_opened: reverse module apps_mem already found with handle 0x9505eb20 (idx 1) refs 2
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1844: remote_handle64_open: Successfully opened handle 0xaaaabb31aa80 (remote 0xf5c700) for file:///libhap_example_skel.so?hap_example_skel_handle_invoke&_modver=1.0&_dom=cdsp on domain 3 (spawn time 18236 us, load time 11155 us), num handles 1
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1965: remote_handle64_close: closed module libhap_example_skel.so with handle 0xaaaabb31aa80 remote handle 0xf5c700, num of open handles: 0
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:2614: remote_session_control Unsigned PD enable 1 request for domain 3
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file fastrpc_shell_unsigned_3
+11月 06 22:31:39 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:3538: Info: Created user PD on domain 3, dbg_trace 0x0, enabled attr=> RPC timeout:0, Dbg Mode:N, CRC:N, Unsigned:Y, Signed:N, Adapt QOS:N, PD dump: (Config:N, Dbg:N), Perf: (Kernel:N, DSP:N), Iregion:N, QTF:N, UAF:N userPD initmem len:0x500000, Log pkt: N
+11月 06 22:31:39 xiaomi-raphael fastrpc_test[2747]: log_config.c:422:file_watcher_thread: Couldn't find file fastrpc_test.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx;/usr/local/share/fastrpc_test/v68
+11月 06 22:31:39 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xaaaabb31b100, method 2 on domain 3 (sc 0x2020200) (errno Operation not permitted)
+11月 06 22:31:39 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xffff84001800, method 5 on domain 3 (sc 0x5000000) (errno Operation not permitted)
+11月 06 22:31:39 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1719: Warning 0x4e: remote_handle_open_domain: remotectl1 domains not supported for domain 3
+11月 06 22:31:39 xiaomi-raphael fastrpc_test[2747]: mod_table.c:480: is_reverse_handle_opened: reverse module apps_std already found with handle 0x9505ea20 (idx 0) refs 3
+11月 06 22:31:39 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file libhap_example_skel.so
+11月 06 22:31:39 xiaomi-raphael fastrpc_test[2747]: mod_table.c:480: is_reverse_handle_opened: reverse module apps_mem already found with handle 0x9505eb20 (idx 1) refs 3
+11月 06 22:31:39 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1844: remote_handle64_open: Successfully opened handle 0xaaaabb31b100 (remote 0xf5c6b0) for file:///libhap_example_skel.so?hap_example_skel_handle_invoke&_modver=1.0&_dom=cdsp on domain 3 (spawn time 23407 us, load time 12231 us), num handles 1
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1965: remote_handle64_close: closed module libhap_example_skel.so with handle 0xaaaabb31b100 remote handle 0xf5c6b0, num of open handles: 0
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:2614: remote_session_control Unsigned PD enable 1 request for domain 3
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file fastrpc_shell_unsigned_3
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:3538: Info: Created user PD on domain 3, dbg_trace 0x0, enabled attr=> RPC timeout:0, Dbg Mode:N, CRC:N, Unsigned:Y, Signed:N, Adapt QOS:N, PD dump: (Config:N, Dbg:N), Perf: (Kernel:N, DSP:N), Iregion:N, QTF:N, UAF:N userPD initmem len:0x500000, Log pkt: N
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: log_config.c:422:file_watcher_thread: Couldn't find file fastrpc_test.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx;/usr/local/share/fastrpc_test/v68
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xaaaabb316990, method 2 on domain 3 (sc 0x2020200) (errno Success)
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1719: Warning 0x4e: remote_handle_open_domain: remotectl1 domains not supported for domain 3
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1607: Error 0x4e: remote_handle64_invoke failed for module (null), handle 0xffff840012d0, method 5 on domain 3 (sc 0x5000000) (errno Operation not permitted)
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file libcalculator_skel.so
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1844: remote_handle64_open: Successfully opened handle 0xaaaabb316990 (remote 0xf5c0e0) for file:///libcalculator_skel.so?calculator_skel_handle_invoke&_modver=1.0&_idlver=1.2.3&_dom=cdsp on domain 3 (spawn time 21815 us, load time 17391 us), num handles 1
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1844: remote_handle64_open: Successfully opened handle 0xaaaabb3171e0 (remote 0xf5ce40) for file:///libcalculator_skel.so?calculator_skel_handle_invoke&_modver=1.0&_idlver=1.2.3&_dom=cdsp on domain 3 (spawn time 1 us, load time 1038 us), num handles 2
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1965: remote_handle64_close: closed module libcalculator_skel.so with handle 0xaaaabb316990 remote handle 0xf5c0e0, num of open handles: 1
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1965: remote_handle64_close: closed module libcalculator_skel.so with handle 0xaaaabb3171e0 remote handle 0xf5ce40, num of open handles: 0
+
+===== kernel-fastrpc =====
+CMD: journalctl -b -k --no-pager 2>/dev/null | grep -iE 'fastrpc|glink|compute-cb|invoke|init_create|mem_map' | tail -60
+RC: 0
+11月 06 22:31:18 xiaomi-raphael kernel: OF: reserved mem: initialized node fastrpc, compatible id shared-dma-pool
+11月 06 22:31:18 xiaomi-raphael kernel: OF: reserved mem: 0x00000000fec00000..0x00000000ffbfffff (16384 KiB) map reusable fastrpc
+11月 06 22:31:20 xiaomi-raphael kernel: qcom,fastrpc 8300000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1: no reserved DMA memory for FASTRPC
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@1: Adding to iommu group 14
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@2: Adding to iommu group 15
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@3: Adding to iommu group 16
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@4: Adding to iommu group 17
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@5: Adding to iommu group 18
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@6: Adding to iommu group 19
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@7: Adding to iommu group 20
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@8: Adding to iommu group 21
+11月 06 22:31:20 xiaomi-raphael kernel: qcom,fastrpc-cb 8300000.remoteproc:glink-edge:fastrpc:compute-cb@1: mem mmap error, fd 11, vaddr ffffadca0000, size 262144
+11月 06 22:31:38 xiaomi-raphael kernel: qcom,fastrpc-cb 8300000.remoteproc:glink-edge:fastrpc:compute-cb@2: mem mmap error, fd 12, vaddr ffff952bf000, size 4096
+
+===== our-files =====
+CMD: echo '== host_main.c =='; cat /data/local/tmp/hvx/host_main.c; echo '== hvx_add.h URI lines =='; grep -nE 'URI|_modver|handle_invoke' /data/local/tmp/hvx/hvx_add.h; echo '== skel copies =='; ls -l /data/local/tmp/hvx/libhvx_add_skel.so /usr/share/qcom/dsp/cdsp/libhvx_add_skel.so /usr/lib/rfsa/adsp/libhvx_add_skel.so 2>&1; echo '== sha =='; sha256sum /data/local/tmp/hvx/libhvx_add_skel.so /usr/share/qcom/dsp/cdsp/libhvx_add_skel.so 2>&1; echo '== ELF =='; file /data/local/tmp/hvx/libhvx_add_skel.so 2>&1; readelf -h /data/local/tmp/hvx/libhvx_add_skel.so 2>&1 | head -20
+RC: 0
+== host_main.c ==
+/*
+ * host_main.c - host (applications processor / Linux on K20 Pro) side example.
+ *
+ * Flow:
+ *   0) Enable Unsigned PD (must be done BEFORE the first FastRPC call!) so the
+ *      cDSP is allowed to load our unsigned hvx_add_skel.so.
+ *   1) Prepare two int32 vectors a, b and an output vector out.
+ *   2) Open a remote cDSP session via the QAIC-generated stub (hvx_add_open).
+ *   3) Dispatch the vector add to the DSP (hvx_add_addVec).
+ *   4) Verify the result on the host (out[i] == a[i] + b[i]).
+ *   5) Close the session.
+ *
+ * API generated by QAIC from hvx_add.idl:
+ *   - hvx_add_open(const char* uri, remote_handle64* h) -> int
+ *   - hvx_add_close(remote_handle64 h) -> int
+ *   - hvx_add_rpc_init(remote_handle64 h) -> int
+ *   - hvx_add_addVec(remote_handle64 h, const int32* a, int aLen,
+ *                    const int32* b, int bLen, int32* result, int resultLen) -> int
+ *
+ * Unsigned PD control (from <remote.h> / remote_default.h):
+ *   int remote_session_control(uint32_t req, void* data, uint32_t datalen);
+ *   struct remote_rpc_control_unsigned_module { int domain; int enable; };
+ *   #define DSPRPC_CONTROL_UNSIGNED_MODULE 2
+ *   #define CDSP_DOMAIN_ID 3
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* QAIC generated: prototypes + remote_handle64 + hvx_add_URI */
+#include "hvx_add.h"
+
+/* FastRPC userspace: remote_session_control(), DSPRPC_CONTROL_UNSIGNED_MODULE,
+ * CDSP_DOMAIN / CDSP_DOMAIN_ID, struct remote_rpc_control_unsigned_module. */
+#include <remote.h>
+
+#ifndef CDSP_DOMAIN_ID
+#define CDSP_DOMAIN_ID 3
+#endif
+#ifndef CDSP_DOMAIN
+#define CDSP_DOMAIN "&_dom=cdsp"
+#endif
+
+/*
+ * enable_unsigned_pd: allow the cDSP to load our unsigned skel .so.
+ * Must run before hvx_add_open(). Non-fatal if the stack already permits it.
+ */
+static int enable_unsigned_pd(void) {
+    struct remote_rpc_control_unsigned_module data;
+    int rc;
+
+    memset(&data, 0, sizeof(data));
+    data.enable = 1;                 /* 1 = allow unsigned modules */
+    data.domain = CDSP_DOMAIN_ID;    /* 3 = cDSP */
+
+    rc = remote_session_control(DSPRPC_CONTROL_UNSIGNED_MODULE,
+                                (void*)&data, (uint32_t)sizeof(data));
+    if (rc != 0) {
+        fprintf(stderr,
+                "host: remote_session_control(UNSIGNED_MODULE) returned %d "
+                "(non-fatal: may already be allowed)\n", rc);
+        return 0;
+    }
+    printf("host: unsigned PD enabled for cDSP (domain=%d)\n", CDSP_DOMAIN_ID);
+    return 0;
+}
+
+#define N        (1000)          /* vector length */
+#define PRINT_N  (16)            /* print first few for eyeball check */
+
+int main(void) {
+    remote_handle64 handle = 0;
+    int32_t *a = NULL, *b = NULL, *out = NULL;
+    int i, rc, status = 0;
+    int mismatches = 0;
+
+    /* 0) Enable Unsigned PD - before ANY FastRPC call */
+    enable_unsigned_pd();
+
+    /* 1) Prepare data (host malloc is fine; QAIC stub copies to DSP via rpcmem) */
+    a   = (int32_t*)malloc(N * sizeof(int32_t));
+    b   = (int32_t*)malloc(N * sizeof(int32_t));
+    out = (int32_t*)malloc(N * sizeof(int32_t));
+    if (a == NULL || b == NULL || out == NULL) {
+        fprintf(stderr, "host: malloc failed\n");
+        status = -1;
+        goto cleanup;
+    }
+    for (i = 0; i < N; i++) {
+        a[i]   = (int32_t)(i * 2 - 500);   /* include negatives to test sign */
+        b[i]   = (int32_t)(i + 1);
+        out[i] = 0;
+    }
+
+    /* 2) Open remote cDSP session (CDSP selected via CDSP_DOMAIN in the URI) */
+    rc = hvx_add_open(hvx_add_URI CDSP_DOMAIN, &handle);
+    if (rc != 0) {
+        fprintf(stderr, "host: hvx_add_open failed, rc=%d\n", rc);
+        status = -2;
+        goto cleanup;
+    }
+    printf("host: opened cDSP session, handle=%llu\n", (unsigned long long)handle);
+
+    /* Optional one-time init (no-op here) */
+    rc = hvx_add_rpc_init(handle);
+    if (rc != 0) {
+        fprintf(stderr, "host: rpc_init returned %d (non-fatal)\n", rc);
+    }
+
+    /* 3) Dispatch vector add to the DSP (HVX on Hexagon 690) */
+    rc = hvx_add_addVec(handle, a, N, b, N, out, N);
+    if (rc != 0) {
+        fprintf(stderr, "host: hvx_add_addVec failed, rc=%d\n", rc);
+        status = -3;
+        goto close;
+    }
+    printf("host: hvx_add_addVec done (N=%d)\n", N);
+
+    /* 4) Verify on host */
+    for (i = 0; i < N; i++) {
+        if (out[i] != a[i] + b[i]) {
+            mismatches++;
+            if (mismatches <= 8) {
+                fprintf(stderr, "host: mismatch at %d: out=%d expected=%d\n",
+                        i, out[i], a[i] + b[i]);
+            }
+        }
+    }
+
+    printf("host: first %d results (a + b = out):\n", PRINT_N);
+    for (i = 0; i < PRINT_N && i < N; i++) {
+        printf("  [%4d] %6d + %6d = %6d\n", i, a[i], b[i], out[i]);
+    }
+
+    if (mismatches == 0) {
+        printf("host: PASS - all %d elements verified correct.\n", N);
+    } else {
+        fprintf(stderr, "host: FAIL - %d/%d mismatches.\n", mismatches, N);
+        status = -4;
+    }
+
+close:
+    hvx_add_close(handle);
+cleanup:
+    free(a);
+    free(b);
+    free(out);
+    return status;
+}
+== hvx_add.h URI lines ==
+40:    * @param uri, <interface>_URI"&_dom=aDSP"
+41:    *    <interface>_URI is a QAIC generated uri, or
+42:    *    "file:///<sofilename>?<interface>_skel_handle_invoke&_modver=1.0"
+48:    *      _modver: module version, _modver=1.0
+65:#ifndef hvx_add_URI
+68:#define hvx_add_URI "file:///data/local/tmp/hvx/libhvx_add_skel.so?hvx_add_skel_handle_invoke&_modver=1.0"
+69:#endif /*hvx_add_URI*/
+== skel copies ==
+-rw-r--r-- 1 root root 7160 11月  4 07:37 /data/local/tmp/hvx/libhvx_add_skel.so
+lrwxrwxrwx 1 root root   38 11月  5 22:54 /usr/lib/rfsa/adsp/libhvx_add_skel.so -> /data/local/tmp/hvx/libhvx_add_skel.so
+-rw-r--r-- 1 root root 7160 11月  4 07:37 /usr/share/qcom/dsp/cdsp/libhvx_add_skel.so
+== sha ==
+ae8c3f54e05fea07d57ce9784737f9a4477ea505f5cd5f2a2e89d9bb75bd2cec  /data/local/tmp/hvx/libhvx_add_skel.so
+ae8c3f54e05fea07d57ce9784737f9a4477ea505f5cd5f2a2e89d9bb75bd2cec  /usr/share/qcom/dsp/cdsp/libhvx_add_skel.so
+== ELF ==
+/data/local/tmp/hvx/libhvx_add_skel.so: ELF 32-bit LSB shared object, QUALCOMM DSP6, version 1 (SYSV), dynamically linked, not stripped
+ELF 头：
+  Magic：   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
+  类别:                              ELF32
+  数据:                              2 补码，小端序 (little endian)
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI 版本:                          0
+  类型:                              DYN (共享目标文件)
+  系统架构:                          QUALCOMM DSP6 Processor
+  版本:                              0x1
+  入口点地址：               0x0
+  程序头起点：          52 (bytes into file)
+  Start of section headers:          6240 (bytes into file)
+  标志：             0x66
+  Size of this header:               52 (bytes)
+  Size of program headers:           32 (bytes)
+  Number of program headers:         3
+  Size of section headers:           40 (bytes)
+  Number of section headers:         23
+  Section header string table index: 20
+
+===== test-assets =====
+CMD: echo '== fastrpc_test skels =='; find /usr /data/local/tmp /opt -iname 'lib*calculator*' -o -iname 'lib*hap_example*' 2>/dev/null | head -30; echo '== fastrpc_test binary =='; which fastrpc_test; file $(which fastrpc_test) 2>&1; echo '== how calculator is opened (strings) =='; strings -a $(which fastrpc_test) 2>/dev/null | grep -iE 'calculator|_modver|file:///|_skel|URI' | head -30
+RC: 0
+== fastrpc_test skels ==
+/usr/local/lib/fastrpc_test/libhap_example.so
+/usr/local/lib/fastrpc_test/libcalculator.so
+/usr/local/share/fastrpc_test/v75/libhap_example_skel.so
+/usr/local/share/fastrpc_test/v75/libcalculator_skel.so
+/usr/local/share/fastrpc_test/v68/libhap_example_skel.so
+/usr/local/share/fastrpc_test/v68/libcalculator_skel.so
+/opt/fastrpc-pr319/test/v75/libhap_example_skel.so
+/opt/fastrpc-pr319/test/v75/libcalculator_skel.so
+/opt/fastrpc-pr319/test/android/libhap_example.so
+/opt/fastrpc-pr319/test/android/libcalculator.so
+/opt/fastrpc-pr319/test/v68/libhap_example_skel.so
+/opt/fastrpc-pr319/test/v68/libcalculator_skel.so
+/opt/fastrpc-pr319/test/linux/libhap_example.so
+/opt/fastrpc-pr319/test/linux/libcalculator.so
+== fastrpc_test binary ==
+/usr/local/bin/fastrpc_test
+/usr/local/bin/fastrpc_test: ELF 64-bit LSB pie executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-aarch64.so.1, BuildID[sha1]=9479ee769e449fb3bc0e8888f07e2084cf9178e1, for GNU/Linux 3.7.0, with debug_info, not stripped
+== how calculator is opened (strings) ==
+
+===== dsp-libs =====
+CMD: echo '== /usr/share/qcom/dsp/cdsp contents =='; ls -la /usr/share/qcom/dsp/cdsp/ | head -40; echo '== rfsa adsp links =='; ls -la /usr/lib/rfsa/adsp/ | head -30; echo '== env =='; systemctl show cdsprpcd -p Environment --no-pager
+RC: 0
+== /usr/share/qcom/dsp/cdsp contents ==
+总计 13280
+drwxr-xr-x 2 root root    4096 11月  6 01:25 .
+drwxr-xr-x 5 root root    4096  8月  1 12:20 ..
+-rw-r--r-- 1 root root  939664 11月  6 21:39 fastrpc_shell_3
+-rw-r--r-- 1 root root  935256 11月  6 21:39 fastrpc_shell_unsigned_3
+-rw-r--r-- 1 root root  289960 11月  6 21:39 libbenchmark_skel.so
+-rw-r--r-- 1 root root 1435816 11月  6 21:39 libc++abi.so.1
+-rw-r--r-- 1 root root 3124704 11月  6 21:39 libc++.so.1
+-rw-r--r-- 1 root root  242152 11月  6 21:39 libhcp_rpc_skel.so
+-rw-r--r-- 1 root root  248976 11月  6 21:39 libhta_dsp_skel.so
+-rw-r--r-- 1 root root    7160 11月  4 07:37 libhvx_add_skel.so
+-rw-r--r-- 1 root root 3344144 11月  6 21:39 libimmotion_skel.so
+-rw-r--r-- 1 root root   85840 11月  6 21:39 libstabilitydomain_skel.so
+-rw-r--r-- 1 root root  264496 11月  6 21:39 libsysmondomain_skel.so
+-rw-r--r-- 1 root root   29864 11月  6 21:39 libsysmonhvxthrottle_skel.so
+-rw-r--r-- 1 root root   38216 11月  6 21:39 libsysmonquery_skel.so
+-rw-r--r-- 1 root root  205040 11月  6 21:39 libsysmon_skel.so
+-rw-r--r-- 1 root root  223696 11月  6 21:39 libvpp_aie.so
+-rw-r--r-- 1 root root 1678016 11月  6 21:39 libvpp_frc.so
+-rw-r--r-- 1 root root    6736 11月  6 21:39 libvpp_mvp.so
+-rw-r--r-- 1 root root    6736 11月  6 21:39 libvpp_nr.so
+-rw-r--r-- 1 root root    6736 11月  6 21:39 libvpp_qbr.so
+-rw-r--r-- 1 root root  276400 11月  6 21:39 libvpp_svc_skel.so
+-rw-r--r-- 1 root root    1656 11月  6 21:39 map_SHARED_LIBS_855.cdsp.prodQ.txt
+-rw-r--r-- 1 root root  157320 11月  6 21:39 ubwcdma_dynlib.so
+== rfsa adsp links ==
+总计 8
+drwxr-xr-x 2 root root 4096 11月  6 01:25 .
+drwxr-xr-x 4 root root 4096 11月  5 22:54 ..
+lrwxrwxrwx 1 root root   40 11月  5 22:54 fastrpc_shell_3 -> /usr/share/qcom/dsp/cdsp/fastrpc_shell_3
+lrwxrwxrwx 1 root root   49 11月  5 22:54 fastrpc_shell_unsigned_3 -> /usr/share/qcom/dsp/cdsp/fastrpc_shell_unsigned_3
+lrwxrwxrwx 1 root root   45 11月  5 22:54 libbenchmark_skel.so -> /usr/share/qcom/dsp/cdsp/libbenchmark_skel.so
+lrwxrwxrwx 1 root root   39 11月  5 22:54 libc++abi.so.1 -> /usr/share/qcom/dsp/cdsp/libc++abi.so.1
+lrwxrwxrwx 1 root root   36 11月  5 22:54 libc++.so.1 -> /usr/share/qcom/dsp/cdsp/libc++.so.1
+lrwxrwxrwx 1 root root   43 11月  5 22:54 libhcp_rpc_skel.so -> /usr/share/qcom/dsp/cdsp/libhcp_rpc_skel.so
+lrwxrwxrwx 1 root root   43 11月  5 22:54 libhta_dsp_skel.so -> /usr/share/qcom/dsp/cdsp/libhta_dsp_skel.so
+lrwxrwxrwx 1 root root   38 11月  5 22:54 libhvx_add_skel.so -> /data/local/tmp/hvx/libhvx_add_skel.so
+lrwxrwxrwx 1 root root   44 11月  5 22:54 libimmotion_skel.so -> /usr/share/qcom/dsp/cdsp/libimmotion_skel.so
+lrwxrwxrwx 1 root root   51 11月  5 22:54 libstabilitydomain_skel.so -> /usr/share/qcom/dsp/cdsp/libstabilitydomain_skel.so
+lrwxrwxrwx 1 root root   48 11月  5 22:54 libsysmondomain_skel.so -> /usr/share/qcom/dsp/cdsp/libsysmondomain_skel.so
+lrwxrwxrwx 1 root root   53 11月  5 22:54 libsysmonhvxthrottle_skel.so -> /usr/share/qcom/dsp/cdsp/libsysmonhvxthrottle_skel.so
+lrwxrwxrwx 1 root root   47 11月  5 22:54 libsysmonquery_skel.so -> /usr/share/qcom/dsp/cdsp/libsysmonquery_skel.so
+lrwxrwxrwx 1 root root   42 11月  5 22:54 libsysmon_skel.so -> /usr/share/qcom/dsp/cdsp/libsysmon_skel.so
+lrwxrwxrwx 1 root root   38 11月  5 22:54 libvpp_aie.so -> /usr/share/qcom/dsp/cdsp/libvpp_aie.so
+lrwxrwxrwx 1 root root   38 11月  5 22:54 libvpp_frc.so -> /usr/share/qcom/dsp/cdsp/libvpp_frc.so
+lrwxrwxrwx 1 root root   38 11月  5 22:54 libvpp_mvp.so -> /usr/share/qcom/dsp/cdsp/libvpp_mvp.so
+lrwxrwxrwx 1 root root   37 11月  5 22:54 libvpp_nr.so -> /usr/share/qcom/dsp/cdsp/libvpp_nr.so
+lrwxrwxrwx 1 root root   38 11月  5 22:54 libvpp_qbr.so -> /usr/share/qcom/dsp/cdsp/libvpp_qbr.so
+lrwxrwxrwx 1 root root   43 11月  5 22:54 libvpp_svc_skel.so -> /usr/share/qcom/dsp/cdsp/libvpp_svc_skel.so
+lrwxrwxrwx 1 root root   59 11月  5 22:54 map_SHARED_LIBS_855.cdsp.prodQ.txt -> /usr/share/qcom/dsp/cdsp/map_SHARED_LIBS_855.cdsp.prodQ.txt
+lrwxrwxrwx 1 root root   42 11月  5 22:54 ubwcdma_dynlib.so -> /usr/share/qcom/dsp/cdsp/ubwcdma_dynlib.so
+== env ==
+Environment="ADSP_LIBRARY_PATH=/usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx" "DSP_LIBRARY_PATH=/usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx"
+

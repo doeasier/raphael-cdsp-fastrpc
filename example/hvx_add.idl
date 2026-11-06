@@ -1,0 +1,21 @@
+//============================================================================
+// hvx_add.idl - FastRPC IDL for the minimal Hexagon 690 (HVX) vector-add ex.
+//
+// Valid QAIC IDL syntax (mirrors the SDK calculator.idl):
+//   #include "AEEStdDef.idl"   basic typedefs: int32, uint32, ...
+//   #include "remote.idl"      remote_handle64, remote method framework
+//   interface X : remote_handle64 { ... }   handle is implicit first arg
+//
+// Methods:
+//   rpc_init()        one-time DSP-side setup (HVX mode check), no data
+//   addVec(a, b, out) out[i] = a[i] + b[i], computed on cDSP via HVX
+//                     a,b are input sequences, out is a returned sequence
+//============================================================================
+
+#include "AEEStdDef.idl"
+#include "remote.idl"
+
+interface hvx_add : remote_handle64 {
+   long rpc_init();
+   long addVec(in sequence<int32> a, in sequence<int32> b, rout sequence<int32> result);
+};

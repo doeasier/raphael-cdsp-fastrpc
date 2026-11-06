@@ -1,0 +1,239 @@
+说明（中文，不属于待贴正文）：
+  本文件为**最终版对外报告（英文）**，2026-11-06 重写。
+  旧版是「INIT_CREATE 恒返回 AEE_EBADASID、待求版本配对建议」的负结果草稿，
+  且把设备 PIL 误写成 cdsp.mbn —— 结论与形态均已推翻，请勿再使用旧版。
+  **尚未发送**：对外提交属外部动作，需用户确认后执行。
+  建议主投递点：qualcomm/fastrpc#400（同类 user PD spawn 被固件拒绝，见下文 §0）
+  数据出处：docs/05-Hexagon690-DSP调用研究.md §11/§13/§16/§17.6，
+            logs/firmware/postboot-verify.txt、hostmain-uri-fix.txt、logs/pdscan/
+
+--------------------------------------------------------------------------------
+Subject: [data point, resolved] SM8150 raphael cDSP: AEE_EBADASID on
+         FASTRPC_IOCTL_INIT_CREATE was an era-mismatched firmware set;
+         replacing the whole matched set (PIL + shells + skels) fixes
+         unsigned PD on domain 3
+
+Hi,
+
+§0  Why this report
+-------------------
+This is a *resolved* data point, not a support request. It is directly
+relevant to qualcomm/fastrpc#400 ("User PD spawn refused by CDSP firmware
+with AEE_EQURTBADASID (0x8000054f) on SM8550/QCS8550 ... era-matched kailua
+shells"), and to the recurring "remote_init failed / check your DSP payload
+pairing" advice given in #325. In #400 a maintainer states:
+
+    "Both shell and firmware files need to come from the same DSP build,
+     if both are not matching, failures like this might be seen."
+    "There is a hash-matching that happens during
+     adsp_process_group_create_mpd_attrs which checks if shell is ...
+     matching hashes for the firmware."
+
+and the reporter describes their set as "same line, not the same build".
+Our device was in exactly that state (00131-branch PIL + 2020-12 00171
+shell), and we have a clean A/B proving the pairing rule: we saw the same
+class of failure (AEE_EBADASID, 0x80000453, on RMID_INIT_CREATE) and fixed
+it *entirely by replacing the DSP firmware set*. No kernel patch, no module
+rebuild, no userspace-library change was needed. #400 has since been marked
+stale, so a concrete positive result may help the reporter and future
+readers. Note the error codes differ (0x80000453 AEE_EBADASID here vs
+0x8000054f AEE_EQURTBADASID in #400); both point at ASID allocation while
+creating a user PD. We hope the before/after matrix helps others on
+consumer devices running mainline kernels.
+
+§1  Environment (per README "Bug Reporting Guidelines")
+------------------------------------------------------
+  Platform / SoC     Xiaomi Redmi K20 Pro / Mi 9T Pro (raphael),
+                     SM8150, Hexagon 690 cDSP, domain 3, arch v66
+  Kernel             7.0.0-sm8150-gc526b7bf7ebc-dirty (mainline, from
+                     GengWei1997/kernel-deb @ 7.0 / raphael.config)
+                     CONFIG_QCOM_FASTRPC=y (built-in),
+                     CONFIG_QCOM_Q6V5_PAS=m, CONFIG_QCOM_MDT_LOADER=y
+  HLOS               Ubuntu 24.04 arm64 rootfs, UEFI + rEFInd boot,
+                     USB-NCM network (no Wi-Fi/modem in DT)
+  Userspace lib      qualcomm/fastrpc (formerly quic/fastrpc), built on
+                     target with ./gitcompile; libcdsprpc.so, cdsprpcd,
+                     fastrpc_test installed to /usr/local. No release tag.
+  DT                 cdsp only (adsp/mpss/slpi status=disabled);
+                     12 compute-cb@N with dma-coherent;
+                     cdsp recovery=disabled
+  Nodes              /dev/fastrpc-cdsp, /dev/fastrpc-cdsp-secure
+  DSP lib paths      /usr/lib/rfsa/adsp (symlinks),
+                     /usr/share/qcom/dsp/cdsp, /data/local/tmp/hvx
+  Env for tests      LD_LIBRARY_PATH=/usr/local/lib
+                     ADSP_LIBRARY_PATH=/usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx
+                     DSP_LIBRARY_PATH=<same>
+  Tests run          fastrpc_test -d 3 -U 1 ; custom host_main (QAIC IDL
+                     stub + hexagon-clang-built libhvx_add_skel.so)
+
+§2  BEFORE — the failing configuration
+--------------------------------------
+The device was NOT using a single cdsp.mbn. The PIL image is in *split*
+format, as fixed by the DT property:
+
+  firmware-name = "qcom/sm8150/Xiaomi/raphael/cdsp.mdt";
+  dmesg: "Booting fw image qcom/sm8150/Xiaomi/raphael/cdsp.mdt, size 7580"
+
+  /lib/firmware/qcom/sm8150/Xiaomi/raphael/
+      cdsp.mdt + cdsp.b00,b01,b02,b03,b04,b05,b06,b08,b10 + cdspr.jsn
+  (b07/b09/b11 have p_filesz = 0 and therefore do not exist)
+
+Its ELF program headers describe b02=227348 B, b05=2710852 B and carry
+"CDSP.HT.2.0.1-00131-SM8150-1". The shells in the rootfs were from a
+*different* build/branch:
+
+  fastrpc_shell_unsigned_3   933772 B, sha256 1d03f6ca...
+  CDSP.HT.2.0.1-00171-SM8150-1.357350.2_20201211_224311 (China Beta)
+
+i.e. an older 00131 PIL paired with a 2020-12 shell. Note that the
+firmware-xiaomi-raphael .deb shipped with the same kernel package contains
+a merged cdsp.mbn (3405460 B, 00171, b02=228148 / b05=2735588) which is
+*not* what this device was booting.
+
+  Observed with a minimal UAPI-only probe (one ioctl per fresh fd):
+    GET_DSP_INFO (nr=13)      rc=0
+    INIT_ATTACH  (nr=4)       rc=0
+    MEM_MAP      (nr=10)      0x80000414 AEE_EUNSUPPORTED
+    INIT_CREATE  (nr=5)       0x80000453 AEE_EBADASID   <-- persistent
+    fastrpc_test -d 3 -U 1    0 passed / 3 failed
+    host_main                 rc=-2147482541
+
+  With cdsprpcd stopped, INIT_CREATE instead returned 0x80000580
+  (AEE_DEFAULT_PROCESS), so the daemon was satisfying the root/default-PD
+  precondition and the DSP was failing at ASID allocation. Restoring the
+  daemon reproduced 0x80000453 exactly.
+
+§3  Ruled out (each re-tested, no effect)
+------------------------------------------
+  - adding a "memory-region" / reserved heap DT property to cdsp
+    (fastrpc_init_reserved_mem() only handles ADSP/SDSP upstream)
+  - redirecting -secure to the non-secure node; -U 0/1 x -a v68/v75
+  - re-issuing INIT_ATTACH or changing attach order
+  - ADSP_LISTENER_MEM_CACHE_SIZE=0
+  - attrs 0x0 (RMID6) vs 0x8 (RMID7) on INIT_CREATE
+  - forging INIT_CREATE success (subsequent INVOKE returns AEE_ENOSUCH /
+    AEE_EUNABLETOLOAD: no PD was actually created)
+  - rebuilding/replacing the kernel or fastrpc.ko (never done in the end)
+
+  Negative result for PR #319 ("apps_mem: fallback to legacy mmap/unmap
+  when internal API fails"; closed upstream, NOT merged -- we built it
+  locally for the experiment), built and tested on target in two variants:
+    v1 (rflags as passed)      -> nr=6 MMAP rejected with EINVAL
+    v2 (ADSP_MMAP_ADD_PAGES)   -> the cDSP glink/RPC channel HANGS:
+                                  INIT_ATTACH starts returning errno=110,
+                                  only a full reboot recovers it
+  So on this 2020-12 SM8150 firmware, falling back to legacy RMID_INIT_MMAP
+  is NOT a usable degradation path. This may be worth a note in the PR /
+  its successor discussion. The library was fully rolled back (sha256
+  verified) and no build switch exists to disable the MEM_MAP path
+  (ENABLE_UPSTREAM_DRIVER_INTERFACE is hard-coded in Makefile.am).
+  Related: #405 reports glink "intent request timed out" / GET_DSP_INFO
+  -110 on X1P-42-100; our v2 hang produced the same errno, though the
+  trigger (legacy MMAP fallback) is different.
+
+§4  AFTER — the fix: replace the COMPLETE matched set
+------------------------------------------------------
+Source (offline extraction, no flashing of any partition):
+  fw_raphael_miui_RAPHAEL_V12.5.6.0.RFKCNXM_f5fe3b4a6f_11.0.zip
+  MIUI China Stable, 2021-07-30, NON-HLOS.bin -> CDSP.MDT + CDSP.Bxx
+  build string CDSP.HT.2.0.1-00171-SM8150-1.357350.2.419065.1_20210730_070147
+
+32 files were replaced atomically (10 split PIL + cdspr.jsn + 21 DSP libs):
+  - CDSP.MDT and CDSP.B00/B01/B02/B03/B04/B05/B06/B08/B10 were renamed
+    to LOWERCASE cdsp.mdt / cdsp.bXX and copied to
+    /lib/firmware/qcom/sm8150/Xiaomi/raphael/ (0755 root:root).
+    Segment lengths were asserted against the 12 MDT p_filesz entries.
+    The merged 3.4 MB cdsp.mbn was NOT used: the loader only requests .mdt.
+  - 21 files to /usr/share/qcom/dsp/cdsp/ (0644), including
+    fastrpc_shell_unsigned_3 935256 B sha256 f94a2062...
+    fastrpc_shell_3          939664 B sha256 f12bf733...
+  /usr/lib/rfsa/adsp/ symlinks and our own libhvx_add_skel.so were left
+  untouched. A full file-level backup + rollback script was kept.
+  Then: systemctl reboot (never kexec).
+
+Verification (dmesg + sha256):
+  "Booting fw image qcom/sm8150/Xiaomi/raphael/cdsp.mdt, size 7580"
+  "remote processor cdsp is now up"
+  No -22 / authentication / anti-rollback / "failed to load" errors.
+  A China Stable 2021-07 image PAS-authenticated fine on this China Beta
+  device (UEFI Secure Boot disabled).
+  cdsp.mdt sha256 4b82459c..., cdsp.b02 a14316ec..., cdsp.b05 85e67884...
+  remoteproc0 = running; /dev/fastrpc-cdsp[-secure] present; cdsprpcd active.
+
+  fastrpc_test -d 3 -U 1:
+      Total tests run: 3   Passed: 3   Failed: 0
+      libcalculator.so computed Sum = 499500, Max value = 999 on domain 3
+      RESULT: All applicable tests PASSED
+  AEE_EBADASID / AEE_EUNSUPPORTED no longer occur on the create path.
+
+  Custom test (QAIC-generated stub + Hexagon v66 skel, 1000-element vector
+  add) initially still failed with 0x80000406, but that turned out to be an
+  unrelated URI pitfall worth documenting:
+
+    BAD : "file:///data/local/tmp/hvx/libhvx_add_skel.so?..."
+          DSP-side dlopen strips the leading '/' and rejects the now-relative
+          name: "Absolute path or ./obj_name required for shared object
+          data/local/tmp/hvx/..."
+    GOOD: "file:///libhvx_add_skel.so?hvx_add_skel_handle_invoke&_modver=1.0"
+          (bare filename, resolved via ADSP_LIBRARY_PATH) -- exactly how
+          fastrpc_test opens libcalculator_skel.so / libhap_example_skel.so
+
+  With that one-line change: "host: PASS - all 1000 elements verified
+  correct." The skel really executed on the cDSP in an unsigned PD.
+
+§5  Takeaways / possible upstream actions
+-------------------------------------------
+  1. On SM8150, AEE_EBADASID on RMID_INIT_CREATE with a 2020-era firmware
+     is a *firmware capability / version-pairing* symptom, not a kernel or
+     libcdsprpc defect. Suggested first question for #400-style reports:
+     "are the PIL image, fastrpc_shell_unsigned_3 and all skels from the
+     SAME build?" -- and ask for the MDT build string, not just the shell's.
+  2. Split (mdt+bXX) vs merged (mbn) packaging matters: on a split device,
+     dropping a cdsp.mbn has no effect at all (silent no-op). DT's
+     firmware-name decides which form is loaded.
+  3. linux-msm/hexagon-dsp-binaries config.txt has sm8250/RB5 and
+     sdm845/db845c entries but no sm8150/raphael. We have a verified
+     2021-07-30 set and can contribute a version-pairing note / entry if
+     the maintainers want it (binary redistribution/licensing to be
+     discussed first).
+  4. Consider a short note in the docs that skel URIs must use a bare
+     filename (or ./name) resolved through ADSP_LIBRARY_PATH, and that
+     legacy MMAP fallback can hang the cDSP on old firmware.
+  5. On novelty, precisely: the error code itself is public -- in
+     inc/AEEStdErr.h, AEE_EBADASID is (AEE_EOFFSET + 0x053) with
+     AEE_EOFFSET = 0x80000400 on the DSP, i.e. exactly 0x80000453;
+     0x80000453 also appears in an Android/vendor-stack log on XDA
+     (instantnoodlep, "apps_dev_init failed for domain 3"). Firmware/shell
+     pairing is discussed elsewhere too (Radxa Q6A with 0x80000600
+     AEE_EFATAL; trailcurrentoss/TrailCurrentPlaybill "Lessons Learned";
+     #188, #269, #401 and the maintainer comments in #400). However, a
+     repository-wide issue/PR search for "AEE_EBADASID" / "EBADASID"
+     returns zero hits, #400 has only the abstract principle and no
+     successful case, and we found no public record of the full causal
+     chain + fix. So what is (very likely) new here is the demonstrated
+     root cause and solution: a clean, fully reverted A/B on SM8150
+     mainline showing that replacing the *complete* matched set (split
+     PIL + shells + skels) alone turns AEE_EBADASID into working unsigned
+     PDs, with no kernel or userspace changes. We make no claim of an
+     exhaustive survey of the whole web.
+  6. The Docs/ directory currently has no firmware/shell compatibility
+     or troubleshooting page (only adspmsgd.md, apps_mem.md,
+     conf_guideline.md, daemons.md, manpages, schemas). A short document
+     stating "PIL image, fastrpc_shell_unsigned_3 and skels must come from
+     the same DSP build; on split devices DT firmware-name requests
+     cdsp.mdt+bXX, not cdsp.mbn; skel URIs must be bare filenames" would
+     likely save others a lot of time. Per CONTRIBUTING.md we would first
+     open an issue to agree on scope, then send a PR against `development`
+     with `git commit -s` (DCO) signoff.
+
+§6  Repro assets (available on request)
+----------------------------------------
+  fastrpc_pdscan.c / ioctl_trace.c   minimal UAPI-only probes
+  deploy_pdscan.py                   P0/P1/P2/restore matrix driver
+  pack_firmware.py / deploy_firmware.py   split-PIL packing, phased deploy,
+                                         backup + rollback
+  logs/firmware/postboot-verify.txt  full post-reboot acceptance log
+  docs/05-Hexagon690-DSP调用研究.md  full investigation log (Chinese)
+
+Thanks to the maintainers for the library and the pairing guidance in
+earlier issues -- it is what pointed us at the firmware set.

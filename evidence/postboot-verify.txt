@@ -1,0 +1,169 @@
+POST-REBOOT ACCEPTANCE  started 2026-11-06 21:42:26
+reboot was issued at 21:40:41; old uptime was ~9720 s
+
+TIMEOUT: device did not come back within 1200 s
+======================================================================
+POST-REBOOT WATCHER RUN 2  started 2026-11-06 22:19:53
+max wait ~7200 s; previous run timed out with no SSH banner
+
+device uptime at acceptance: 24 s
+
+===== identity =====
+CMD: uptime; echo ---; cat /proc/uptime; echo ---; cat /proc/cmdline
+RC: 0
+ 22:31:38 up 0 min,  2 users,  load average: 0.34, 0.08, 0.03
+---
+24.50 149.71
+---
+root=UUID=ee8d3593-59b1-480e-a3b6-4fefb17ee7d8 rw console=ttyMSM0,115200 console=tty0 loglevel=4 systemd.show_status=1 rd.systemd.show_status=1 systemd.log_level=info rd.udev.log_priority=info udev.log_priority=info plymouth.enable=0 panic=0 systemd.unit=multi-user.target systemd.mask=hexagonrpcd-sdsp.service systemd.mask=hexagonrpcd-sdsp.path systemd.mask=raphael-sensors.service systemd.mask=raphael-sensors-persist-perms.service systemd.mask=raphael-slpi-client2slpi.service systemd.mask=raphael-slpi-bl-notify.service systemd.mask=raphael-slpi-oled-gate.service systemd.mask=raphael-gpsd-bridge.service systemd.mask=raphael-sim-init.service dtb=\dtbs\qcom\sm8150-xiaomi-raphael.dtb initrd=\initrd.img-7.0.0-sm8150-gc526b7bf7ebc-dirty
+
+
+===== firmware-version =====
+CMD: echo '== PIL mdt / b02 / b05 =='; sha256sum /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.mdt /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b02 /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b05; echo '== unsigned shell =='; sha256sum /usr/share/qcom/dsp/cdsp/fastrpc_shell_unsigned_3; echo '== build ids =='; grep -a -o -E '[0-9]{6,}\.[0-9]+_[0-9]{8}_[0-9]{6}' /usr/share/qcom/dsp/cdsp/fastrpc_shell_unsigned_3 | sort -u | head -5; grep -a -o -E 'CDSP.HT.2.0.1.{0,80}' /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b05 | head -3
+RC: 0
+== PIL mdt / b02 / b05 ==
+4b82459c883f4d9b75cc41c916db41c5c982c3e299c74fa59a550cf8d6f62177  /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.mdt
+a14316ec0d5ad01982332c3240e3f54393d2f32fe0468a53f84612f53c6eb4f8  /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b02
+85e678842bdd71f17cab12d5ceed577a954971b9dfd962dbe9d2871e911e4154  /lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b05
+== unsigned shell ==
+f94a206286adc2aa17df70c9468884702445e0490711adeefbdb26a05c25ef31  /usr/share/qcom/dsp/cdsp/fastrpc_shell_unsigned_3
+== build ids ==
+419065.1_20210730_070147
+CDSP.HT.2.0.1-00171-SM8150-1.357350.2.419065.1IMAGE_VARIANT_STRING=855.cdsp.prodQOEM_I
+CDSP.HT.2.0.1-00171-SM8150qurt pid is %d
+CDSP.HT.2.0.1-00171-SM8150-1_20200916_040146/b/cdsp_proc/platform/fastrpc_thread_queue/src/fa
+
+>>> VERDICT: NEW 2021-07-30 FIRMWARE IN PLACE
+
+===== kernel-log =====
+CMD: journalctl -b -k --no-pager 2>/dev/null | grep -iE 'cdsp|q6v5|qcom_mdt|remoteproc|pas_|scm|firmware|auth|rollback|failed' | tail -100
+RC: 0
+11月 06 22:31:18 xiaomi-raphael kernel: psci: PSCIv1.1 detected in firmware.
+11月 06 22:31:18 xiaomi-raphael kernel: psci: [Firmware Bug]: failed to set PC mode: -3
+11月 06 22:31:18 xiaomi-raphael kernel: scmi_core: SCMI protocol bus registered
+11月 06 22:31:18 xiaomi-raphael kernel: qcom_scm firmware:scm: SHM Bridge not supported
+11月 06 22:31:18 xiaomi-raphael kernel: qcom_scm: convention: smc arm 64
+11月 06 22:31:18 xiaomi-raphael kernel: qcom_scm firmware:scm: qseecom: found qseecom with version 0x1400000
+11月 06 22:31:18 xiaomi-raphael kernel: qcom_scm firmware:scm: qseecom: untested machine, skipping
+11月 06 22:31:19 xiaomi-raphael kernel: cpu cpu7: Voltage update failed freq=2956800
+11月 06 22:31:19 xiaomi-raphael kernel: cpu cpu7: failed to update OPP for freq=2956800
+11月 06 22:31:19 xiaomi-raphael kernel: cpu cpu7: Voltage update failed freq=2956800
+11月 06 22:31:19 xiaomi-raphael kernel: cpu cpu7: failed to update OPP for freq=2956800
+11月 06 22:31:19 xiaomi-raphael kernel: sm8150-pinctrl 3100000.pinctrl: pin_config_group_set op failed for group 6
+11月 06 22:31:19 xiaomi-raphael kernel: [drm] Loaded GMU firmware v2.0.261
+11月 06 22:31:19 xiaomi-raphael kernel: remoteproc remoteproc0: cdsp is available
+11月 06 22:31:19 xiaomi-raphael kernel: remoteproc remoteproc0: powering up cdsp
+11月 06 22:31:19 xiaomi-raphael kernel: remoteproc remoteproc0: Booting fw image qcom/sm8150/Xiaomi/raphael/cdsp.mdt, size 7580
+11月 06 22:31:20 xiaomi-raphael kernel: remoteproc remoteproc0: remote processor cdsp is now up
+11月 06 22:31:20 xiaomi-raphael kernel: qcom,fastrpc 8300000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1: no reserved DMA memory for FASTRPC
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@1: Adding to iommu group 14
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@2: Adding to iommu group 15
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@3: Adding to iommu group 16
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@4: Adding to iommu group 17
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@5: Adding to iommu group 18
+11月 06 22:31:20 xiaomi-raphael kernel: snd-sm8150-raphael sound: qcom_snd_parse_of failed: -517
+11月 06 22:31:20 xiaomi-raphael kernel: snd-sm8150-raphael sound: qcom_snd_parse_of failed: -517
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@6: Adding to iommu group 19
+11月 06 22:31:20 xiaomi-raphael kernel: snd-sm8150-raphael sound: qcom_snd_parse_of failed: -517
+11月 06 22:31:20 xiaomi-raphael kernel: snd-sm8150-raphael sound: qcom_snd_parse_of failed: -517
+11月 06 22:31:20 xiaomi-raphael kernel: snd-sm8150-raphael sound: qcom_snd_parse_of failed: -517
+11月 06 22:31:20 xiaomi-raphael kernel: bluetooth hci0: Direct firmware load for qca/crbtfw21.tlv failed with error -2
+11月 06 22:31:20 xiaomi-raphael kernel: Bluetooth: hci0: QCA Failed to request file: qca/crbtfw21.tlv (-2)
+11月 06 22:31:20 xiaomi-raphael kernel: Bluetooth: hci0: QCA Failed to request file: qca/crbtfw21.tlv (-2)
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@7: Adding to iommu group 20
+11月 06 22:31:20 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@8: Adding to iommu group 21
+11月 06 22:31:20 xiaomi-raphael kernel: snd-sm8150-raphael sound: qcom_snd_parse_of failed: -517
+11月 06 22:31:20 xiaomi-raphael kernel: snd-sm8150-raphael sound: qcom_snd_parse_of failed: -517
+11月 06 22:31:20 xiaomi-raphael kernel: qcom,fastrpc-cb 8300000.remoteproc:glink-edge:fastrpc:compute-cb@1: mem mmap error, fd 11, vaddr ffffadca0000, size 262144
+11月 06 22:31:22 xiaomi-raphael kernel: snd-sm8150-raphael sound: qcom_snd_parse_of failed: -517
+11月 06 22:31:32 xiaomi-raphael kernel: snd-sm8150-raphael sound: qcom_snd_parse_of failed: -517
+
+
+===== pas-errors =====
+CMD: dmesg 2>/dev/null | grep -iE 'cdsp|pas|mdt|auth|rollback|failed to load' | tail -60
+RC: 0
+[    0.000000] Unknown kernel command line parameters "dtb=\dtbs\qcom\sm8150-xiaomi-raphael.dtb", will be passed to user space.
+[    5.283018] systemd[1]: Started systemd-ask-password-wall.path - Forward Password Requests to Wall Directory Watch.
+[    6.325077] remoteproc remoteproc0: cdsp is available
+[    6.326350] remoteproc remoteproc0: powering up cdsp
+[    6.326356] remoteproc remoteproc0: Booting fw image qcom/sm8150/Xiaomi/raphael/cdsp.mdt, size 7580
+[    6.392507] remoteproc remoteproc0: remote processor cdsp is now up
+
+
+===== state =====
+CMD: echo '== remoteproc =='; cat /sys/class/remoteproc/remoteproc0/state 2>&1; echo '== devnodes =='; ls -l /dev/fastrpc-cdsp* 2>&1; echo '== daemon =='; systemctl is-active cdsprpcd 2>&1; echo '== failed units =='; systemctl --failed --no-pager 2>&1 | head -20
+RC: 0
+== remoteproc ==
+running
+== devnodes ==
+crw-r----- 1 root    fastrpc 10, 267 11月  6 22:31 /dev/fastrpc-cdsp
+crw------- 1 fastrpc fastrpc 10, 266 11月  6 22:31 /dev/fastrpc-cdsp-secure
+== daemon ==
+active
+== failed units ==
+  UNIT          LOAD   ACTIVE SUB    DESCRIPTION
+● data2.mount   loaded failed failed /data2
+● rmtfs.service loaded failed failed Qualcomm remotefs service
+
+Legend: LOAD   → Reflects whether the unit definition was properly loaded.
+        ACTIVE → The high-level unit activation state, i.e. generalization of SUB.
+        SUB    → The low-level unit activation state, values depend on unit type.
+
+2 loaded units listed.
+
+
+===== host-main =====
+CMD: cd /data/local/tmp/hvx && timeout 90 env LD_LIBRARY_PATH=/usr/local/lib ADSP_LIBRARY_PATH='/usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx' DSP_LIBRARY_PATH='/usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx' ./host_main 2>&1 | tail -50; echo HOST_MAIN_RC=$?
+RC: 0
+host: hvx_add_open failed, rc=-2147482618
+host: unsigned PD enabled for cDSP (domain=3)
+HOST_MAIN_RC=0
+
+
+===== fastrpc-test =====
+CMD: timeout 90 env LD_LIBRARY_PATH=/usr/local/lib ADSP_LIBRARY_PATH='/usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx' DSP_LIBRARY_PATH='/usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx' fastrpc_test -d 3 -U 1 2>&1 | tail -40; echo FASTRPC_TEST_RC=$?
+RC: 0
+
+Demonstrating FARF run-time logging
+
+hap_example function PASSED
+Please look at the mini-dm logs or the adb logcat logs for DSP output
+
+Demonstrating HAP_mem.h APIs
+fastrpc_mmap APIs are not supported on this target
+
+hap_example function PASSED
+Please look at the mini-dm logs or the adb logcat logs for DSP output
+
+Demonstrating HAP_perf.h APIs
+
+hap_example function PASSED
+Please look at the mini-dm logs or the adb logcat logs for DSP output
+[PASS] libhap_example.so
+
+
+Allocate 4000 bytes from ION heap
+Creating sequence of numbers from 0 to 999
+Compute sum on domain 3
+
+Call calculator_sum on the DSP
+Sum = 499500
+
+Call calculator_max on the DSP
+Max value = 999
+[PASS] libcalculator.so
+
+
+========================================
+Test Summary:
+  Total tests run:    3
+  Passed:             3
+  Failed:             0
+  Skipped:            0
+========================================
+
+RESULT: All applicable tests PASSED
+FASTRPC_TEST_RC=0
+
+
+finished 2026-11-06 22:31:37

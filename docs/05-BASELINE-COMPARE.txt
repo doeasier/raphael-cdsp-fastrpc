@@ -1,0 +1,168 @@
+##############################################################################
+# baseline-compare.txt — 新旧 CDSP 固件逐项对照
+# 基准(旧/设备当前同版): tmp/kernel/v7.0-firmware-xiaomi-raphael.deb
+#   deb 内 PIL: usr/lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.mbn
+#   deb 内 DSP: usr/share/qcom/dsp/cdsp/
+# 新(2021-07-30): fw_raphael_miui_RAPHAEL_V12.5.6.0.RFKCNXM_f5fe3b4a6f_11.0.zip
+#   来源: NON-HLOS.bin (FAT16, IMAGE/) + dspso.bin (ext4, /cdsp/)
+# 生成时间: 2026-11-06 （本地离线）
+##############################################################################
+
+==============================================================================
+一、DSP 库逐项对照  (基准 deb:/usr/share/qcom/dsp/cdsp/  vs  新 dspso.bin:/cdsp/)
+==============================================================================
+文件名                                               旧字节        新字节       字节差  判定       sha256(旧 / 新)
+------------------------------------------------------------------------------
+fastrpc_shell_3                                938172     939664     +1492  已更新     
+    old sha: c08865e4150cb186f382bd822c27a58e07bf31ec6201b0d36690e6c31fc95884
+    new sha: f12bf733515ecbf67c2dea46cb8cb92d999de523e72533cf4148376e1e2b21d1
+fastrpc_shell_unsigned_3                       933772     935256     +1484  已更新     
+    old sha: 1d03f6ca76c2d2d21142ef50bedb52dbfe10356afa5168295f8dd8205f2afd43
+    new sha: f94a206286adc2aa17df70c9468884702445e0490711adeefbdb26a05c25ef31
+libbenchmark_skel.so                           288200     289960     +1760  已更新     
+    old sha: 5b3c15fc8c4afb18ea5d1e811f48b8d0e72c00f1fd25185de8a7258b39bba5d7
+    new sha: 9f5c8da4996e716d534d71eb63b1d81008ce4ebc078859e21ff12db33d55ef84
+libc++.so.1                                   3124704    3124704        +0  完全相同    
+    old sha: 1fc1384555cfad5dd23df8b2e07ffb10a22d6b4bce83a1eb7d0c5e71470188d7
+    new sha: 1fc1384555cfad5dd23df8b2e07ffb10a22d6b4bce83a1eb7d0c5e71470188d7
+libc++abi.so.1                                1435816    1435816        +0  完全相同    
+    old sha: 766a3ec60719b6a4b33dd5612ff92ba2c72fe6da16a2b8a97e7ef9d274030cb9
+    new sha: 766a3ec60719b6a4b33dd5612ff92ba2c72fe6da16a2b8a97e7ef9d274030cb9
+libhcp_rpc_skel.so                             241608     242152      +544  已更新     
+    old sha: c97e73d6e7ee1f04fa6a10c66353260ce2d266791ffeffe02df1e0165b554ab2
+    new sha: 78809032710d91130fe41141b9c1eb31dc58c92b405eee4667c9e0fc5be61cd6
+libhta_dsp_skel.so                             248112     248976      +864  已更新     
+    old sha: 9b23e1b5735838febdbea4c2da36d95a0cdbc7506a3c599b8fbb443e551832d9
+    new sha: 9293cc4dbba5ae2a3eb904f2e0be26bb7c5b3a43367f4d0def259c81bb65b4f6
+libimmotion_skel.so                           3341872    3344144     +2272  已更新     
+    old sha: 1c7a2d27723c80d50a80e33b34b90e6487d493efb979623cf0f2620fbd644f51
+    new sha: f2620f926d6c12e3ce5efb81020f7e96436a58d808708d04bf4579aff08f6b57
+libstabilitydomain_skel.so                      85584      85840      +256  已更新     
+    old sha: b867dba8fb3545280f7a79a87381a5788e7fc610248f592ac00a5df2b2d9b18d
+    new sha: 5ad532292068ed63e82e3143d66773e32d662c24ff6f09cb7bc46c6f49592445
+libsysmon_skel.so                              204496     205040      +544  已更新     
+    old sha: c7a72d7e140644f9a18b39f9a2cd234733c13ac1e2102d4e5fd8ca0f90b3b395
+    new sha: 27e7edf7d81e4ddfb2697e757201750bdf51a4b760bd7b4283349fff71144f37
+libsysmondomain_skel.so                        263824     264496      +672  已更新     
+    old sha: f4cbfbbc53d86bdfe9b9ef893453b6bc8f86c519a2046aa25d705197ce987ab9
+    new sha: cb9df8018f01c95f869f8b5414ea7b5b17e648989809ed13904730cf5b7a4a5c
+libsysmonhvxthrottle_skel.so                    29704      29864      +160  已更新     
+    old sha: 2f650e10b9a08881172f9c612c586fda162db707955d76d1e21b3c88ba0334ec
+    new sha: b457c80290076ea04cbc7645ceec9aab7d20ade95ac590b4e57e11d5ee966570
+libsysmonquery_skel.so                          38024      38216      +192  已更新     
+    old sha: 15a9f06cbd559a80b55cc676bc0c096a319756708d0498dc130c93595229b256
+    new sha: 8059abef29aee3a4f3b2462b09155bc7c2e44e28597795aa249fcbb0f37ca13d
+libvpp_aie.so                                  222704     223696      +992  已更新     
+    old sha: 682f1d6bfd8cd756e53431023aa38c02c53999a2b75f946e409d98d582acc7ec
+    new sha: 8e0adbc746cee22c13ec6f3d40801e7f7ca008383bd6db839bc8fbea30c53186
+libvpp_frc.so                                 1675744    1678016     +2272  已更新     
+    old sha: 5b25f7698472ccb0e6c87f5e4b40a13fb1ef9b7b6e131a170ce6616b56d4ff7a
+    new sha: d0d263e25bed0137fa3b81a6615c824e4a64cf0756d7ff16c2923561b38fc86f
+libvpp_mvp.so                                    6704       6736       +32  已更新     
+    old sha: a83f4f34bd5a223a84ae47419112a94ce1c0c0791096aef9fe569d4bd87bb541
+    new sha: 5e6bd28f8dc8815a660c1c5cd007de6ecdab1d92605c95669fe521987a8746a1
+libvpp_nr.so                                     6704       6736       +32  已更新     
+    old sha: 61646dfaf3823b82d462d93403a05cb039b396b36d15b30ab29fe889960b601f
+    new sha: cc88d6e39b8d89cda7b977e117ce48969af04b3c7f3cead052f2fa5be6ccfee2
+libvpp_qbr.so                                    6704       6736       +32  已更新     
+    old sha: 5576ea1e7fe15409f01f2b7c1a962cd965f527bc815d947fd5b7a040f1def353
+    new sha: 0c4fd1e2482bc01996952aa9a1a3128e77a0e9b04b6463e0ee8ad75f74e04689
+libvpp_svc_skel.so                             276048     276400      +352  已更新     
+    old sha: 77d45e45cf58b4f492f97ea5d32ddf4f40aedc818fe43a19f65204bac8f4d357
+    new sha: b349bf5fe7819e7653258e07e0f6d3febfd0ea1a79d1e83027ef6b4f9881156a
+map_SHARED_LIBS_855.cdsp.prodQ.txt               1656       1656        +0  完全相同    
+    old sha: 67942e90f65b98d5187bf5aeed4a5088575fad0356b5d420a8a50ea22fa08094
+    new sha: 67942e90f65b98d5187bf5aeed4a5088575fad0356b5d420a8a50ea22fa08094
+ubwcdma_dynlib.so                              156584     157320      +736  已更新     
+    old sha: f75c8d6040a69959ebd00234af790fc0366a7dbfe802f2d97e56f212076d6cbe
+    new sha: fd68479ce7c4ee3198a6149b8f076983626d9c1f87c1f088500ce200281a2107
+------------------------------------------------------------------------------
+小计: 21 个文件；完全相同 3 个，已更新 18 个
+注: 完全相同的是 libc++.so.1、libc++abi.so.1、map_SHARED_LIBS_855.cdsp.prodQ.txt；
+    两个 fastrpc_shell 与全部 skel/动态库均不同（整体重新编译）。
+
+==============================================================================
+二、PIL 固件对照
+==============================================================================
+cdsp.mbn
+   旧: 3405460 bytes  sha256=53fa7dcacfe9952b2c5d15012f9aed6caa75d089b2f2af95e72a9d4ddbfb2a13
+   新: 3405460 bytes  sha256=00c366aa71d695d10be350630f7b437c9773efdd429ba168fd29305bee4fd1fd
+   大小相同: True ; 前 436 字节(ELF头+12 phdr)完全相同: True
+   逐字节相同率: 85.936%% (2926524/3405460)，不同字节 478936 → 同基线新构建，非同一文件
+   形态: ELF32 / e_machine=0xa4(Hexagon QDSP6) / ET_EXEC / 12 个 program headers
+         [0] PT_NULL hash 段 flags=0x07000000 filesz=436 ; [1] PT_NULL flags=0x02200000 filesz=7144
+         全部 11 个数据段 p_offset+p_filesz 内联于文件，最大段末尾恰为文件末尾，尾部 0 多余字节
+
+cdspr.jsn / CDSPR.JSN
+   旧: 403 bytes  sha256=15e148599165b38f68e62302d63c87caa5f0b164deb81aa419bbb4ecf920bc4b
+   新: 403 bytes  sha256=15e148599165b38f68e62302d63c87caa5f0b164deb81aa419bbb4ecf920bc4b
+   逐字节相同: True ; 内容: sr_version 1.1.1, domain=cdsp/root_pd, qmi_instance_id=76, service=tms/servreg
+
+新增(基准 deb 无)：原始 split 分段，来自 NON-HLOS.bin:IMAGE/
+   CDSP.MDT 7580 B (= ELF头+phdr 436 + hash/签名数据 7144，即 B00 + B01)
+   CDSP.B00 436 / B01 7144 / B02 228148 / B03 104284 / B04 1200 / B05 2735588
+   CDSP.B06 48596 / B08 209184 / B10 54932  （B07/B09/B11 因 phdr.filesz=0 而不存在）
+   校验: MDT == B00 + B01；各 Bxx 长度 == 对应 phdr.filesz；MDT 前 436 字节 == 基准 mbn 前 436 字节
+
+==============================================================================
+三、内嵌 build-id / 版本串差异
+==============================================================================
+位置                             旧(基准/设备当前)                                           新(2021-07-30)                                       
+------------------------------------------------------------------------------
+QC_IMAGE_VERSION_STRING        CDSP.HT.2.0.1-00171-SM8150-1.357350.2                CDSP.HT.2.0.1-00171-SM8150-1.357350.2.419065.1      
+mod_table.c 源码路径               ...357350.2_20201211_224311                          ...419065.1_20210730_070147                         
+QCOM time                      Q6_BUILD_TS_Fri_Dec_11_23:00:52_PST_2020             Q6_BUILD_TS_Fri_Jul_30_07:09:27_PST_2021            
+ENGG time                      Q6_BUILD_TS_Tue_Jun_15_22:27:44_PST_2021             Q6_BUILD_TS_Sun_Oct_17_22:54:44_PST_2021            
+OEM_IMAGE_VERSION_STRING       c3-miui-ota-bd120.bj                                 c5-xm-ota-bd022.bj                                  
+OEM_IMAGE_UUID                 Q_SENTINEL_..._20210615_2228 (仅基准 mbn 中检出)           (本轮未检出，见注)                                          
+------------------------------------------------------------------------------
+三处交叉印证（新套内三者完全一致）:
+   cdsp.mbn(重建) 内嵌 ...419065.1_20210730_070147
+   fastrpc_shell_3 内嵌 ...419065.1_20210730_070147
+   fastrpc_shell_unsigned_3 内嵌 ...419065.1_20210730_070147
+   基准套内三者均为 ...357350.2_20201211_224311
+注: 本轮版本串检索未含 OEM_IMAGE_UUID_STRING 关键字，不代表新套不存在该字段。
+
+==============================================================================
+四、整套齐全性核对（map_SHARED_LIBS_855.cdsp.prodQ.txt 映射表 vs 实际提取）
+==============================================================================
+映射表列出 20 项:
+   1. libsysmon_skel.so                          已提取
+   2. libsysmondomain_skel.so                    已提取
+   3. libstabilitydomain_skel.so                 已提取
+   4. libsysmonquery_skel.so                     已提取
+   5. libbenchmark_skel.so                       已提取
+   6. libsysmonhvxthrottle_skel.so               已提取
+   7. libvpp_svc_skel.so                         已提取
+   8. libvpp_aie.so                              已提取
+   9. libvpp_frc.so                              已提取
+  10. libvpp_mvp.so                              已提取
+  11. libvpp_nr.so                               已提取
+  12. libvpp_qbr.so                              已提取
+  13. libimmotion_skel.so                        已提取
+  14. ubwcdma_dynlib.so                          已提取
+  15. libhcp_rpc_skel.so                         已提取
+  16. libhta_dsp_skel.so                         已提取
+  17. libc++.so.1                                已提取
+  18. libc++abi.so.1                             已提取
+  19. fastrpc_shell_3                            已提取
+  20. fastrpc_shell_unsigned_3                   已提取
+缺失: 无
+实际提取普通文件 21 个 = 映射表 20 项 + 映射表自身 1 个
+PIL 侧: CDSP.MDT + 9 个 Bxx + CDSPR.JSN + 重建 cdsp.mbn，共 12 个固件文件，签名/hash 段
+        (phdr[0] 436 B 与 phdr[1] 7144 B) 随 B00/B01 原样保留，无独立签名文件缺失。
+
+==============================================================================
+五、结论
+==============================================================================
+【事实】是否确实更新：是。
+   · PIL 固件 build id 由 ...1.357350.2_20201211_224311 升级为 ...1.357350.2.419065.1_20210730_070147；
+   · 源码路径、QCOM/ENGG 编译时间戳、OEM 版本号全部同步变化；
+   · 重建 cdsp.mbn 与基准 85.936% 字节相同 / 478936 字节不同；
+   · fastrpc_shell_3 938172→939664 B、fastrpc_shell_unsigned_3 933772→935256 B，sha256 全变；
+   · 全部 skel / 动态库大小与 sha256 均变化；仅 libc++、libc++abi、map 表、cdspr.jsn 未变。
+【事实】是否整套齐全：是。映射表 20 项全部提取，PIL 分段 + 重建 mbn 齐备，签名/hash 段原样保留。
+【事实】本轮未发现阻碍整套替换的硬缺口（无缺文件、无 ext4/FAT16 解析失败、无缺签名段）。
+【推测】唯一待确认项：设备侧 DSP 库实际目录。基准 deb 落在 /usr/share/qcom/dsp/cdsp/，
+        而任务描述与 dspso.bin 挂载惯例指向 /usr/lib/dsp/cdsp/；部署前须人工确认，不可盲写。
+

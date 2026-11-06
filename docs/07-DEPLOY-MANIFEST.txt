@@ -1,0 +1,37 @@
+# deploy-manifest.txt - sha256 of every file in deploy-bundle.tar.gz
+# layout: pil/ -> /lib/firmware/qcom/sm8150/Xiaomi/raphael/
+#         dsp/ -> /usr/share/qcom/dsp/cdsp/
+# cdsp.mbn intentionally EXCLUDED (device boots cdsp.mdt split)
+
+e569f87d0f5800ebff05684688f07b2441cf50e3b3bab1049fdb06ce8d3b686b  436  pil/cdsp.b00
+5dc5efcd87b3d304719b84f6a1bb59e1cd9ea18a3fec7f0cb1f034735266f752  7144  pil/cdsp.b01
+a14316ec0d5ad01982332c3240e3f54393d2f32fe0468a53f84612f53c6eb4f8  228148  pil/cdsp.b02
+19acd6c04f05923f5ced9c226f2cadf89aa9ea4cb2999d6ef774a559cfa5f846  104284  pil/cdsp.b03
+91a0f8a30417b5488f62368073d953e4d68ed25bee2e9ca4c4e48896b0b64ee6  1200  pil/cdsp.b04
+85e678842bdd71f17cab12d5ceed577a954971b9dfd962dbe9d2871e911e4154  2735588  pil/cdsp.b05
+29a625653510d762fd5569ca77c8e7da7799f7b08ef915b7c2b6b312a807107e  48596  pil/cdsp.b06
+b5d6b494684ddd643719ca212aed9782acaa6b7e2907e3ac0b5ad1d50286d3bd  209184  pil/cdsp.b08
+14b4f85ba80165c5e2b0c7bbb83be37ad7620dd2cbae82cccbe052a77eb5f7a2  54932  pil/cdsp.b10
+4b82459c883f4d9b75cc41c916db41c5c982c3e299c74fa59a550cf8d6f62177  7580  pil/cdsp.mdt
+15e148599165b38f68e62302d63c87caa5f0b164deb81aa419bbb4ecf920bc4b  403  pil/cdspr.jsn
+f12bf733515ecbf67c2dea46cb8cb92d999de523e72533cf4148376e1e2b21d1  939664  dsp/fastrpc_shell_3
+f94a206286adc2aa17df70c9468884702445e0490711adeefbdb26a05c25ef31  935256  dsp/fastrpc_shell_unsigned_3
+9f5c8da4996e716d534d71eb63b1d81008ce4ebc078859e21ff12db33d55ef84  289960  dsp/libbenchmark_skel.so
+1fc1384555cfad5dd23df8b2e07ffb10a22d6b4bce83a1eb7d0c5e71470188d7  3124704  dsp/libc++.so.1
+766a3ec60719b6a4b33dd5612ff92ba2c72fe6da16a2b8a97e7ef9d274030cb9  1435816  dsp/libc++abi.so.1
+78809032710d91130fe41141b9c1eb31dc58c92b405eee4667c9e0fc5be61cd6  242152  dsp/libhcp_rpc_skel.so
+9293cc4dbba5ae2a3eb904f2e0be26bb7c5b3a43367f4d0def259c81bb65b4f6  248976  dsp/libhta_dsp_skel.so
+f2620f926d6c12e3ce5efb81020f7e96436a58d808708d04bf4579aff08f6b57  3344144  dsp/libimmotion_skel.so
+5ad532292068ed63e82e3143d66773e32d662c24ff6f09cb7bc46c6f49592445  85840  dsp/libstabilitydomain_skel.so
+27e7edf7d81e4ddfb2697e757201750bdf51a4b760bd7b4283349fff71144f37  205040  dsp/libsysmon_skel.so
+cb9df8018f01c95f869f8b5414ea7b5b17e648989809ed13904730cf5b7a4a5c  264496  dsp/libsysmondomain_skel.so
+b457c80290076ea04cbc7645ceec9aab7d20ade95ac590b4e57e11d5ee966570  29864  dsp/libsysmonhvxthrottle_skel.so
+8059abef29aee3a4f3b2462b09155bc7c2e44e28597795aa249fcbb0f37ca13d  38216  dsp/libsysmonquery_skel.so
+8e0adbc746cee22c13ec6f3d40801e7f7ca008383bd6db839bc8fbea30c53186  223696  dsp/libvpp_aie.so
+d0d263e25bed0137fa3b81a6615c824e4a64cf0756d7ff16c2923561b38fc86f  1678016  dsp/libvpp_frc.so
+5e6bd28f8dc8815a660c1c5cd007de6ecdab1d92605c95669fe521987a8746a1  6736  dsp/libvpp_mvp.so
+cc88d6e39b8d89cda7b977e117ce48969af04b3c7f3cead052f2fa5be6ccfee2  6736  dsp/libvpp_nr.so
+0c4fd1e2482bc01996952aa9a1a3128e77a0e9b04b6463e0ee8ad75f74e04689  6736  dsp/libvpp_qbr.so
+b349bf5fe7819e7653258e07e0f6d3febfd0ea1a79d1e83027ef6b4f9881156a  276400  dsp/libvpp_svc_skel.so
+67942e90f65b98d5187bf5aeed4a5088575fad0356b5d420a8a50ea22fa08094  1656  dsp/map_SHARED_LIBS_855.cdsp.prodQ.txt
+fd68479ce7c4ee3198a6149b8f076983626d9c1f87c1f088500ce200281a2107  157320  dsp/ubwcdma_dynlib.so

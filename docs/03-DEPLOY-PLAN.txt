@@ -1,0 +1,181 @@
+###############################################################################
+# deploy-plan.txt  v2 — cDSP 固件整套替换【实测修正版预案】
+# 修订：2026-11-06 21:4x（Agent 模式，设备侧只读核查后）
+# 状态：只读核查已完成；主机侧产物已按实测形态重新打包；设备侧仍为 0 改动基线
+# 对象：Redmi K20 Pro / raphael / SM8150，Ubuntu 24.04 + mainline 7.0，Hexagon 690 cDSP
+# 目标：把设备 cDSP 换成 2021-07-30 整套同 build 固件，验证 Unsigned PD FastRPC
+#       (基线：FASTRPC_IOCTL_INIT_CREATE 恒返回 0x80000453 = AEE_EBADASID)
+#
+# ⚠️ v1 预案有三处错误，均已由设备侧只读实测证伪，见【0】。以本 v2 为准。
+###############################################################################
+
+【0】v1 的三处错误（全部为【事实】，证据在 logs/firmware/）
+  错误 1 —— 「设备 PIL 是单个 cdsp.mbn 3.4MB」
+    【实测】设备是 split 形态：/lib/firmware/qcom/sm8150/Xiaomi/raphael/
+       cdsp.mdt 7580 B + cdsp.b00/b01/b02/b03/b04/b05/b06/b08/b10（无 b07/b09/b11）
+       + cdspr.jsn 403 B。目录中**没有 cdsp.mbn**。
+    证据：
+       logs/firmware/readonly-audit.txt  §pil-dir
+       内核日志 `Booting fw image qcom/sm8150/Xiaomi/raphael/cdsp.mdt, size 7580`
+       DT 属性 firmware-name = "qcom/sm8150/Xiaomi/raphael/cdsp.mdt"
+         （logs/firmware/readonly-boot.txt §firmware-name，节点 remoteproc@8300000）
+    → 修正：按 split 形态替换 mdt + 9 个 bXX（小写同名），**不要放 cdsp.mbn**。
+
+  错误 2 —— 「基准 deb = 设备当前同版」
+    【实测】只对用户态成立，对 PIL 不成立：
+       · /usr/share/qcom/dsp/cdsp/ 的 21 个文件 sha256 与基准 deb 逐字节一致
+         （fastrpc_shell_unsigned_3 = 1d03f6ca…，build id 357350.2_20201211_224311）
+       · 但设备 cdsp.mdt 前 436 B sha = b33f71db…，与基准 deb cdsp.mbn 前 436 B
+         （= e569f87d…）**不同**；设备 cdsp.b05 内
+         QC_IMAGE_VERSION_STRING = `CDSP.HT.2.0.1-00131-SM8150-1`
+       · ELF32 phdr 逐项对比（logs/firmware/readonly-audit2.txt）：
+           设备 mdt : b02=227348  b05=2710852  p_offset 末段 0x33a000
+           基准 mbn : b02=228148  b05=2735588  p_offset 末段 0x340000（与 2021 新包完全相同）
+           前 436 B：设备 b33f71db… / 基准=新包 e569f87d…
+    → 【结论】设备当前是「00131 分支 PIL + 2020-12 shell」的**不配套组合**。
+      这恰好印证 §16.4 引用的 Radxa / Dmitry Baryshkov 结论
+      「libraries / shell must match exactly the DSP firmware」。
+      换整套 2021-07-30（PIL 00171 + shell 419065.1 + 全部 skel 同 build）
+      同时修掉「不配套」与「版本过老」两个变量，**方向比 v1 更站得住**。
+
+  错误 3 —— 「替换前在 rEFInd 里保留/新增一个已知良好回滚启动项」
+    【实测】ESP = /dev/sda30（LABEL="efi"，1G vfat，当前**未挂载**）。
+       只读挂载后内容仅 /EFI/BOOT/BOOTAA64.EFI + refind.conf(36644 B，默认样例，
+       menuentry 全是注释示例) + drivers_aa64/ + vars/。
+       **没有任何 vmlinuz / initrd / .dtb / 第二启动项 / 第二内核**。
+       efibootmgr -v 只有 6 个 `scsi N` auto_created_boot_option，无 rEFInd 菜单项。
+       SecureBoot efivar = 0（关闭），SetupMode = 1。
+    证据：logs/firmware/readonly-boot.txt、logs/firmware/readonly-esp.txt
+    → 修正：**不能依赖 rEFInd 回滚**。改为【文件级回滚】：
+       备份原 pil/ 与 dsp/ 全部目标文件 → tar.gz → SHA256SUMS →
+       一旦失败，用 SSH 把备份原样写回并 systemctl reboot。
+       依据：cdsp remoteproc 加载失败不会阻止 multi-user.target（stage2 DTB
+       只留 cdsp，其它 remoteproc 已 disabled；q6v5_pas probe 失败只影响 cDSP），
+       Ubuntu 本身仍可正常启动 → 文件级回滚路径始终可达。
+       ⚠️ 仍需用户保留物理重启 / TWRP 兜底能力（历史上 sshd logind 曾卡死，
+          需要物理重启才能恢复 SSH）。
+
+【1】设备侧目标路径（已实测确认）
+  A. PIL（10 个文件，split 形态）
+     /lib/firmware/qcom/sm8150/Xiaomi/raphael/
+        cdsp.mdt   <- raphael-20210730/pil/CDSP.MDT
+        cdsp.b00..b06 / b08 / b10 <- raphael-20210730/pil/CDSP.Bxx（小写）
+        cdspr.jsn  <- raphael-20210730/pil/CDSPR.JSN（逐字节相同，可跳过）
+     【事实】/lib -> usr/lib（usrmerge 软链）；DT firmware-name 明确指向 cdsp.mdt。
+     【事实】新 CDSP.MDT 的 12 个 phdr 中 9 个非零 filesz 与 9 个 Bxx 长度逐项相等
+            （pack_firmware.py 已断言通过），qcom_mdt_load 可正确加载。
+  B. DSP 库（21 个文件）
+     /usr/share/qcom/dsp/cdsp/   <- raphael-20210730/dsp/cdsp/*
+     【事实】cdsprpcd 的 Environment:
+        ADSP_LIBRARY_PATH = /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx
+        DSP_LIBRARY_PATH  = 同上
+        /usr/lib/rfsa/adsp/ 下 21 个条目**全是符号链接**指向 /usr/share/qcom/dsp/cdsp/，
+        所以只替换后者即可，链接自动生效；/usr/lib/dsp/cdsp/ 不存在，绝不写入。
+     【注意】/usr/share/qcom/dsp/cdsp/libhvx_add_skel.so（自编 7160 B）**不在
+        21 文件清单内，必须保留不动**；/usr/lib/rfsa/adsp/ 下对应链接指向
+        /data/local/tmp/hvx/libhvx_add_skel.so，也不要动。
+
+【2】产物（主机侧，2026-11-06 已生成并校验）
+  tmp/firmware/raphael-20210730/deploy-bundle.tar.gz
+     6,062,495 B  sha256=a3f1d8790073050f9e35e747641c1c0b765e166ba90b1516c712f7539e2c38ec
+     内含 32 个文件：pil/(11) + dsp/(21) + deploy-manifest.txt
+     原始 16,938,919 B → gzip 后 6.06 MB
+  tmp/firmware/raphael-20210730/deploy-manifest.txt
+     每个文件的 sha256 / 字节数 / tar 内路径
+  ⚠️ 环境坑：USB-NCM 上单次 23 MB SFTP 曾卡死并耗尽 sshd 会话（见 §13）。
+     → 上传必须**分片 + 每片独立 SSH 连接 + 逐片 sha256 校验**，见【4】。
+
+【3】备份（替换前必做，文件级回滚的唯一保障）
+  /root/cdsp-firmware-backup-20201211-pre-20210730/
+      pil/    设备现有 cdsp.mdt + cdsp.b00..b10 + cdspr.jsn
+      dsp/    设备现有 21 个目标文件（**不含** libhvx_add_skel.so）
+      SHA256SUMS, README.txt（记录替换时间、来源、build id）
+  /root/cdsp-firmware-backup-20201211-pre-20210730.tar.gz（整包归档）
+  /root/cdsp-rollback.sh（自动回滚脚本：解包 → 覆盖 → 校验 → 提示 reboot）
+  【注意】备份目录名沿用 v1（20201211 指旧 shell build 日期）；实际 PIL 是
+        00131 分支，README 里必须写明，避免回滚时误判版本。
+
+【4】执行顺序
+  1) 主机侧（✅ 已完成）：离线提取、逐项基准比对、ELF phdr 校验、按 split 形态打包。
+  2) 上传（分片，每片独立连接）：deploy-bundle.tar.gz → /root/cdsp-20210730-staging/
+     建议 1 MB/片，共 6 片；每片 SFTP 后立刻 sha256 校验；全部收齐后
+     `cat part* > deploy-bundle.tar.gz` 并比对整体 sha256。
+  3) 设备上解包到 /root/cdsp-20210730-staging/pil/ 与 dsp/，按 deploy-manifest.txt
+     逐文件 sha256 比对；任一不符 → 立即中止，设备保持 0 改动。
+  4) 只读复核基线：remoteproc0 state=running、cdsprpcd active、/dev/fastrpc-cdsp 在位、
+     DTB stage2 仍在（/proc/cmdline 的 dtb= 参数）、Secure Boot disabled。
+  5) 备份（见【3】），确认 SHA256SUMS 齐全、tar.gz 可解、rollback.sh 可执行。
+  6) 整套替换：先 pil/ 后 dsp/，**32 个文件一次到位，不留混搭**；
+     保持原属主 root:root 与权限（pil 原为 0755，dsp 原为 0644）。
+  7) 设备上复核新文件 sha256 与 deploy-manifest.txt 全部一致；
+     确认 libhvx_add_skel.so 仍在且 sha 未变。
+  8) systemctl reboot（**绝不 kexec**）。
+  9) 重启后验收（见【5】）。
+
+【5】验收与停止条件
+  只读检查：
+    dmesg | grep -iE 'cdsp|pas|mdt|remoteproc|auth|scm|firmware'
+    cat /sys/class/remoteproc/remoteproc0/state
+    ls -l /dev/fastrpc-cdsp*
+    grep -a -o -E '[0-9]{6,}\.[0-9]+_[0-9]{8}_[0-9]{6}' /usr/share/qcom/dsp/cdsp/fastrpc_shell_unsigned_3
+  判定：
+    a) qcom_q6v5_pas / qcom_mdt_load / qcom_scm_pas_auth_and_reset 返回 -22 /
+       "authentication"/"verify"/"rollback"/"failed to load" → **PAS 验签或
+       anti-rollback 拒绝，立即停止换固件路线**，走【3】回滚，记录为 V51 负结果。
+    b) remoteproc0 非 running 或 /dev/fastrpc-cdsp 打不开 → 固件未加载成功，回滚。
+    c) cdsp running 但 INIT_CREATE 仍 0x80000453 → **「固件版本过旧/不配套」假设
+       不成立或不是唯一原因**，停止换固件路线（不要继续换别的固件版本），
+       回到 D8 其它假设（内核 fastrpc 对 unsigned shell 的处理、DSP 侧 ASID 能力）。
+    d) 出现 0x80000600 → 优先怀疑版本串分叉，核对 21 个 dsp 文件与 10 个 pil 文件
+       是否全部换成同一套，必要时整体回滚。
+    e) 成功信号：remoteproc0=running、shell build id 变为 419065.1_20210730_070147、
+       `host_main` 打印 `host: PASS`（或至少 INIT_CREATE 不再 BADASID）。
+  功能验证命令（沿用现有资产）：
+    cd /data/local/tmp/hvx && LD_LIBRARY_PATH=/usr/local/lib \
+      DSP_LIBRARY_PATH='/usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx' \
+      ./host_main
+    fastrpc_test -d 3 -U 1
+
+【6】风险登记
+  · PAS 验签 / anti-rollback：中低。换入的是**同机型官方 China Stable** 固件，
+    签名链与原厂 OTA 一致；设备当前 PIL 是更老的 00131 分支，方向为升级，
+    anti-rollback 通常只拦降级。但【推测】TZ 可能校验 OEM_IMAGE_UUID 或
+    PIL 分支编号，无法在主机侧预验证，只能靠 reboot 后 dmesg 判定。
+  · 无 rEFInd 回滚项：已用文件级回滚替代；残留风险是极端情况下 SSH 不可达
+    （如 sshd logind 再次卡死）→ 需物理重启 / TWRP。
+  · 不刷分区、不改 DTB、不换内核、不装 drop-in、不动 libhvx_add_skel.so。
+  · 所有替换均为根文件系统中的普通文件，reboot 后生效，文件级可逆。
+
+【7】证据文件
+  logs/firmware/readonly-audit.txt     第一轮设备只读全量核查
+  logs/firmware/readonly-audit2.txt    第二轮（ELF phdr 对比 + ESP 定位）
+  logs/firmware/readonly-boot.txt      efibootmgr / 分区 / DT firmware-name
+  logs/firmware/readonly-esp.txt       ESP 只读挂载内容（已 umount）
+  tmp/firmware/device-cdsp.mdt / device-cdsp.b00   设备原件下载副本
+  tmp/boot_probe/verify_firmware_readonly*.py / verify_boot_entries.py /
+  tmp/boot_probe/verify_esp_readonly.py / pack_firmware.py / deploy_firmware.py
+
+【8】最终状态（2026-11-06 22:34）：**成功，D8 达成，请勿回滚**
+  已完成：upload(32/32 校验) → backup → precheck → replace(32/32 校验) →
+          verify → systemctl reboot(21:40:41) → 22:31 物理重启 → 自动验收。
+  结果：PAS 验签通过（无 -22）、cdsp=running、build id `419065.1_20210730_070147`；
+        `fastrpc_test -d 3 -U 1` 3/3 PASS；`host_main` 把 skel URI 改成裸文件名后
+        打印 `host: PASS - all 1000 elements verified correct.`。
+        详见 docs/05 §17.6、logs/firmware/postboot-verify.txt、hostmain-uri-fix.txt。
+  中间插曲（21:40–22:31，SSH 会话层不可用，已被物理重启解决）：
+    ping/ARP 通；TCP 22 SYN-ACK 但无 banner；80/12345/5355 回 RST（排除 TUN 代理）；
+    adb 无设备；Windows 路由正确。判定为 Linux 已起、sshd 会话层卡住
+    （疑与历史 pam_systemd/logind CreateSession 卡死同源），PAS 验签结果未知。
+  应急路径（详见 docs/05 §17.5）：
+    ① 长按电源键物理重启一次，SSH 恢复后先跑 deploy_firmware.py early 读 dmesg；
+    ② 若仍不通，rEFInd 选 **`Boot stage1 (usb-net only)`**（唯一同时带
+       modprobe.blacklist 六项且不 mask usb-ncm 的项；`Boot ORIGINAL` 无黑名单，
+       `Boot DIAG` mask 了网络）。`timeout -1` 会直接启动第一项，看不到菜单时
+       用 `twrp_add_rollback_entry.sh` 把黑名单项置顶。进系统后
+       `bash /root/cdsp-rollback.sh`；
+    ③ 仍不行则进 TWRP：`twrp_add_rollback_entry.sh`（启动项置顶）+
+       `twrp_rollback.sh`（文件级恢复），二选一或依次执行。
+  回滚后务必 systemctl reboot，绝不 kexec。
+  回滚校验 sha256：cdsp.mdt=c87b5fa0… / cdsp.b02=a0aaa879… /
+    cdsp.b05=85086ea8… / fastrpc_shell_unsigned_3=1d03f6ca…
+###############################################################################

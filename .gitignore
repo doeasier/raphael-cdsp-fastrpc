@@ -1,0 +1,23 @@
+# Prevent accidental redistribution of vendor firmware blobs.
+*.mbn
+*.mdt
+*.b0*
+*.b1*
+*.bin
+*.img
+*.tar.gz
+*.tgz
+*.deb
+*.so
+*.dtb
+*.journal
+*.gz
+deploy-bundle*
+NON-HLOS*
+pil/
+dsp/
+parts/
+firmware/pil/
+firmware/dsp/
+__pycache__/
+*.pyc

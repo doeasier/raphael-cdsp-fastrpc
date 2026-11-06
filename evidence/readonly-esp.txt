@@ -1,0 +1,192 @@
+READ-ONLY ESP INSPECTION (/dev/sda30)
+mounted=True
+== ESP tree (maxdepth 3) ==
+d /mnt 4096
+d /mnt/EFI 4096
+d /mnt/EFI/BOOT 4096
+f /mnt/EFI/BOOT/BOOTAA64.EFI 315392
+d /mnt/EFI/BOOT/drivers_aa64 4096
+f /mnt/EFI/BOOT/refind.conf 36644
+d /mnt/EFI/BOOT/vars 4096
+== refind.conf menuentries ==
+--- /mnt/EFI/BOOT/refind.conf ---
+6:# Timeout in seconds for the main menu screen. Setting the timeout to 0
+7:# disables automatic booting (i.e., no timeout). Setting it to -1 causes
+11:# menu with no timeout.
+13:timeout -1
+29:# Normally, when the timeout period has passed, rEFInd boots the
+30:# default_selection. If the following option is uncommented, though,
+36:#shutdown_after_timeout
+46:# (such as an HFS+ volume), and it increases the risk of filesystem
+55:# Screen saver timeout; the screen blanks after the specified number of
+65:#  banner      - the rEFInd title banner (built-in or loaded via "banner")
+67:#  singleuser  - remove the submenu options to boot macOS in single-user
+73:#  editor      - the options editor (+, F2, or Insert on boot options menu)
+74:#  badges      - device-type badges for boot options
+96:# Use a custom title banner instead of the rEFInd icon and name. The file
+137:# Like the banner option above, these options take a filename of an
+235:# kernel's EFI stub loader. You can specify an empty list to boot all
+237:# Valid options:
+239:#   linux   - A Linux kernel with EFI stub loader
+240:#   elilo   - The ELILO boot loader
+241:#   grub    - The GRUB (Legacy or 2) boot loader
+247:# Which non-bootloader tools to show on the tools line, and in what
+253:#                     or a boot loader's directory
+280:# with no options.
+285:# alone or a volume identifier plus pathname. The default is to scan no
+287:# loader is found.
+296:# full pathname, or a volume identifier (filesystem label, partition
+302:# Boot loaders that can launch a Windows restore or emergency system.
+320:# Which types of boot loaders to search, and in what order to display them:
+321:#  internal      - internal EFI disk-based boot loaders
+322:#  external      - external EFI disk-based boot loaders
+324:#  netboot       - EFI network (PXE) boot options
+325:#  hdbios        - BIOS disk-based boot loaders
+326:#  biosexternal  - BIOS external boot loaders (USB, eSATA, etc.)
+327:#  cd            - BIOS optical-disc boot loaders
+330:# Note that the legacy BIOS options require firmware support, which is
+344:# when no BIOS-mode options are set via scanfor.
+357:# When scanning volumes for EFI boot loaders, rEFInd always looks for
+358:# macOS's and Microsoft Windows' boot loaders in their normal locations,
+360:# for additional boot loaders, but it doesn't recurse into these directories.
+362:# Directories are specified relative to the volume's root directory. This
+363:# option applies to ALL the volumes that rEFInd scans UNLESS you include
+364:# a volume name and colon before the directory name, as in "myvol:/somedir"
+370:# to various hard-coded directories. rEFInd also scans each volume root (\)
+374:# @/boot    - /boot on every scanned volume (vendor ext4 /boot, userdata /boot, etc.)
+379:# For EFI-mode scans, you normally specify a volume by its label, which you
+386:# For legacy-mode scans, you can specify any subset of the boot loader
+390:#dont_scan_volumes "Recovery HD"
+392:# Directories that should NOT be scanned for boot loaders. By default,
+399:# of the menu if that's a duplicate of another boot loader or to exclude
+400:# a directory that holds drivers or non-bootloader utilities provided by
+406:# from the scan on the myvol volume but not on other volumes.
+410:# Files that should NOT be included as EFI boot loaders (on the
+411:# first line of the display). If you're using a boot loader that
+413:# the main binary or if you want to "blacklist" certain loaders by
+421:# complete pathname with volume (e.g., "SOMEDISK:/EFI/somedir/notme.efi"
+435:# EFI NVRAM Boot#### variables that should NOT be presented as loaders
+448:# kernels with EFI stub loaders but that don't give those kernels filenames
+452:# "vmlinuz", "bzImage", or "kernel" to be included as loaders, even if they
+459:# Support loaders that have been compressed with gzip.
+462:# including the EFI stub loader. This makes them unloadable in rEFInd
+467:#support_gzipped_loaders true
+473:# kernels then appear as options on the sub-menu.
+480:# are also EFI boot loaders. To include the default string, use "+"
+493:# is not what you'd want. Also, if the kernel or initrd file includes both a
+499:# (say, if your kernel filename includes "linux" but the initrd filename
+507:# launching Linux via an EFI stub loader, ELILO, or GRUB. This variable,
+514:# Symlinked loaders will be processed when this setting is set to true.
+523:# any time. If more loaders are discovered than this value, rEFInd shows
+533:# default loader using:
+534:#  - A digit between 1 and 9, in which case the Nth loader in the menu
+537:#    recently booted loader.
+538:#  - Any substring that corresponds to a portion of the loader's title
+539:#    (usually the OS's name, boot loader's path, or a volume or
+540:#    filesystem title).
+549:# to 12:30 AM. You may specify multiple default_selection lines, in which
+555:#default_selection 1
+556:#default_selection Microsoft
+557:#default_selection "+,bzImage,vmlinuz"
+558:#default_selection Maintenance 23:30 2:00
+559:#default_selection "Maintenance,macOS" 1:00 2:30
+609:# file is loaded as if its options appeared at the point of the "include"
+616:# Sample manual configuration stanzas. Each begins with the "menuentry"
+622:#  volume    - identifies the filesystem from which subsequent files
+623:#              are loaded. You can specify the volume by filesystem
+626:#  loader    - identifies the boot loader file
+627:#  initrd    - Specifies an initial RAM disk file
+628:#  icon      - specifies a custom boot loader icon
+629:#  ostype    - OS type code to determine boot options available by
+634:#              Default is auto-detected from loader filename.
+635:#  options   - sets options to be passed to the boot loader; use
+637:#              if any options use characters that might be changed
+647:# and #) to be disabled. This is useful mainly with the "options"
+650:# except when you must pass a forward slash to the loader, as when
+659:# This entry includes Linux-specific boot options and specification
+662:menuentry Linux {
+664:    volume 904404F8-B481-440C-A1E3-11A5A954E601
+665:    loader bzImage-3.3.0-rc7
+666:    initrd initrd-3.3.0.img
+667:    options "ro root=UUID=5f96cafa-e0a7-4057-b18f-fa709db5b837"
+674:# does not include version numbers in its kernel and initrd filenames, you
+675:# may need to use manual boot stanzas when using fallback initrds or
+678:menuentry "Arch Linux" {
+680:    volume   "Arch Linux"
+681:    loader   /boot/vmlinuz-linux
+682:    initrd   /boot/initramfs-linux.img
+683:    options  "root=PARTUUID=5028fa50-0079-4c40-b240-abfaf28693ea rw add_efi_memmap"
+684:    submenuentry "Boot using fallback initramfs" {
+685:        initrd /boot/initramfs-linux-fallback.img
+687:    submenuentry "Boot to terminal" {
+688:        add_options "systemd.unit=multi-user.target"
+694:# its GRUB 2 boot loader. Note uses of Linux-style forward slashes
+695:menuentry Ubuntu {
+696:    loader /EFI/ubuntu/grubx64.efi
+703:menuentry "ELILO" {
+704:    loader \EFI\elilo\elilo.efi
+711:menuentry "Windows 7" {
+712:    loader \EFI\Microsoft\Boot\bootmgfw.efi
+716:# EFI shells are programs just like boot loaders, and can be
+718:# script that it's to run on the "options" line. The script
+721:menuentry "Windows via shell script" {
+== refind_linux.conf / all conf ==
+--- /mnt/EFI/BOOT/refind.conf ---
+#
+# refind.conf
+# Configuration file for the rEFInd boot menu
+#
+
+# Timeout in seconds for the main menu screen. Setting the timeout to 0
+# disables automatic booting (i.e., no timeout). Setting it to -1 causes
+# an immediate boot to the default OS *UNLESS* a keypress is in the buffer
+# when rEFInd launches, in which case that keypress is interpreted as a
+# shortcut key. If no matching shortcut is found, rEFInd displays its
+# menu with no timeout.
+#
+timeout -1
+
+# SM8150 (Xiaomi K20 Pro / Raphael): keep XBL continuous splash on screen.
+preserve_sm8150_splash true
+pause_sm8150_mdp_scanout false
+
+# Set the logging level. When set to 0, rEFInd does not log its actions.
+# When set to 1 or above, rEFInd creates a file called refind.log in
+# its home directory on the ESP and records information about what it's
+# doing. Higher values record more information, up to a maximum of 4.
+# This token should be left at the default of 0 except when debugging
+# problems.
+# Default value is 0
+#
+#log_level 1
+
+# Normally, when the timeout period has passed, rEFInd boots the
+# default_selection. If the following option is uncommented, though,
+# rEFInd will instead attempt to shut down the computer.
+# CAUTION: MANY COMPUTERS WILL INSTEAD HANG OR REBOOT! Macs and more
+# recent UEFI-based PCs are most likely to work with this feature.
+# Default value is true
+#
+#shutdown_after_timeout
+
+# Whether to store rEFInd's rEFInd-specific variables in NVRAM (1, true,
+# or on) or in files in the "vars" subdirectory of rEFInd's directory on
+# disk (0, false, or off). Using NVRAM works well with most computers;
+# however, it increases wear on the motherboard's NVRAM, and if the EFI
+# is buggy or the NVRAM is old and worn out, it may not work at all.
+# Storing variables on disk is a viable alternative in such cases, or
+# if you want to minimize wear and tear on the NVRAM; however, it won't
+# work if rEFInd is stored on a filesystem that's read-only to the EFI
+# (such as an HFS+ volume), and it increases the risk of filesystem
+# damage. Note that this option affects ONLY rEFInd's own variables,
+# such as the PreviousBoot, HiddenTags, HiddenTools, and HiddenLegacy
+# variables. It does NOT affect Secure Boot or other non-rEFInd
+# variables.
+== kernel / initrd / dtb files ==
+/mnt/EFI/BOOT/BOOTAA64.EFI 315392
+/mnt/EFI/BOOT/drivers_aa64/btrfs_aa64.efi 60904
+/mnt/EFI/BOOT/drivers_aa64/ext2_aa64.efi 21928
+/mnt/EFI/BOOT/drivers_aa64/ext4_aa64.efi 22472
+/mnt/EFI/BOOT/drivers_aa64/hfs_aa64.efi 23112
+/mnt/EFI/BOOT/drivers_aa64/iso9660_aa64.efi 21128
+/mnt/EFI/BOOT/drivers_aa64/reiserfs_aa64.efi 24360

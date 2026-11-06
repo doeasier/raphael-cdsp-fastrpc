@@ -1,0 +1,27 @@
+# 阶段 1 不改动本文件（设备上的 /etc/modprobe.d/99-raphael-dsp-debug.conf 保持诊断版原样）。
+# 阶段 1 只改 rEFInd 启动项：去掉 systemd.mask=usb-ncm.service。
+#
+# 原因（2026-11-05，已用 upstream 资料核对）：
+#   qcom_q6v5_pas 一旦解封，modem 就会启动；SM8150 mainline 已知 modem 的
+#   WLAN PD 在 QMI_WLFW_CAL_REPORT_REQ 阶段可把整个 SoC fabric 锁死
+#   （~29ms、无 panic、无 ramdump、连 netconsole 都来不及），与本项目此前
+#   "固定 43-44s + 无日志" 的启动循环指纹吻合。所以阶段 1 绝不碰它。
+#
+# ---- 以下仅为【阶段 2】参考：设备当前生效的诊断版内容（保持不变） ----
+#   blacklist qcom_q6v5_pas
+#   blacklist qcom_q6v5_adsp
+#   blacklist qcom_q6v5_mss
+#   blacklist qcom_q6v5_common
+#   blacklist qcom_sysmon
+#   blacklist qcom_pil_info
+#   install qcom_q6v5_pas /bin/false
+#   install qcom_q6v5_adsp /bin/false
+#   install qcom_q6v5_mss /bin/false
+#
+# ---- 阶段 2 的目标形态（等能联网、核对 DTB 后再落地） ----
+#   1) 先用 DT status="disabled" 关掉 modem/adsp/slpi 三个 remoteproc 节点，
+#      只留 cdsp（4 个 PAS 节点共用 qcom_q6v5_pas，无法靠 blacklist 区分）；
+#   2) 再删除 qcom_q6v5_pas 的 blacklist 与 install /bin/false 两行
+#      （install 是硬拦截，连依赖解析和显式 modprobe 都挡，必须一起删）；
+#   3) qcom_q6v5_adsp / qcom_q6v5_mss 是旧平台 self-auth 驱动，SM8150 无匹配
+#      节点，可继续屏蔽；qcom_q6v5_common / sysmon / pil_info 建议一并解封。

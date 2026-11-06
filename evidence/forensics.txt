@@ -1,0 +1,46 @@
+CMD: echo "=== boots ==="; timeout 15 journalctl --list-boots --no-pager 2>&1 | tail -12; echo "=== previous boot: logind / ssh ==="; timeout 25 journalctl -b -1 -u systemd-logind -u ssh --no-pager -o short-precise 2>&1 | tail -80; echo "=== 11-06 window: logind / ssh ==="; timeout 25 journalctl --since "2026-11-06 00:00" --until "2026-11-06 23:59" -u systemd-logind -u ssh --no-pager -o short-precise 2>&1 | tail -80; echo "=== 11-06 window: pam/session keywords ==="; timeout 25 journalctl --since "2026-11-06 00:00" --until "2026-11-06 23:59" --no-pager -o short-precise 2>&1 | grep -iE "pam_systemd|Failed to create session|Maximum number of sessions|Connection timed out|sshd|sftp|session" | tail -80; echo "=== current logind ==="; p=$(pidof systemd-logind | cut -d" " -f1); echo PID=$p; if [ -n "$p" ]; then echo WCHAN=$(cat /proc/$p/wchan 2>/dev/null); echo FD_COUNT=$(ls /proc/$p/fd 2>/dev/null | wc -l); echo STATE=$(ps -o stat= -p $p 2>/dev/null); fi; echo "=== sessions ==="; timeout 10 loginctl list-sessions --no-legend 2>&1 | head -25; echo "=== hung tasks ==="; dmesg 2>/dev/null | grep -iE "hung task|blocked for more than|D state" | tail -20; echo FORENSICS_DONE
+RC: 0
+--- stdout ---
+=== boots ===
+-11 dea446a2cf104f4880db99fde30bb0e1 Thu 2026-11-05 07:02:34 CST Thu 2026-11-05 07:02:34 CST
+-10 190ae458583945c1b0f3d480b853bdcf Thu 2026-11-05 07:03:16 CST Thu 2026-11-05 07:03:16 CST
+ -9 b1c30e4e0df4403bb723cf11fb50edd6 Thu 2026-11-05 07:03:59 CST Thu 2026-11-05 07:25:31 CST
+ -8 5d0dfb1f19394a03bf7242b479ef4dd1 Thu 2026-11-05 07:34:15 CST Thu 2026-11-05 07:34:22 CST
+ -7 71049df7fb9446fbb220febb811f713b Thu 2026-11-05 19:32:25 CST Thu 2026-11-05 19:32:25 CST
+ -6 dda958dcb2f44a3396d397a6d9787b7c Thu 2026-11-05 19:33:09 CST Thu 2026-11-05 19:33:09 CST
+ -5 9dadea0ce5014fd596d23ab56190cd87 Thu 2026-11-05 19:33:52 CST Thu 2026-11-05 19:33:52 CST
+ -4 1819e8618e0742be98e2a876343c1bc5 Thu 2026-11-05 20:02:30 CST Thu 2026-11-05 22:15:44 CST
+ -3 cce17ce0613346b3b74d5611b639ecda Thu 2026-11-05 22:21:34 CST Thu 2026-11-05 22:46:52 CST
+ -2 fec4af529b7a4e4a83f1de8709b967af Thu 2026-11-05 22:47:08 CST Fri 2026-11-06 08:48:15 CST
+ -1 e05f81a25bd543b39d865518500911c4 Fri 2026-11-06 08:48:30 CST Fri 2026-11-06 09:11:23 CST
+  0 894beadc5dcb47e5a0b3f2039543fe65 Fri 2026-11-06 18:48:30 CST Fri 2026-11-06 18:49:17 CST
+=== previous boot: logind / ssh ===
+11月 06 08:48:32.274059 xiaomi-raphael systemd[1]: Starting systemd-logind.service - User Login Management...
+11月 06 08:48:32.338330 xiaomi-raphael systemd-logind[618]: New seat seat0.
+11月 06 08:48:32.358458 xiaomi-raphael systemd-logind[618]: Watching system buttons on /dev/input/event0 (pm8941_pwrkey)
+11月 06 08:48:32.377260 xiaomi-raphael systemd[1]: Started systemd-logind.service - User Login Management.
+11月 06 08:48:34.504215 xiaomi-raphael systemd-logind[618]: New session c1 of user gdm.
+11月 06 08:48:49.871229 xiaomi-raphael systemd[1]: Starting ssh.service - OpenBSD Secure Shell server...
+11月 06 08:48:49.980899 xiaomi-raphael sshd[2487]: Server listening on 0.0.0.0 port 22.
+11月 06 08:48:49.980995 xiaomi-raphael sshd[2487]: Server listening on :: port 22.
+11月 06 08:48:49.981762 xiaomi-raphael systemd[1]: Started ssh.service - OpenBSD Secure Shell server.
+11月 06 08:48:50.023370 xiaomi-raphael sshd[2489]: Connection closed by 172.16.42.171 port 2920
+11月 06 09:11:22.407725 xiaomi-raphael sshd[61496]: Accepted password for root from 172.16.42.171 port 11801 ssh2
+11月 06 09:11:22.412563 xiaomi-raphael sshd[61496]: pam_unix(sshd:session): session opened for user root(uid=0) by root(uid=0)
+11月 06 09:11:22.456200 xiaomi-raphael systemd-logind[618]: New session 3 of user root.
+=== 11-06 window: logind / ssh ===
+-- No entries --
+=== 11-06 window: pam/session keywords ===
+=== current logind ===
+PID=567
+WCHAN=do_epoll_wait
+FD_COUNT=38
+STATE=Ss
+=== sessions ===
+ 6   0 root -     -    active no -
+c1 121 gdm  seat0 tty1 active no -
+=== hung tasks ===
+FORENSICS_DONE
+
+--- stderr ---
+

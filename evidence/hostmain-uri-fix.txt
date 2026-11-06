@@ -1,0 +1,88 @@
+host_main URI fix (bare filename)
+===== backup-and-check =====
+CMD: cd /data/local/tmp/hvx && cp -a hvx_add.h hvx_add.h.pre-uri-fix-20261106 && cp -a host_main host_main.pre-uri-fix-20261106 && echo '== URI before =='; grep -n 'define hvx_add_URI' hvx_add.h; echo '== URI hardcoded in stub? =='; grep -n 'libhvx_add_skel.so' hvx_add_stub.c host_main.c hvx_add.h 2>/dev/null
+RC: 0
+== URI before ==
+68:#define hvx_add_URI "file:///data/local/tmp/hvx/libhvx_add_skel.so?hvx_add_skel_handle_invoke&_modver=1.0"
+== URI hardcoded in stub? ==
+hvx_add.h:68:#define hvx_add_URI "file:///data/local/tmp/hvx/libhvx_add_skel.so?hvx_add_skel_handle_invoke&_modver=1.0"
+
+===== patch-uri =====
+CMD: cd /data/local/tmp/hvx && sed -i 's|file:///data/local/tmp/hvx/libhvx_add_skel.so|file:///libhvx_add_skel.so|' hvx_add.h && echo '== URI after =='; grep -n 'define hvx_add_URI' hvx_add.h
+RC: 0
+== URI after ==
+68:#define hvx_add_URI "file:///libhvx_add_skel.so?hvx_add_skel_handle_invoke&_modver=1.0"
+
+===== rebuild =====
+CMD: cd /data/local/tmp/hvx && gcc host_main.c hvx_add_stub.c -I. -Iincs -Iincs/stddef -o host_main -L/usr/local/lib -lcdsprpc -lpthread -ldl 2>&1; echo GCC_RC=$?; ls -l host_main
+RC: 0
+GCC_RC=0
+-rwxr-xr-x 1 root root 71672 11月  6 22:34 host_main
+
+===== run =====
+CMD: cd /data/local/tmp/hvx && timeout 120 env LD_LIBRARY_PATH=/usr/local/lib ADSP_LIBRARY_PATH='/usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx' DSP_LIBRARY_PATH='/usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx' ./host_main 2>&1; echo HOST_MAIN_RC=$?
+RC: 0
+host: unsigned PD enabled for cDSP (domain=3)
+host: opened cDSP session, handle=187650505697232
+host: hvx_add_addVec done (N=1000)
+host: first 16 results (a + b = out):
+  [   0]   -500 +      1 =   -499
+  [   1]   -498 +      2 =   -496
+  [   2]   -496 +      3 =   -493
+  [   3]   -494 +      4 =   -490
+  [   4]   -492 +      5 =   -487
+  [   5]   -490 +      6 =   -484
+  [   6]   -488 +      7 =   -481
+  [   7]   -486 +      8 =   -478
+  [   8]   -484 +      9 =   -475
+  [   9]   -482 +     10 =   -472
+  [  10]   -480 +     11 =   -469
+  [  11]   -478 +     12 =   -466
+  [  12]   -476 +     13 =   -463
+  [  13]   -474 +     14 =   -460
+  [  14]   -472 +     15 =   -457
+  [  15]   -470 +     16 =   -454
+host: PASS - all 1000 elements verified correct.
+HOST_MAIN_RC=0
+
+===== journal =====
+CMD: journalctl -b --no-pager --since '3 min ago' 2>/dev/null | grep -iE 'hvx|skel|dlerror|remote_handle64_open|Successfully opened file' | tail -40
+RC: 0
+11月 06 22:31:20 xiaomi-raphael cdsprpcd[571]: log_config.c:422:file_watcher_thread: Couldn't find file cdsprpcd.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx
+11月 06 22:31:38 xiaomi-raphael host_main[2741]: apps_std_imp.c:1076: Successfully opened file fastrpc_shell_unsigned_3
+11月 06 22:31:38 xiaomi-raphael host_main[2741]: log_config.c:422:file_watcher_thread: Couldn't find file host_main.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx
+11月 06 22:31:38 xiaomi-raphael host_main[2741]: fastrpc_apps_user.c:1740: Error 0x80000406: remote_handle_open_domain: dynamic loading failed for file:///data/local/tmp/hvx/libhvx_add_skel.so?hvx_add_skel_handle_invoke&_modver=1.0&_dom=cdsp on domain 3 (dlerror Absolute path or ./obj_name required for shared object data/local/t
+11月 06 22:31:38 xiaomi-raphael host_main[2741]: fastrpc_apps_user.c:1840: Error 0x80000406: remote_handle64_open failed for file:///data/local/tmp/hvx/libhvx_add_skel.so?hvx_add_skel_handle_invoke&_modver=1.0&_dom=cdsp (errno Success)
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file fastrpc_shell_unsigned_3
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: log_config.c:422:file_watcher_thread: Couldn't find file fastrpc_test.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx;/usr/local/share/fastrpc_test/v68
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file libmultithreading_skel.so
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1844: remote_handle64_open: Successfully opened handle 0xaaaabb31ec40 (remote 0xf5c210) for file:///libmultithreading_skel.so?multithreading_skel_handle_invoke&_modver=1.0&_dom=cdsp on domain 3 (spawn time 24466 us, load time 12185 us), num handles 1
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1965: remote_handle64_close: closed module libmultithreading_skel.so with handle 0xaaaabb31ec40 remote handle 0xf5c210, num of open handles: 0
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file fastrpc_shell_unsigned_3
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: log_config.c:422:file_watcher_thread: Couldn't find file fastrpc_test.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx;/usr/local/share/fastrpc_test/v68
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file libhap_example_skel.so
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1844: remote_handle64_open: Successfully opened handle 0xaaaabb31b100 (remote 0xf5c0b0) for file:///libhap_example_skel.so?hap_example_skel_handle_invoke&_modver=1.0&_dom=cdsp on domain 3 (spawn time 20997 us, load time 13074 us), num handles 1
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1965: remote_handle64_close: closed module libhap_example_skel.so with handle 0xaaaabb31b100 remote handle 0xf5c0b0, num of open handles: 0
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file fastrpc_shell_unsigned_3
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: log_config.c:422:file_watcher_thread: Couldn't find file fastrpc_test.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx;/usr/local/share/fastrpc_test/v68
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file libhap_example_skel.so
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1844: remote_handle64_open: Successfully opened handle 0xaaaabb31aa80 (remote 0xf5c700) for file:///libhap_example_skel.so?hap_example_skel_handle_invoke&_modver=1.0&_dom=cdsp on domain 3 (spawn time 18236 us, load time 11155 us), num handles 1
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1965: remote_handle64_close: closed module libhap_example_skel.so with handle 0xaaaabb31aa80 remote handle 0xf5c700, num of open handles: 0
+11月 06 22:31:38 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file fastrpc_shell_unsigned_3
+11月 06 22:31:39 xiaomi-raphael fastrpc_test[2747]: log_config.c:422:file_watcher_thread: Couldn't find file fastrpc_test.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx;/usr/local/share/fastrpc_test/v68
+11月 06 22:31:39 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file libhap_example_skel.so
+11月 06 22:31:39 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1844: remote_handle64_open: Successfully opened handle 0xaaaabb31b100 (remote 0xf5c6b0) for file:///libhap_example_skel.so?hap_example_skel_handle_invoke&_modver=1.0&_dom=cdsp on domain 3 (spawn time 23407 us, load time 12231 us), num handles 1
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1965: remote_handle64_close: closed module libhap_example_skel.so with handle 0xaaaabb31b100 remote handle 0xf5c6b0, num of open handles: 0
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file fastrpc_shell_unsigned_3
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: log_config.c:422:file_watcher_thread: Couldn't find file fastrpc_test.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx;/usr/local/share/fastrpc_test/v68
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: apps_std_imp.c:1076: Successfully opened file libcalculator_skel.so
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1844: remote_handle64_open: Successfully opened handle 0xaaaabb316990 (remote 0xf5c0e0) for file:///libcalculator_skel.so?calculator_skel_handle_invoke&_modver=1.0&_idlver=1.2.3&_dom=cdsp on domain 3 (spawn time 21815 us, load time 17391 us), num handles 1
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1844: remote_handle64_open: Successfully opened handle 0xaaaabb3171e0 (remote 0xf5ce40) for file:///libcalculator_skel.so?calculator_skel_handle_invoke&_modver=1.0&_idlver=1.2.3&_dom=cdsp on domain 3 (spawn time 1 us, load time 1038 us), num handles 2
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1965: remote_handle64_close: closed module libcalculator_skel.so with handle 0xaaaabb316990 remote handle 0xf5c0e0, num of open handles: 1
+11月 06 22:31:40 xiaomi-raphael fastrpc_test[2747]: fastrpc_apps_user.c:1965: remote_handle64_close: closed module libcalculator_skel.so with handle 0xaaaabb3171e0 remote handle 0xf5ce40, num of open handles: 0
+11月 06 22:34:05 xiaomi-raphael host_main[9869]: apps_std_imp.c:1076: Successfully opened file fastrpc_shell_unsigned_3
+11月 06 22:34:05 xiaomi-raphael host_main[9869]: log_config.c:422:file_watcher_thread: Couldn't find file host_main.farf, errno (No such file or directory) at /usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx
+11月 06 22:34:05 xiaomi-raphael host_main[9869]: apps_std_imp.c:1076: Successfully opened file libhvx_add_skel.so
+11月 06 22:34:05 xiaomi-raphael host_main[9869]: fastrpc_apps_user.c:1844: remote_handle64_open: Successfully opened handle 0xaaaac9bbe7d0 (remote 0xf5c690) for file:///libhvx_add_skel.so?hvx_add_skel_handle_invoke&_modver=1.0&_dom=cdsp on domain 3 (spawn time 18761 us, load time 11953 us), num handles 1
+11月 06 22:34:05 xiaomi-raphael host_main[9869]: fastrpc_apps_user.c:1965: remote_handle64_close: closed module libhvx_add_skel.so with handle 0xaaaac9bbe7d0 remote handle 0xf5c690, num of open handles: 0
+

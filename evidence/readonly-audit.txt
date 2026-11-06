@@ -1,0 +1,513 @@
+READ-ONLY AUDIT 2026-11-06 21:31:19
+HOST 172.16.42.1
+
+===== identity =====
+CMD: uname -a; echo ---; head -4 /etc/os-release; echo ---; uptime; echo ---; cat /proc/cmdline
+RC: 0
+Linux xiaomi-raphael 7.0.0-sm8150-gc526b7bf7ebc-dirty #1 SMP PREEMPT Mon Jul 13 12:55:31 UTC 2026 aarch64 aarch64 aarch64 GNU/Linux
+---
+PRETTY_NAME="Ubuntu 24.04.4 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.4 LTS (Noble Numbat)"
+---
+ 21:31:13 up  2:42,  2 users,  load average: 0.18, 0.25, 0.26
+---
+root=UUID=ee8d3593-59b1-480e-a3b6-4fefb17ee7d8 rw console=ttyMSM0,115200 console=tty0 loglevel=4 systemd.show_status=1 rd.systemd.show_status=1 systemd.log_level=info rd.udev.log_priority=info udev.log_priority=info plymouth.enable=0 panic=0 systemd.unit=multi-user.target systemd.mask=hexagonrpcd-sdsp.service systemd.mask=hexagonrpcd-sdsp.path systemd.mask=raphael-sensors.service systemd.mask=raphael-sensors-persist-perms.service systemd.mask=raphael-slpi-client2slpi.service systemd.mask=raphael-slpi-bl-notify.service systemd.mask=raphael-slpi-oled-gate.service systemd.mask=raphael-gpsd-bridge.service systemd.mask=raphael-sim-init.service dtb=\dtbs\qcom\sm8150-xiaomi-raphael.dtb initrd=\initrd.img-7.0.0-sm8150-gc526b7bf7ebc-dirty
+
+
+===== usrmerge =====
+CMD: ls -ld /lib /usr/lib; echo ---; readlink -f /lib/firmware; echo ---; readlink -f /usr/share/qcom/dsp/cdsp
+RC: 0
+lrwxrwxrwx  1 root root    7  4月 22  2024 /lib -> usr/lib
+drwxr-xr-x 98 root root 4096 11月  5 22:54 /usr/lib
+---
+/usr/lib/firmware
+---
+/usr/share/qcom/dsp/cdsp
+
+
+===== pil-dir =====
+CMD: echo '== /lib/firmware/qcom/sm8150/Xiaomi/raphael =='; ls -la /lib/firmware/qcom/sm8150/Xiaomi/raphael/ 2>&1; echo '== any cdsp* under /lib/firmware/qcom =='; find /lib/firmware/qcom -maxdepth 4 -iname 'cdsp*' -printf '%p %s bytes\n' 2>/dev/null | sort
+RC: 0
+== /lib/firmware/qcom/sm8150/Xiaomi/raphael ==
+总计 115900
+drwxr-xr-x 3 root root     4096  8月  1 12:20 .
+drwxr-xr-x 3 root root     4096  8月  1 12:20 ..
+-rw-r--r-- 1 root root    14256  7月 13 20:12 a640_zap.mbn
+-rwxr-xr-x 1 root root      532  7月 13 20:12 adsp.b00
+-rwxr-xr-x 1 root root     7288  7月 13 20:12 adsp.b01
+-rwxr-xr-x 1 root root     8732  7月 13 20:12 adsp.b02
+-rwxr-xr-x 1 root root   208148  7月 13 20:12 adsp.b03
+-rwxr-xr-x 1 root root  1781628  7月 13 20:12 adsp.b04
+-rwxr-xr-x 1 root root   895268  7月 13 20:12 adsp.b05
+-rwxr-xr-x 1 root root     2912  7月 13 20:12 adsp.b06
+-rwxr-xr-x 1 root root    42316  7月 13 20:12 adsp.b07
+-rwxr-xr-x 1 root root   520920  7月 13 20:12 adsp.b08
+-rwxr-xr-x 1 root root       84  7月 13 20:12 adsp.b09
+-rwxr-xr-x 1 root root  9611576  7月 13 20:12 adsp.b10
+-rwxr-xr-x 1 root root   520792  7月 13 20:12 adsp.b11
+-rwxr-xr-x 1 root root     4040  7月 13 20:12 adsp.b12
+-rwxr-xr-x 1 root root   502552  7月 13 20:12 adsp.b13
+-rwxr-xr-x 1 root root     7820  7月 13 20:12 adsp.mdt
+-rwxr-xr-x 1 root root      403  7月 13 20:12 adspr.jsn
+-rwxr-xr-x 1 root root      555  7月 13 20:12 adspua.jsn
+-rw-r--r-- 1 root root  3598424  7月 13 20:12 CAMERA_ICP.elf
+-rwxr-xr-x 1 root root      436  7月 13 20:12 cdsp.b00
+-rwxr-xr-x 1 root root     7144  7月 13 20:12 cdsp.b01
+-rwxr-xr-x 1 root root   227348  7月 13 20:12 cdsp.b02
+-rwxr-xr-x 1 root root   104284  7月 13 20:12 cdsp.b03
+-rwxr-xr-x 1 root root     1200  7月 13 20:12 cdsp.b04
+-rwxr-xr-x 1 root root  2710852  7月 13 20:12 cdsp.b05
+-rwxr-xr-x 1 root root    48596  7月 13 20:12 cdsp.b06
+-rwxr-xr-x 1 root root   209184  7月 13 20:12 cdsp.b08
+-rwxr-xr-x 1 root root    54932  7月 13 20:12 cdsp.b10
+-rwxr-xr-x 1 root root     7580  7月 13 20:12 cdsp.mdt
+-rwxr-xr-x 1 root root      403  7月 13 20:12 cdspr.jsn
+-rw-r--r-- 1 root root     1108  7月 13 20:12 modem.b00
+-rw-r--r-- 1 root root     8152  7月 13 20:12 modem.b01
+-rw-r--r-- 1 root root     8224  7月 13 20:12 modem.b02
+-rw-r--r-- 1 root root     8528  7月 13 20:12 modem.b03
+-rw-r--r-- 1 root root   243368  7月 13 20:12 modem.b04
+-rw-r--r-- 1 root root   273816  7月 13 20:12 modem.b05
+-rw-r--r-- 1 root root    54900  7月 13 20:12 modem.b06
+-rw-r--r-- 1 root root   132280  7月 13 20:12 modem.b07
+-rw-r--r-- 1 root root   114772  7月 13 20:12 modem.b08
+-rw-r--r-- 1 root root  2526948  7月 13 20:12 modem.b09
+-rw-r--r-- 1 root root  1359872  7月 13 20:12 modem.b10
+-rw-r--r-- 1 root root    15992  7月 13 20:12 modem.b11
+-rw-r--r-- 1 root root    34240  7月 13 20:12 modem.b12
+-rw-r--r-- 1 root root   866512  7月 13 20:12 modem.b13
+-rw-r--r-- 1 root root   311296  7月 13 20:12 modem.b14
+-rw-r--r-- 1 root root  1982464  7月 13 20:12 modem.b15
+-rw-r--r-- 1 root root      316  7月 13 20:12 modem.b17
+-rw-r--r-- 1 root root   547888  7月 13 20:12 modem.b18
+-rw-r--r-- 1 root root 27663241  7月 13 20:12 modem.b19
+-rw-r--r-- 1 root root  5104348  7月 13 20:12 modem.b20
+-rw-r--r-- 1 root root    75968  7月 13 20:12 modem.b22
+-rw-r--r-- 1 root root 30515264  7月 13 20:12 modem.b23
+-rw-r--r-- 1 root root   716781  7月 13 20:12 modem.b24
+-rw-r--r-- 1 root root   135168  7月 13 20:12 modem.b25
+-rw-r--r-- 1 root root       45  7月 13 20:12 modem.b26
+-rw-r--r-- 1 root root  4194304  7月 13 20:12 modem.b27
+-rw-r--r-- 1 root root   538908  7月 13 20:12 modem.b28
+-rw-r--r-- 1 root root    73124  7月 13 20:12 modem.b29
+-rw-r--r-- 1 root root     4904  7月 13 20:12 modem.b30
+-rw-r--r-- 1 root root      128  7月 13 20:12 modem.b31
+-rw-r--r-- 1 root root     9260  7月 13 20:12 modem.mdt
+drwxr-xr-x 3 root root     4096  8月  1 12:20 modem_pr
+-rw-r--r-- 1 root root      719  7月 13 20:12 modemr.jsn
+-rw-r--r-- 1 root root      713  7月 13 20:12 modemuw.jsn
+-rwxr-xr-x 1 root root      212  7月 13 20:12 npu.b00
+-rwxr-xr-x 1 root root     6808  7月 13 20:12 npu.b01
+-rwxr-xr-x 1 root root    38568  7月 13 20:12 npu.b02
+-rwxr-xr-x 1 root root     7796  7月 13 20:12 npu.b03
+-rwxr-xr-x 1 root root        0  7月 13 20:12 npu.b04
+-rwxr-xr-x 1 root root     7020  7月 13 20:12 npu.mdt
+-rwxr-xr-x 1 root root  5387280  7月 13 20:12 qdsp6m.qdb
+-rw-r--r-- 1 root root      403  7月 13 20:12 slpir.jsn
+-rw-r--r-- 1 root root      756  7月 13 20:12 slpi_rp.b00
+-rw-r--r-- 1 root root     7624  7月 13 20:12 slpi_rp.b01
+-rw-r--r-- 1 root root    10012  7月 13 20:12 slpi_rp.b02
+-rw-r--r-- 1 root root   168972  7月 13 20:12 slpi_rp.b03
+-rw-r--r-- 1 root root  2069104  7月 13 20:12 slpi_rp.b04
+-rw-r--r-- 1 root root  1248276  7月 13 20:12 slpi_rp.b05
+-rw-r--r-- 1 root root   178900  7月 13 20:12 slpi_rp.b06
+-rw-r--r-- 1 root root    94060  7月 13 20:12 slpi_rp.b07
+-rw-r--r-- 1 root root    57473  7月 13 20:12 slpi_rp.b08
+-rw-r--r-- 1 root root       82  7月 13 20:12 slpi_rp.b09
+-rw-r--r-- 1 root root    29248  7月 13 20:12 slpi_rp.b10
+-rw-r--r-- 1 root root   245760  7月 13 20:12 slpi_rp.b11
+-rw-r--r-- 1 root root  1326785  7月 13 20:12 slpi_rp.b12
+-rw-r--r-- 1 root root   434580  7月 13 20:12 slpi_rp.b13
+-rw-r--r-- 1 root root   276192  7月 13 20:12 slpi_rp.b14
+-rw-r--r-- 1 root root    36868  7月 13 20:12 slpi_rp.b15
+-rw-r--r-- 1 root root    62808  7月 13 20:12 slpi_rp.b16
+-rw-r--r-- 1 root root    53148  7月 13 20:12 slpi_rp.b17
+-rw-r--r-- 1 root root   416156  7月 13 20:12 slpi_rp.b18
+-rw-r--r-- 1 root root   333996  7月 13 20:12 slpi_rp.b19
+-rw-r--r-- 1 root root      172  7月 13 20:12 slpi_rp.b20
+-rw-r--r-- 1 root root     8380  7月 13 20:12 slpi_rp.mdt
+-rw-r--r-- 1 root root      405  7月 13 20:12 slpius.jsn
+-rwxr-xr-x 1 root root      148  7月 13 20:12 spss1p.b00
+-rwxr-xr-x 1 root root     6712  7月 13 20:12 spss1p.b01
+-rwxr-xr-x 1 root root   524288  7月 13 20:12 spss1p.b02
+-rwxr-xr-x 1 root root   536576  7月 13 20:12 spss1p.mbn
+-rwxr-xr-x 1 root root     6860  7月 13 20:12 spss1p.mdt
+-rwxr-xr-x 1 root root      148  7月 13 20:12 spss2p.b00
+-rwxr-xr-x 1 root root     6712  7月 13 20:12 spss2p.b01
+-rwxr-xr-x 1 root root   524288  7月 13 20:12 spss2p.b02
+-rwxr-xr-x 1 root root   536576  7月 13 20:12 spss2p.mbn
+-rwxr-xr-x 1 root root     6860  7月 13 20:12 spss2p.mdt
+-rwxr-xr-x 1 root root      212  7月 13 20:12 venus.b00
+-rwxr-xr-x 1 root root     6808  7月 13 20:12 venus.b01
+-rwxr-xr-x 1 root root  1052128  7月 13 20:12 venus.b02
+-rwxr-xr-x 1 root root    40516  7月 13 20:12 venus.b03
+-rwxr-xr-x 1 root root       32  7月 13 20:12 venus.b04
+-rwxr-xr-x 1 root root     7020  7月 13 20:12 venus.mdt
+-rwxr-xr-x 1 root root  4053616  7月 13 20:12 wlanmdsp.mbn
+== any cdsp* under /lib/firmware/qcom ==
+/lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b00 436 bytes
+/lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b01 7144 bytes
+/lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b02 227348 bytes
+/lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b03 104284 bytes
+/lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b04 1200 bytes
+/lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b05 2710852 bytes
+/lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b06 48596 bytes
+/lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b08 209184 bytes
+/lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.b10 54932 bytes
+/lib/firmware/qcom/sm8150/Xiaomi/raphael/cdsp.mdt 7580 bytes
+/lib/firmware/qcom/sm8150/Xiaomi/raphael/cdspr.jsn 403 bytes
+
+
+===== pil-sha =====
+CMD: cd /lib/firmware/qcom/sm8150/Xiaomi/raphael/ 2>/dev/null && sha256sum * 2>/dev/null | sort -k2
+RC: 0
+bb1b61bae977aab5e5a68bd88848f4479c8d156911d96c7de73f7195b674db06  a640_zap.mbn
+b36476d6e2134ff6f99e222499e194381b7f7939451c7791579fbe8e7d2120da  adsp.b00
+be4c302061dc0053b5bdd7dae26f9bf4c020f4377e90a6b2607f84f3ff0684cb  adsp.b01
+5f371e2020ae8d6759311e9113caac6135583952e939dadd64bc3fd332e22de4  adsp.b02
+2dd2ece676f270c4ac4a2fce8888aad7759bbb7b9df2252df023a75982b3163d  adsp.b03
+bd517e2f2bd405718e52e767111d7d0852f9fe5d2cb7ca26d6a3d42969ceec47  adsp.b04
+0badec9d60ca7baa771842501b3dc56332c086a5efed8fab8f656e85fc4194ee  adsp.b05
+f2ecbf0536d285d63b7c2390fe5c4cf14e34f69a0da942cb02cf338d11c86aef  adsp.b06
+78f9ea22dd73fc9a6b776c4d9f8b6361ec1b69ba8bd859306214bcfd3ec3e3c0  adsp.b07
+c327febcb4f553b73894d1c033fca469dba6545930ec2891d120c33c41b99dd0  adsp.b08
+2b9d00d7f3642ae372bd295f690b62eb3710f07f8f2329fc595000d51c421cf7  adsp.b09
+6eb15766136db8ca83776b97727025609c60380543cd46e1cbb3a69b2c1512b7  adsp.b10
+15d4b60836d1fa7441a95651bd55aa47c51a014aa8e6625d1999e892d2742c31  adsp.b11
+dc275d16549d385bddc7dbc1f94a541cd7423af0e027d2e160b0b6c1a087f462  adsp.b12
+d2385078665c7ea0cb880017f37e266e17a6f5cee9c63770ba92b7b0341d98e8  adsp.b13
+5a27250a66375f976b63d41c02ff690865f9c644b37abc1f30168dd8453e64ff  adsp.mdt
+4781dc9312fa017b0e611c752dae2183c0f205af8300b28417a496dae511b0a5  adspr.jsn
+d6c6376f53e5449eb4f7b9e5a30679ebc2a9afaad28c13ff171f979e7b1af1f6  adspua.jsn
+043834591ac6b6a2ab79db5b6d524b5e9412b8c1588aa6c43015db495fe122f1  CAMERA_ICP.elf
+b33f71db9dedc986316a245da29b67079e4a6423cdab0ab0d591ae61e454b660  cdsp.b00
+45120a7a6a99347d3dfca62a970c2d54815e9220606553f6f53b757ae28a3a90  cdsp.b01
+a0aaa87974d8d4b1c72a4761001af5d4639a4106ac8d223aef0cd36f556e1443  cdsp.b02
+3846f9b6ce834a3ce0d6902ca8f897af67380680f6bd99591fa042ba9bddd624  cdsp.b03
+91a0f8a30417b5488f62368073d953e4d68ed25bee2e9ca4c4e48896b0b64ee6  cdsp.b04
+85086ea86d973002d0e2addb6f5c6841731750c586ce6aeb72f871bbf16a878e  cdsp.b05
+ccb1120d5391e0a560311ab651b4c86df36500d9c4be61fafd416d481093db58  cdsp.b06
+907c1d6f8567d9b0eb9a0c93dbaf65ee36dea76197f6e95130959de822765b43  cdsp.b08
+835ecf447a07db7adce16e88b3f427ae016f279be40536bd07754236672f7fb0  cdsp.b10
+c87b5fa07e97cb03895936f80bef7f74e4dcff8680084466cb7efae4e21eec87  cdsp.mdt
+15e148599165b38f68e62302d63c87caa5f0b164deb81aa419bbb4ecf920bc4b  cdspr.jsn
+ea2b0f881cece0ff77e285c9fdce5e89283c6e6d8c41afe485282a507a9cc83c  modem.b00
+bb7e2a3a43e1010c818b1afa253cc48376853b56312297309dd481fe4afa3611  modem.b01
+fa1e3fa84b58a5e1ad9294ade3c224e64a79f1b309ac323aa0e479db296b4cfa  modem.b02
+66d1c0b4402ad695c8ab93d54037450b6f98263c72b445aeca745c2d0c00f6ba  modem.b03
+cdf282cd4837e9673ad4832e183bec502d4f663fc5b008172dfcf8ecf1d63e85  modem.b04
+de275c403fcbd913497fa279bad0effc1897ff3c9e412fd773048d6752ad58cd  modem.b05
+de60d6a69f46ef9107483615e4dc8e723980725cb20a9bcb90d4e8067ab94367  modem.b06
+0e4e5ebedc6ddf2d6b781aa6ae3f28c9a2df4f31c2fe781f1567f8123364ab59  modem.b07
+4f9610a183638f4302dfb6de3090aa8601ad93c9ef4e9f56062efc37c390b544  modem.b08
+9875089f5432ab844955714df50a833697bdd53b0ce7606fe213acef4a6961f7  modem.b09
+87dea7ce7b56ed38b1331f2f7fac7611af45c690e518daaed96f129e48457501  modem.b10
+c2d612e357ab23f8119c6008f2f75142135d84a532ccb0f58b0e970ec80db54b  modem.b11
+c55b090726c51b46a85aefd183109ad0b7a9f2f15de1602dc83d7fbf332a47ce  modem.b12
+a15e53817d49a11dd063be1d18c5b3b2d01e0a3bea1fdf68008b4465a328c8d4  modem.b13
+6f4f45d7d884da51599008ecd152ff91fbce464c7110fabab20691ebf9883cb1  modem.b14
+e75fc10290d04f595822c61d9c11562f7a6b9ce248647f3d1065cf7bccbc7d3c  modem.b15
+3128a52f12bd4a29efc9c343f76fa9178fca6d9bdd007c16a1a3f4a6e579c4ce  modem.b17
+a71d5f731d5453b68fb0d38c65acc8b9a12a118bc77bb3e508c847a806438015  modem.b18
+31ece0b6c60b3c463178a6ab7d228a5fd6bc06cd13c853d55f46b5cc867f3cf5  modem.b19
+88664d2792ba9e4186d00a3ef4ef03a7efa39e6a3a89400e8c38cea69b0fd49f  modem.b20
+2f9ce4ac462e4be4e9a5fe58a23c6f89ef3ca3c39b9b1d07ace7a8cfc1f286fd  modem.b22
+84067ba5089ae7699af2076d65548810fe8246813802cfba60001fd2bb8ba609  modem.b23
+164c7556ab3275d9e4d626644756eb872a49e25ddb07ed02ecad8cafc4031c35  modem.b24
+c86b6ec98b7146c037c0b238feb4630cb277911d8f1e1b79c3ef44eb01967fde  modem.b25
+e69c261d3f9ee3695586b4f16305040c0ec91d3654a7828846f532d78b650b06  modem.b26
+cc78aae36c60929438a12faa7d45d4ae712818c24496977e552428312bcb03cd  modem.b27
+d4a1dd0f97435705b5216da43c7dca32f170a2ed1ae7595949167097c9596bf8  modem.b28
+95c217dfa1eda6524579e22dd8f54c51722335fafa32774edfe1968401fcdf48  modem.b29
+016c7468f41eec941d8ae69722e5eebb9f067b2ba310951c8e95531adee3b823  modem.b30
+ccaf64831171509962106c6d920c45968539d8a3253cc507f5bf6025d6fa9812  modem.b31
+45d3b4049dc665948696b047644afed33a3fa5c76362560c35c0e445a6119f92  modem.mdt
+7a6af01b85c33d92778d0d0077fb1282168206a5ad1029e1ba1129972a620d38  modemr.jsn
+e75d94b61df3e86c5b3f7a976d93f726cb85f2b897a8ea80a0924b9bb9c1a3bf  modemuw.jsn
+6f2efa6da44faa9794f243abcd407513fdd7280ab8063c6b290ece20cfaecdeb  npu.b00
+c0e31a05400373384df476c468515902233257d53cb2efebc08b4316321e01a9  npu.b01
+f6a69a5f718001e946a42c04578a82fd6f382273f8742d63244a41236c6be425  npu.b02
+66f05a5b4e137b3fd8ed0b79873d565d853fd8bde3325859d43713259dfa418f  npu.b03
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  npu.b04
+21e5a2957e9366e0517967b450385d80e0a6308c5ab40dfb8cb1955d3daa8ea7  npu.mdt
+1b6d2114ee7830e50fa22a17b9dc96e8b29afe72a8a29ed930d5d4f44029bb50  qdsp6m.qdb
+5343b1141c19ab1e1d22583941e05984834f7c8060de92212b3cc330b370a65b  slpir.jsn
+03edd927963e274e9d8163734f9da03eda4eb87bb14bb9506cff488e2fbfb760  slpi_rp.b00
+7bffe9729e4d44ad687bb48505eac295d88475822ceb896bfc9eab1911f7b192  slpi_rp.b01
+4bd1a8f32332fb76cf6a4ef0518161f6ca6e93734411e8b3079884414ae36794  slpi_rp.b02
+8ce59c0f468f3ee1b15c5f5ae6e48872af10da4ae29a5c04f2b4d05436efcdbc  slpi_rp.b03
+c7e2a8a43ddd6d585f21ef17aeb8b50f1e78380f20c48d4a43c6a41931c8dbdd  slpi_rp.b04
+32ec10cf911a809f39f5eb8f9d8a87ac12fde8fd89991608d729d08923425beb  slpi_rp.b05
+f28781015eff5dfc64565b72ce5a769019eaf9ed5d8de00164b77166f0757dc1  slpi_rp.b06
+4b1bf11f5cb4af265bd0ec39ec9e47df36eebbdd13f51a5bdb16b1804531e1a4  slpi_rp.b07
+2252d1ff1c7853eb36ae2f2a94cdf800e442b7c84a7162e3d01181cb16dfae92  slpi_rp.b08
+1330fdc3b6f53d07c8eb2f7ddd3821890b779b93e68ddfc172a01cbd54b8fb2c  slpi_rp.b09
+fe2488065a4d36a87a7f0581bf148e4dda61af5256b7a4b2abba5eac81eb3755  slpi_rp.b10
+7898d9a823ca6a2b0330f65a5ca0a71b82f878b076b133795cca99b18cef805f  slpi_rp.b11
+19dd70b1f1fb6dcac5e1af2b1694a2b9ccbb41c99eb19ff8aa66ae303fdd3cce  slpi_rp.b12
+fa2f5560c51d4dd9a939131b2dcb48e860a40581f6701132513addc7455544a4  slpi_rp.b13
+e5296117746bf1f99bc61c0075888c71177521b251026b2f69f138a851f07467  slpi_rp.b14
+d0fd6bda54655dd3168b4c1ea395f87168c894aa83c4e92c87cb6d3d32a9e3ed  slpi_rp.b15
+cb7e8241c6b2cd0c14aa5b3d0a6f40d6ece376f88220e96043ad68cc1f91b7d0  slpi_rp.b16
+120bce00c180ce0814c7612e1f1852c5f590eb2366ac555ded16463a0d81c5d5  slpi_rp.b17
+b83d1b1b863f5f9139329b3e5caf7c1eb422ea1aa4d84c76f396b838265b2ef6  slpi_rp.b18
+6bcf5990dd0580af51452ce1e5e47881ec7619422f088eb42432b2175bef354d  slpi_rp.b19
+83a3054d7460f2bb9a68fbfb8e6a775d4391f3774d66ebcd78c6fbbfbc3fad09  slpi_rp.b20
+5762e9f59d003235f3ba3f8b0904742769c6a4b43ab9bb6850bd23b0eb3a9c7b  slpi_rp.mdt
+68e78c2cca89c18931ca1b241abf277bda1b75d939d8a8573bfabc43f049ed26  slpius.jsn
+0b2d94cfa7ca6401d739bc5a3e0b3191ddf433ecf2528c75a5710083e0ff3dcc  spss1p.b00
+a2a878fecb7bad057d0a02aa98c57e57e077a679c3251de5be7895b9f1d338a1  spss1p.b01
+429dc2613732cadc9fe9a630291548cd915afd9ec200602386474e65313fc556  spss1p.b02
+036193e6d88060bfc379ce6a400ea1ca6c079fa44434dec31496aa411357bdfd  spss1p.mbn
+da13c1bdb6266b78971aa7d7cc84fb79f43e13808a751ab8c0b7121d1769006c  spss1p.mdt
+0b2d94cfa7ca6401d739bc5a3e0b3191ddf433ecf2528c75a5710083e0ff3dcc  spss2p.b00
+60d37f1e2bdf67f07e78385b9a7adad0b66f2029101be4fdc91300625275693d  spss2p.b01
+93b23e70f80dd09880c4ea083a0926a7cd6e3724ca1e9f79017c56aaa8e5fdd0  spss2p.b02
+db484fc889da166ef493319aa66d39329b4edf5ef9245c8d6b53b4f162b0f9c1  spss2p.mbn
+4265c83863d0e6b3703d2f8a7c4667a7dc9ae016a22e639fce7e8cfebb24fad4  spss2p.mdt
+cf742cacc5088a9e17cd2b4f4d979abd538d14d41deb287e64142ac9f67e861f  venus.b00
+33591dad91550970d989c7a8fc92947dbcc20a2f37f85de8d7f3ac4a279f7683  venus.b01
+f1d0d57c23834e7fab0211015f0f6783f8be521d281c8e7be73332ce75b313ec  venus.b02
+6a6d5ec5ed7d0474a6bf953ae6668820b501f5c29c35f9fb716bdf69ad20bdcb  venus.b03
+43b09596e1496809aaa964b34c146580f0566c86bc9d7218a1288fd15fb93424  venus.b04
+cbec7c55733f90ef1ff252b1304cc7050627b972ee9c3863615c88b267ae7459  venus.mdt
+ceb083b3b1c8e0fd5214c74d2747bebfe49245e2ee83f1e93f332ada58114257  wlanmdsp.mbn
+
+
+===== dsp-dir =====
+CMD: echo '== /usr/share/qcom/dsp/cdsp =='; ls -la /usr/share/qcom/dsp/cdsp/ 2>&1; echo '== /usr/lib/dsp/cdsp =='; ls -la /usr/lib/dsp/cdsp/ 2>&1 | head -30; echo '== /usr/lib/rfsa/adsp =='; ls -la /usr/lib/rfsa/adsp/ 2>&1 | head -30
+RC: 0
+== /usr/share/qcom/dsp/cdsp ==
+总计 13264
+drwxr-xr-x 2 root root    4096 11月  6 01:25 .
+drwxr-xr-x 5 root root    4096  8月  1 12:20 ..
+-rw-r--r-- 1 root root  938172  7月 13 20:12 fastrpc_shell_3
+-rw-r--r-- 1 root root  933772  7月 13 20:12 fastrpc_shell_unsigned_3
+-rw-r--r-- 1 root root  288200  7月 13 20:12 libbenchmark_skel.so
+-rw-r--r-- 1 root root 1435816  7月 13 20:12 libc++abi.so.1
+-rw-r--r-- 1 root root 3124704  7月 13 20:12 libc++.so.1
+-rw-r--r-- 1 root root  241608  7月 13 20:12 libhcp_rpc_skel.so
+-rw-r--r-- 1 root root  248112  7月 13 20:12 libhta_dsp_skel.so
+-rw-r--r-- 1 root root    7160 11月  4 07:37 libhvx_add_skel.so
+-rw-r--r-- 1 root root 3341872  7月 13 20:12 libimmotion_skel.so
+-rw-r--r-- 1 root root   85584  7月 13 20:12 libstabilitydomain_skel.so
+-rw-r--r-- 1 root root  263824  7月 13 20:12 libsysmondomain_skel.so
+-rw-r--r-- 1 root root   29704  7月 13 20:12 libsysmonhvxthrottle_skel.so
+-rw-r--r-- 1 root root   38024  7月 13 20:12 libsysmonquery_skel.so
+-rw-r--r-- 1 root root  204496  7月 13 20:12 libsysmon_skel.so
+-rw-r--r-- 1 root root  222704  7月 13 20:12 libvpp_aie.so
+-rw-r--r-- 1 root root 1675744  7月 13 20:12 libvpp_frc.so
+-rw-r--r-- 1 root root    6704  7月 13 20:12 libvpp_mvp.so
+-rw-r--r-- 1 root root    6704  7月 13 20:12 libvpp_nr.so
+-rw-r--r-- 1 root root    6704  7月 13 20:12 libvpp_qbr.so
+-rw-r--r-- 1 root root  276048  7月 13 20:12 libvpp_svc_skel.so
+-rw-r--r-- 1 root root    1656  7月 13 20:12 map_SHARED_LIBS_855.cdsp.prodQ.txt
+-rw-r--r-- 1 root root  156584  7月 13 20:12 ubwcdma_dynlib.so
+== /usr/lib/dsp/cdsp ==
+ls: 无法访问 '/usr/lib/dsp/cdsp/': 没有那个文件或目录
+== /usr/lib/rfsa/adsp ==
+总计 8
+drwxr-xr-x 2 root root 4096 11月  6 01:25 .
+drwxr-xr-x 4 root root 4096 11月  5 22:54 ..
+lrwxrwxrwx 1 root root   40 11月  5 22:54 fastrpc_shell_3 -> /usr/share/qcom/dsp/cdsp/fastrpc_shell_3
+lrwxrwxrwx 1 root root   49 11月  5 22:54 fastrpc_shell_unsigned_3 -> /usr/share/qcom/dsp/cdsp/fastrpc_shell_unsigned_3
+lrwxrwxrwx 1 root root   45 11月  5 22:54 libbenchmark_skel.so -> /usr/share/qcom/dsp/cdsp/libbenchmark_skel.so
+lrwxrwxrwx 1 root root   39 11月  5 22:54 libc++abi.so.1 -> /usr/share/qcom/dsp/cdsp/libc++abi.so.1
+lrwxrwxrwx 1 root root   36 11月  5 22:54 libc++.so.1 -> /usr/share/qcom/dsp/cdsp/libc++.so.1
+lrwxrwxrwx 1 root root   43 11月  5 22:54 libhcp_rpc_skel.so -> /usr/share/qcom/dsp/cdsp/libhcp_rpc_skel.so
+lrwxrwxrwx 1 root root   43 11月  5 22:54 libhta_dsp_skel.so -> /usr/share/qcom/dsp/cdsp/libhta_dsp_skel.so
+lrwxrwxrwx 1 root root   38 11月  5 22:54 libhvx_add_skel.so -> /data/local/tmp/hvx/libhvx_add_skel.so
+lrwxrwxrwx 1 root root   44 11月  5 22:54 libimmotion_skel.so -> /usr/share/qcom/dsp/cdsp/libimmotion_skel.so
+lrwxrwxrwx 1 root root   51 11月  5 22:54 libstabilitydomain_skel.so -> /usr/share/qcom/dsp/cdsp/libstabilitydomain_skel.so
+lrwxrwxrwx 1 root root   48 11月  5 22:54 libsysmondomain_skel.so -> /usr/share/qcom/dsp/cdsp/libsysmondomain_skel.so
+lrwxrwxrwx 1 root root   53 11月  5 22:54 libsysmonhvxthrottle_skel.so -> /usr/share/qcom/dsp/cdsp/libsysmonhvxthrottle_skel.so
+lrwxrwxrwx 1 root root   47 11月  5 22:54 libsysmonquery_skel.so -> /usr/share/qcom/dsp/cdsp/libsysmonquery_skel.so
+lrwxrwxrwx 1 root root   42 11月  5 22:54 libsysmon_skel.so -> /usr/share/qcom/dsp/cdsp/libsysmon_skel.so
+lrwxrwxrwx 1 root root   38 11月  5 22:54 libvpp_aie.so -> /usr/share/qcom/dsp/cdsp/libvpp_aie.so
+lrwxrwxrwx 1 root root   38 11月  5 22:54 libvpp_frc.so -> /usr/share/qcom/dsp/cdsp/libvpp_frc.so
+lrwxrwxrwx 1 root root   38 11月  5 22:54 libvpp_mvp.so -> /usr/share/qcom/dsp/cdsp/libvpp_mvp.so
+lrwxrwxrwx 1 root root   37 11月  5 22:54 libvpp_nr.so -> /usr/share/qcom/dsp/cdsp/libvpp_nr.so
+lrwxrwxrwx 1 root root   38 11月  5 22:54 libvpp_qbr.so -> /usr/share/qcom/dsp/cdsp/libvpp_qbr.so
+lrwxrwxrwx 1 root root   43 11月  5 22:54 libvpp_svc_skel.so -> /usr/share/qcom/dsp/cdsp/libvpp_svc_skel.so
+lrwxrwxrwx 1 root root   59 11月  5 22:54 map_SHARED_LIBS_855.cdsp.prodQ.txt -> /usr/share/qcom/dsp/cdsp/map_SHARED_LIBS_855.cdsp.prodQ.txt
+lrwxrwxrwx 1 root root   42 11月  5 22:54 ubwcdma_dynlib.so -> /usr/share/qcom/dsp/cdsp/ubwcdma_dynlib.so
+
+
+===== dsp-sha =====
+CMD: cd /usr/share/qcom/dsp/cdsp/ 2>/dev/null && sha256sum * 2>/dev/null | sort -k2
+RC: 0
+c08865e4150cb186f382bd822c27a58e07bf31ec6201b0d36690e6c31fc95884  fastrpc_shell_3
+1d03f6ca76c2d2d21142ef50bedb52dbfe10356afa5168295f8dd8205f2afd43  fastrpc_shell_unsigned_3
+5b3c15fc8c4afb18ea5d1e811f48b8d0e72c00f1fd25185de8a7258b39bba5d7  libbenchmark_skel.so
+766a3ec60719b6a4b33dd5612ff92ba2c72fe6da16a2b8a97e7ef9d274030cb9  libc++abi.so.1
+1fc1384555cfad5dd23df8b2e07ffb10a22d6b4bce83a1eb7d0c5e71470188d7  libc++.so.1
+c97e73d6e7ee1f04fa6a10c66353260ce2d266791ffeffe02df1e0165b554ab2  libhcp_rpc_skel.so
+9b23e1b5735838febdbea4c2da36d95a0cdbc7506a3c599b8fbb443e551832d9  libhta_dsp_skel.so
+ae8c3f54e05fea07d57ce9784737f9a4477ea505f5cd5f2a2e89d9bb75bd2cec  libhvx_add_skel.so
+1c7a2d27723c80d50a80e33b34b90e6487d493efb979623cf0f2620fbd644f51  libimmotion_skel.so
+b867dba8fb3545280f7a79a87381a5788e7fc610248f592ac00a5df2b2d9b18d  libstabilitydomain_skel.so
+f4cbfbbc53d86bdfe9b9ef893453b6bc8f86c519a2046aa25d705197ce987ab9  libsysmondomain_skel.so
+2f650e10b9a08881172f9c612c586fda162db707955d76d1e21b3c88ba0334ec  libsysmonhvxthrottle_skel.so
+15a9f06cbd559a80b55cc676bc0c096a319756708d0498dc130c93595229b256  libsysmonquery_skel.so
+c7a72d7e140644f9a18b39f9a2cd234733c13ac1e2102d4e5fd8ca0f90b3b395  libsysmon_skel.so
+682f1d6bfd8cd756e53431023aa38c02c53999a2b75f946e409d98d582acc7ec  libvpp_aie.so
+5b25f7698472ccb0e6c87f5e4b40a13fb1ef9b7b6e131a170ce6616b56d4ff7a  libvpp_frc.so
+a83f4f34bd5a223a84ae47419112a94ce1c0c0791096aef9fe569d4bd87bb541  libvpp_mvp.so
+61646dfaf3823b82d462d93403a05cb039b396b36d15b30ab29fe889960b601f  libvpp_nr.so
+5576ea1e7fe15409f01f2b7c1a962cd965f527bc815d947fd5b7a040f1def353  libvpp_qbr.so
+77d45e45cf58b4f492f97ea5d32ddf4f40aedc818fe43a19f65204bac8f4d357  libvpp_svc_skel.so
+67942e90f65b98d5187bf5aeed4a5088575fad0356b5d420a8a50ea22fa08094  map_SHARED_LIBS_855.cdsp.prodQ.txt
+f75c8d6040a69959ebd00234af790fc0366a7dbfe802f2d97e56f212076d6cbe  ubwcdma_dynlib.so
+
+
+===== shell-buildid =====
+CMD: for f in /usr/share/qcom/dsp/cdsp/fastrpc_shell_3 /usr/share/qcom/dsp/cdsp/fastrpc_shell_unsigned_3; do echo "== $f =="; grep -a -o -E 'QC_IMAGE_VERSION_STRING.{0,90}' "$f" 2>/dev/null | head -2; grep -a -o -E '[0-9]{6,}\.[0-9]+_[0-9]{8}_[0-9]{6}' "$f" 2>/dev/null | sort -u | head -6; done
+RC: 0
+== /usr/share/qcom/dsp/cdsp/fastrpc_shell_3 ==
+357350.2_20201211_224311
+== /usr/share/qcom/dsp/cdsp/fastrpc_shell_unsigned_3 ==
+357350.2_20201211_224311
+
+
+===== remoteproc =====
+CMD: for f in /sys/class/remoteproc/remoteproc*/name; do echo "$f = $(cat $f 2>/dev/null)"; done; echo ---; for f in /sys/class/remoteproc/remoteproc*/state; do echo "$f = $(cat $f 2>/dev/null)"; done; echo ---; ls -l /dev/fastrpc-* /dev/adsprpc-* 2>&1
+RC: 2
+/sys/class/remoteproc/remoteproc0/name = cdsp
+---
+/sys/class/remoteproc/remoteproc0/state = running
+---
+ls: 无法访问 '/dev/adsprpc-*': 没有那个文件或目录
+crw-r----- 1 root    fastrpc 10, 267 11月  6 18:48 /dev/fastrpc-cdsp
+crw------- 1 fastrpc fastrpc 10, 266 11月  6 18:48 /dev/fastrpc-cdsp-secure
+
+
+===== daemon =====
+CMD: systemctl is-active cdsprpcd 2>&1; systemctl is-enabled cdsprpcd 2>&1; echo ---; systemctl show cdsprpcd -p ExecStart -p Environment -p FragmentPath --no-pager 2>&1 | head -30; echo ---; ls -la /etc/systemd/system/cdsprpcd.service.d/ 2>&1
+RC: 0
+active
+static
+---
+ExecStart={ path=/usr/local/sbin/cdsprpcd ; argv[]=/usr/local/sbin/cdsprpcd ; ignore_errors=no ; start_time=[Fri 2026-11-06 18:49:30 CST] ; stop_time=[n/a] ; pid=5222 ; code=(null) ; status=0/0 }
+Environment="ADSP_LIBRARY_PATH=/usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx" "DSP_LIBRARY_PATH=/usr/lib/rfsa/adsp;/usr/share/qcom/dsp/cdsp;/data/local/tmp/hvx"
+FragmentPath=/usr/lib/systemd/system/cdsprpcd.service
+---
+总计 12
+drwxr-xr-x  2 root root 4096 11月  6 08:41 .
+drwxr-xr-x 36 root root 4096 11月  5 22:54 ..
+-rw-r--r--  1 root root  201 11月  5 22:54 10-searchpath.conf
+
+
+===== boot-efi =====
+CMD: echo '== mounts =='; mount | grep -iE 'efi|boot' | head -10; echo '== /boot =='; ls -la /boot/ 2>&1 | head -40; echo '== /boot/efi/EFI =='; ls -la /boot/efi/EFI/ 2>&1 | head -20; echo '== refind =='; ls -la /boot/efi/EFI/refind/ 2>&1 | head -30
+RC: 0
+== mounts ==
+efivarfs on /sys/firmware/efi/efivars type efivarfs (ro,nosuid,nodev,noexec,relatime)
+== /boot ==
+总计 8
+drwxr-xr-x  2 root root 4096  4月 22  2024 .
+drwxr-xr-x 28 root root 4096 11月  5 22:54 ..
+== /boot/efi/EFI ==
+ls: 无法访问 '/boot/efi/EFI/': 没有那个文件或目录
+== refind ==
+ls: 无法访问 '/boot/efi/EFI/refind/': 没有那个文件或目录
+
+
+===== refind-conf =====
+CMD: for f in /boot/efi/EFI/refind/refind.conf /boot/refind_linux.conf /boot/efi/EFI/refind/refind_linux.conf /etc/refind_linux.conf; do if [ -f "$f" ]; then echo "===== $f ====="; grep -nE 'menuentry|volume|loader|initrd|options|title|dtb' "$f" | head -80; fi; done; echo '== all refind_linux.conf =='; find /boot /boot/efi -iname 'refind_linux.conf' -o -iname '*.efi' 2>/dev/null | head -40
+RC: 0
+== all refind_linux.conf ==
+
+
+===== secureboot =====
+CMD: mokutil --sb-state 2>&1 | head -5; echo ---; dmesg 2>/dev/null | grep -iE 'secure boot|efi:' | tail -6
+RC: 0
+bash: 行 1: mokutil: 未找到命令
+---
+[    0.000000] efi: EFI v2.11 by Das U-Boot
+[    0.000000] efi: RTPROP=0x36ec99040 SMBIOS 3.0=0x36fe06000 INITRD=0x34e306040 MEMRESERVE=0x34e305040 
+
+
+===== space =====
+CMD: df -h / /boot /boot/efi /root 2>&1; echo ---; ls -ld /root/cdsp-firmware-backup* /root/cdsp-20210730-staging* 2>&1; echo ---; ls -la /root/ 2>&1 | head -40
+RC: 0
+df: /boot/efi: 没有那个文件或目录
+文件系统        大小  已用  可用 已用% 挂载点
+/dev/sda31      462G  6.8G  436G    2% /
+/dev/sda31      462G  6.8G  436G    2% /
+/dev/sda31      462G  6.8G  436G    2% /
+---
+ls: 无法访问 '/root/cdsp-firmware-backup*': 没有那个文件或目录
+ls: 无法访问 '/root/cdsp-20210730-staging*': 没有那个文件或目录
+---
+总计 52
+drwx------  8 root root 4096 11月  3 00:34 .
+drwxr-xr-x 28 root root 4096 11月  5 22:54 ..
+-rw-------  1 root root 3558 11月  3 13:39 .bash_history
+-rw-r--r--  1 root root 3106  4月 22  2024 .bashrc
+drwx------  4 root root 4096 11月  3 07:28 .cache
+drwx------  3 root root 4096 11月  2 07:32 .config
+-rw-------  1 root root   20 11月  3 00:34 .lesshst
+drwxr-xr-x  2 root root 4096 11月  2 00:20 llama
+drwxrwxr-x 29 root root 4096 10月 28 19:30 llama.cpp-0.8.0
+-rw-r--r--  1 root root 1639 11月  2 07:06 llama-server-4b.log
+drwxr-xr-x  2 root root 4096 11月  2 00:20 models
+-rw-r--r--  1 root root  161  4月 22  2024 .profile
+drwx------  2 root root 4096  8月  1 12:15 .ssh
+
+
+===== pkg =====
+CMD: dpkg -l 2>/dev/null | grep -iE 'firmware-xiaomi|linux-image|linux-headers' | head -20; echo '== dpkg -V =='; dpkg -V firmware-xiaomi-raphael 2>&1 | head -20
+RC: 0
+ii  firmware-xiaomi-raphael                        1.3                                      arm64        Firmware blobs for Xiaomi K20 Pro
+ii  linux-headers-7.0.0-sm8150-gc526b7bf7ebc-dirty 7.0.0-gc526b7bf7ebc-1                    arm64        Linux kernel headers for 7.0.0-sm8150-gc526b7bf7ebc-dirty on arm64
+ii  linux-image-7.0.0-sm8150-gc526b7bf7ebc-dirty   7.0.0-gc526b7bf7ebc-1                    arm64        Linux kernel, version 7.0.0-sm8150-gc526b7bf7ebc-dirty
+== dpkg -V ==
+?M???????   /usr/share/qcom/sensors/registry/sns_reg_version
+
+
+===== kernel-log =====
+CMD: journalctl -b -k --no-pager 2>/dev/null | grep -iE 'cdsp|q6v5|qcom_mdt|remoteproc|pas_|scm' | tail -60
+RC: 0
+11月 06 18:48:30 xiaomi-raphael kernel: scmi_core: SCMI protocol bus registered
+11月 06 18:48:30 xiaomi-raphael kernel: qcom_scm firmware:scm: SHM Bridge not supported
+11月 06 18:48:30 xiaomi-raphael kernel: qcom_scm: convention: smc arm 64
+11月 06 18:48:30 xiaomi-raphael kernel: qcom_scm firmware:scm: qseecom: found qseecom with version 0x1400000
+11月 06 18:48:30 xiaomi-raphael kernel: qcom_scm firmware:scm: qseecom: untested machine, skipping
+11月 06 18:48:31 xiaomi-raphael kernel: remoteproc remoteproc0: cdsp is available
+11月 06 18:48:31 xiaomi-raphael kernel: remoteproc remoteproc0: powering up cdsp
+11月 06 18:48:31 xiaomi-raphael kernel: remoteproc remoteproc0: Booting fw image qcom/sm8150/Xiaomi/raphael/cdsp.mdt, size 7580
+11月 06 18:48:31 xiaomi-raphael kernel: remoteproc remoteproc0: remote processor cdsp is now up
+11月 06 18:48:31 xiaomi-raphael kernel: qcom,fastrpc 8300000.remoteproc:glink-edge.fastrpcglink-apps-dsp.-1.-1: no reserved DMA memory for FASTRPC
+11月 06 18:48:31 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@1: Adding to iommu group 14
+11月 06 18:48:31 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@2: Adding to iommu group 15
+11月 06 18:48:32 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@3: Adding to iommu group 16
+11月 06 18:48:32 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@4: Adding to iommu group 17
+11月 06 18:48:32 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@5: Adding to iommu group 18
+11月 06 18:48:32 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@6: Adding to iommu group 19
+11月 06 18:48:32 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@7: Adding to iommu group 20
+11月 06 18:48:32 xiaomi-raphael kernel: platform 8300000.remoteproc:glink-edge:fastrpc:compute-cb@8: Adding to iommu group 21
+11月 06 18:48:32 xiaomi-raphael kernel: qcom,fastrpc-cb 8300000.remoteproc:glink-edge:fastrpc:compute-cb@1: mem mmap error, fd 11, vaddr ffffb52b0000, size 262144
+11月 06 18:49:30 xiaomi-raphael kernel: qcom,fastrpc-cb 8300000.remoteproc:glink-edge:fastrpc:compute-cb@1: mem mmap error, fd 11, vaddr ffffb6a40000, size 262144
+
+
+===== farf-cache =====
+CMD: find / -maxdepth 6 -name '*.farf' -o -name '.farf' 2>/dev/null | head -30; echo ---; ls -la /data/local/tmp/hvx/ 2>&1 | head -20
+RC: 0
+/root/llama.cpp-0.8.0/scripts/snapdragon/adb/llama-cli.farf
+---
+总计 104
+drwxr-xr-x 3 root root  4096 11月  4 07:37 .
+drwxr-xr-x 3 root root  4096 11月  4 07:06 ..
+-rwxr-xr-x 1 root root 71672 11月  4 07:37 host_main
+-rw-r--r-- 1 root root  5060 11月  4 07:37 host_main.c
+-rw-r--r-- 1 root root  2733 11月  4 07:37 hvx_add.h
+-rw-r--r-- 1 root root 14966 11月  4 07:37 hvx_add_stub.c
+drwxr-xr-x 3 root root  4096 11月  4 07:07 incs
+-rw-r--r-- 1 root root 17415 11月  4 07:14 libadsprpc.so
+-rw-r--r-- 1 root root  7160 11月  4 07:37 libhvx_add_skel.so
+-rw-r--r-- 1 root root  7588 11月  4 07:14 rpcmem.a
+-rw-r--r-- 1 root root  6989 11月  4 07:14 rpcmem.h
+
+
